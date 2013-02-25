@@ -29,6 +29,7 @@ if(typeof(Storage)!=="undefined") {
 		    }
 		    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
 		}
+		
 		// Get user selection text on page
 		function getSelectedText() {
 			var ret = "<div id='kk' style='width:175px;display:hidden;'>"
@@ -39,6 +40,26 @@ if(typeof(Storage)!=="undefined") {
 		        return ret + document.selection.createRange().text + "</div>";
 		    }
 		    return ret + "&nbsp;<br>&nbsp;<br></div>";
+		}
+		
+		// Get user selection html on page
+		function getSelectedHtml() {
+			var html = "<div id='kk' style='width:175px;display:hidden;'>";
+			if (typeof window.getSelection != "undefined") {
+				var sel = window.getSelection();
+				if (sel.rangeCount) {
+					var container = document.createElement("div");
+					for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+						container.appendChild(sel.getRangeAt(i).cloneContents());
+					}
+					html = container.innerHTML;
+				}
+			} else if (typeof document.selection != "undefined") {
+				if (document.selection.type == "Text") {
+					html = document.selection.createRange().htmlText;
+				}
+			}
+			return html + "&nbsp;<br></div>";
 		}
 		
 	    /**
@@ -435,6 +456,7 @@ if(typeof(Storage)!=="undefined") {
 							var top = p.offset().top;
 							//height
 							var texto = $('#PostItAll').append(getSelectedText());
+							//var texto = $('#PostItAll').append(getSelectedHtml());
 							document.getElementById("kk").style.height = "auto"; //The id of this div is 'sample'
 							var tempheight = document.getElementById("kk").offsetHeight;
 							
@@ -483,6 +505,7 @@ if(typeof(Storage)!=="undefined") {
 								var top = p.offset().top;
 								//height
 								var texto = $('#PostItAll').append(getSelectedText());
+								//var texto = $('#PostItAll').append(getSelectedHtml());
 								document.getElementById("kk").style.height = "auto"; //The id of this div is 'sample'
 								var tempheight = document.getElementById("kk").offsetHeight;
 								
@@ -601,4 +624,6 @@ if(typeof(Storage)!=="undefined") {
 } else {
 	
 	// Sorry! No web storage support..
-	alert('Sorry, your
+	alert('Sorry, your browser do not support localStorage. Post It All will not be loaded.');
+	
+}
