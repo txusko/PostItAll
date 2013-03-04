@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+  <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="libs/jquery.minicolors.css">
+		<link rel="stylesheet" href="plugin/jquery.postitall.css">
+		
+		<link rel="stylesheet" href="libs/main.css">
+
+  </head>
+
+  <body>
+	<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+	<![endif]-->
+
+	<!-- Jumbotron -->
+	<div class="jumbotron wrapper" id="home">
+		<h1>Post It All! <small>jQuery plugin</small></h1>
+		<p class="lead">A jQuery plugin to add postits to your webpage</p>
+	</div>
+	
+	<div class="container marketing">
+
+      <!-- START THE FEATURETTES -->
+
+      <hr class="featurette-divider">
+      
+    	<div class="featurette wrapper" id=licenses>
+		
+			<h3>Basic example</h3>
+			<p class="lead">
+			This is a basic example, where you can convert the content of an HTML object into an editable, draggable and resizable postit.
+			</p>
+			
+			<div class="feat-left">
+	
+				<h4>Code</h4>
+<pre class="prettyprint lang-html">
+// HTML
+&lt;div id="idAddDemoPostit"&gt;Content of the postit 1&lt;/div&gt;
+
+//JAVASCRIPT
+&lt;script&gt;
+$(document).ready(function() {
+  $('#idAddDemoPostit').postitall();
+});
+&lt;/script&gt;
+</pre>
+			</div>
+			
+			<div class="feat-right">
+
+				<h4>Result</h4>
+				<div id="idAddDemoPostit">Content of the postit 1</div>
+			
+			</div>
+		
+		</div>
+
+      <hr class="featurette-divider">
+      
+    	<div class="featurette wrapper" id=licenses>
+			<h3>Form example</h3>
+			<p class="lead">
+				In this example, we pass the parameters of the form to create a new postit. With the 'newPostit' parameter set to true, you can create as many post it's as you want.
+			</p>
+			
+			<div class="feat-left">
+		
+				<h4>Code</h4>
+<pre class="prettyprint lang-html">
+// HTML
+&lt;form&gt;
+  &lt;label for="idBgTextColor"&gt;Background-Color:&lt;/label&gt; 
+  &lt;input id="idBgTextColor" type="text" value="#0000ff"&gt;
+  &lt;label for="idTextColor"&gt;Color:&lt;/label&gt; 
+  &lt;input id="idTextColor" type="text" value="#333333"&gt;
+  &lt;label for="idContent"&gt;Content:&lt;/label&gt; 
+  &lt;textarea id="idContent"&gt;This is anoteher demo&lt;/textarea&gt;
+  &lt;p&gt;&lt;input type="button" class="btn btn-primary" value="Add this as a postit" id="idAddDemoPostit2"&gt;&lt;/p&gt;
+&lt;/form&gt;
+
+// JAVASCRIPT
+&lt;script&gt;
+$(document).ready(function() {
+  $('#idAddDemoPostit2').click(function() {
+      $('#idRight').postitall({
+        'textcolor'       : $('#idTextColor').val(),
+        'backgroundcolor' : $('#idBgTextColor').val(),
+        'description'     : $('#idContent').val(),
+        'newPostit'       : true
+      });
+  });
+});
+&lt;/script&gt;
+</pre>
+
+			</div>
+
+			<div class="feat-right">
+			
+				<h4>Result</h4>
+				<form>
+					<div>
+						<label for="idBgTextColor">Background-Color:</label>
+						<br><input id="idBgTextColor" type="text" name="bgColor" value="#0000ff" class="minicolors">
+					</div>
+					<div>
+						<label for="idTextColor">Color:</label>
+						<br><input id="idTextColor" type="text" name="textColor" value="#333333" class="minicolors">
+					</div>
+					<div>
+						<label for="idContent">Content:</label>
+						<br><textarea id="idContent" name="textColor">This is anoteher demo</textarea>
+					</div>
+					<div>
+						<input type="button" class="btn btn-primary" value="Add this as a postit" id="idAddDemoPostit2">
+					</div>
+					<div id="idAddDemoPostit2_result"></div>
+				</form>				
+			
+			</div>
+						
+		</div>
+	
+	  <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+      
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a class="navegable" href="#top"><i class="icon-circle-arrow-up"></i> Back to top</a></p>
+        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="libs/jquery-1.9.1.min.js"><\/script>')</script>
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+	<script>window.jQuery || document.write('<script src="libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
+
+	<script src="libs/jquery.minicolors.js"></script>
+	<script src="plugin/jquery.postitall.js"></script>
+	
+	<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css" defer="defer"></script>
+
+	<script>
+		var _gaq=[['_setAccount','UA-XXXXXX-XX'],['_trackPageview']];
+		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+		s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+	
+	<script>
+	// Prettify
+	!function ($) {
+		$(function(){
+		  window.prettyPrint && prettyPrint()   
+		})
+	}(window.jQuery)
+	
+	$(document).ready(function() {
+		
+		//Minicolors for the form
+		$('.minicolors').minicolors();
+		
+		//Default postit
+		$('#idAddDemoPostit').postitall();
+		
+		//Recovering data from a form
+		$('#idAddDemoPostit2').click(function() {
+			$('#idAddDemoPostit2_result').postitall({
+				'textcolor' 		: $('#idTextColor').val(),
+				'backgroundcolor' 	: $('#idBgTextColor').val(),
+				'description' 		: $('#idContent').val(),
+				'newPostit' 		: true
+			});
+		});
+		
+	});
+	</script>
+
+  </body>
+</html>

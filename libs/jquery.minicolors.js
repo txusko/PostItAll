@@ -45,6 +45,11 @@ if(jQuery) (function($) {
 					});
 					return $(this);
 				
+				// Hide the color picker
+				case 'hide':
+					hide();
+					return $(this);
+				
 				// Get/set opacity
 				case 'opacity':
 					if( data === undefined ) {
@@ -80,6 +85,11 @@ if(jQuery) (function($) {
 						});
 						return $(this);
 					}
+				
+				// Show the color picker
+				case 'show':
+					show( $(this).eq(0) );
+					return $(this);
 				
 				// Get/set the hex color value
 				case 'value':
@@ -175,7 +185,7 @@ if(jQuery) (function($) {
 		// Inline controls
 		if( settings.inline ) input.parent().addClass('minicolors-inline');
 		
-		updateFromInput(input);
+		updateFromInput(input, false, true);
 		
 	}
 	
@@ -209,8 +219,12 @@ if(jQuery) (function($) {
 			panel = minicolors.find('.minicolors-panel'),
 			settings = input.data('minicolors-settings');
 		
-		// Do nothing if uninitialized, disabled, or already open
-		if( !input.data('minicolors-initialized') || input.prop('disabled') || minicolors.hasClass('minicolors-focus') ) return;
+		// Do nothing if uninitialized, disabled, inline, or already open
+		if( !input.data('minicolors-initialized') || 
+			input.prop('disabled') || 
+			minicolors.hasClass('minicolors-inline') || 
+			minicolors.hasClass('minicolors-focus')
+		) return;
 		
 		hide();
 		
@@ -295,7 +309,7 @@ if(jQuery) (function($) {
 					top: y + 'px',
 					left: x + 'px'
 				}, duration, settings.animationEasing, function() {
-					updateFromControl(input);
+					updateFromControl(input, target);
 				});
 		} else {
 			picker
@@ -303,14 +317,14 @@ if(jQuery) (function($) {
 				.animate({
 					top: y + 'px'
 				}, duration, settings.animationEasing, function() {
-					updateFromControl(input);
+					updateFromControl(input, target);
 				});
 		}
 		
 	}
 	
 	// Sets the input based on the color picker values
-	function updateFromControl(input) {
+	function updateFromControl(input, target) {
 		
 		function getCoords(picker, container) {
 			
@@ -326,7 +340,10 @@ if(jQuery) (function($) {
 			
 		}
 		
-		var hue, saturation, brightness, opacity, rgb, hex, x, y, r, phi,
+		var hue, saturation, brightness, rgb, x, y, r, phi,
+			
+			hex = input.val(),
+			opacity = input.attr('data-opacity'),
 			
 			// Helpful references
 			minicolors = input.parent(),
@@ -349,93 +366,100 @@ if(jQuery) (function($) {
 			sliderPos = getCoords(sliderPicker, slider),
 			opacityPos = getCoords(opacityPicker, opacitySlider);
 		
-		// Determine HSB values
-		switch(settings.control) {
+		// Handle colors
+		if( target.is('.minicolors-grid, .minicolors-slider') ) {
 			
-			case 'wheel':
-				// Calculate hue, saturation, and brightness
-				x = (grid.width() / 2) - gridPos.x;
-				y = (grid.height() / 2) - gridPos.y;
-				r = Math.sqrt(x * x + y * y);
-				phi = Math.atan2(y, x);
-				if( phi < 0 ) phi += Math.PI * 2;
-				if( r > 75 ) {
-					r = 75;
-					gridPos.x = 69 - (75 * Math.cos(phi));
-					gridPos.y = 69 - (75 * Math.sin(phi));
-				}
-				saturation = keepWithin(r / 0.75, 0, 100);
-				hue = keepWithin(phi * 180 / Math.PI, 0, 360);
-				brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
-				hex = hsb2hex({
-					h: hue,
-					s: saturation,
-					b: brightness
-				});
+			// Determine HSB values
+			switch(settings.control) {
 				
-				// Update UI
-				slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
-				break;
-			
-			case 'saturation':
-				// Calculate hue, saturation, and brightness
-				hue = keepWithin(parseInt(gridPos.x * (360 / grid.width())), 0, 360);
-				saturation = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
-				brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
-				hex = hsb2hex({
-					h: hue,
-					s: saturation,
-					b: brightness
-				});
+				case 'wheel':
+					// Calculate hue, saturation, and brightness
+					x = (grid.width() / 2) - gridPos.x;
+					y = (grid.height() / 2) - gridPos.y;
+					r = Math.sqrt(x * x + y * y);
+					phi = Math.atan2(y, x);
+					if( phi < 0 ) phi += Math.PI * 2;
+					if( r > 75 ) {
+						r = 75;
+						gridPos.x = 69 - (75 * Math.cos(phi));
+						gridPos.y = 69 - (75 * Math.sin(phi));
+					}
+					saturation = keepWithin(r / 0.75, 0, 100);
+					hue = keepWithin(phi * 180 / Math.PI, 0, 360);
+					brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
+					hex = hsb2hex({
+						h: hue,
+						s: saturation,
+						b: brightness
+					});
+					
+					// Update UI
+					slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
+					break;
 				
-				// Update UI
-				slider.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: brightness }));
-				minicolors.find('.minicolors-grid-inner').css('opacity', saturation / 100);
-				break;
-			
-			case 'brightness':
-				// Calculate hue, saturation, and brightness
-				hue = keepWithin(parseInt(gridPos.x * (360 / grid.width())), 0, 360);
-				saturation = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
-				brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
-				hex = hsb2hex({
-					h: hue,
-					s: saturation,
-					b: brightness
-				});
+				case 'saturation':
+					// Calculate hue, saturation, and brightness
+					hue = keepWithin(parseInt(gridPos.x * (360 / grid.width())), 0, 360);
+					saturation = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
+					brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
+					hex = hsb2hex({
+						h: hue,
+						s: saturation,
+						b: brightness
+					});
+					
+					// Update UI
+					slider.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: brightness }));
+					minicolors.find('.minicolors-grid-inner').css('opacity', saturation / 100);
+					break;
 				
-				// Update UI
-				slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
-				minicolors.find('.minicolors-grid-inner').css('opacity', 1 - (brightness / 100));
-				break;
-			
-			default:
-				// Calculate hue, saturation, and brightness
-				hue = keepWithin(360 - parseInt(sliderPos.y * (360 / slider.height())), 0, 360);
-				saturation = keepWithin(Math.floor(gridPos.x * (100 / grid.width())), 0, 100);
-				brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
-				hex = hsb2hex({
-					h: hue,
-					s: saturation,
-					b: brightness
-				});
+				case 'brightness':
+					// Calculate hue, saturation, and brightness
+					hue = keepWithin(parseInt(gridPos.x * (360 / grid.width())), 0, 360);
+					saturation = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
+					brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
+					hex = hsb2hex({
+						h: hue,
+						s: saturation,
+						b: brightness
+					});
+					
+					// Update UI
+					slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
+					minicolors.find('.minicolors-grid-inner').css('opacity', 1 - (brightness / 100));
+					break;
 				
-				// Update UI
-				grid.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: 100 }));
-				break;
-			
+				default:
+					// Calculate hue, saturation, and brightness
+					hue = keepWithin(360 - parseInt(sliderPos.y * (360 / slider.height())), 0, 360);
+					saturation = keepWithin(Math.floor(gridPos.x * (100 / grid.width())), 0, 100);
+					brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
+					hex = hsb2hex({
+						h: hue,
+						s: saturation,
+						b: brightness
+					});
+					
+					// Update UI
+					grid.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: 100 }));
+					break;
+				
+			}
+		
+			// Adjust case
+	    	input.val( convertCase(hex, settings.letterCase) );
+	    	
 		}
 		
-		// Determine opacity
-		if( settings.opacity ) {
-			opacity = parseFloat(1 - (opacityPos.y / opacitySlider.height())).toFixed(2);
-		} else {
-			opacity = 1;
+		// Handle opacity
+		if( target.is('.minicolors-opacity-slider') ) {
+			if( settings.opacity ) {
+				opacity = parseFloat(1 - (opacityPos.y / opacitySlider.height())).toFixed(2);
+			} else {
+				opacity = 1;
+			}
+			if( settings.opacity ) input.attr('data-opacity', opacity);
 		}
-
-    // Adjust case
-    input.val( convertCase(hex, settings.letterCase) );
-		if( settings.opacity ) input.attr('data-opacity', opacity);
 		
 		// Set swatch color
 		swatch.find('SPAN').css({
@@ -444,31 +468,12 @@ if(jQuery) (function($) {
 		});
 		
 		// Handle change event
-		if( hex + opacity !== input.data('minicolors-lastChange') ) {
-			
-			// Remember last-changed value
-			input.data('minicolors-lastChange', hex + opacity);
-			
-			// Fire change event
-			if( settings.change ) {
-				if( settings.changeDelay ) {
-					// Call after a delay
-					clearTimeout(input.data('minicolors-changeTimeout'));
-					input.data('minicolors-changeTimeout', setTimeout( function() {
-						settings.change.call(input, hex, opacity);
-					}, settings.changeDelay));
-				} else {
-					// Call immediately
-					settings.change.call(input, hex, opacity);
-				}
-			}
-			
-		}
+		doChange(input, hex, opacity);
 		
 	}
 	
 	// Sets the color picker values from the input
-	function updateFromInput(input, preserveInputValue) {
+	function updateFromInput(input, preserveInputValue, firstRun) {
 		
 		var hex,
 			hsb,
@@ -479,7 +484,6 @@ if(jQuery) (function($) {
 			minicolors = input.parent(),
 			settings = input.data('minicolors-settings'),
 			swatch = minicolors.find('.minicolors-swatch'),
-			
 			
 			// Panel objects
 			grid = minicolors.find('.minicolors-grid'),
@@ -501,7 +505,9 @@ if(jQuery) (function($) {
 		
 		// Determine opacity value
 		if( settings.opacity ) {
+			// Get from data-opacity attribute and keep within 0-1 range
 			opacity = input.attr('data-opacity') === '' ? 1 : keepWithin(parseFloat(input.attr('data-opacity')).toFixed(2), 0, 1);
+			if( isNaN(opacity) ) opacity = 1;
 			input.attr('data-opacity', opacity);
 			swatch.find('SPAN').css('opacity', opacity);
 			
@@ -592,6 +598,38 @@ if(jQuery) (function($) {
 				
 		}
 		
+		// Handle change event
+		if( !firstRun ) doChange(input, hex, opacity);
+		
+	}
+	
+	// Runs the change and changeDelay callbacks
+	function doChange(input, hex, opacity) {
+		
+		var settings = input.data('minicolors-settings');
+		
+		// Only run if it actually changed
+		if( hex + opacity !== input.data('minicolors-lastChange') ) {
+			
+			// Remember last-changed value
+			input.data('minicolors-lastChange', hex + opacity);
+			
+			// Fire change event
+			if( settings.change ) {
+				if( settings.changeDelay ) {
+					// Call after a delay
+					clearTimeout(input.data('minicolors-changeTimeout'));
+					input.data('minicolors-changeTimeout', setTimeout( function() {
+						settings.change.call(input, hex, opacity);
+					}, settings.changeDelay));
+				} else {
+					// Call immediately
+					settings.change.call(input, hex, opacity);
+				}
+			}
+			
+		}
+	
 	}
 	
 	// Generates an RGB(A) object based on the input's value
@@ -771,7 +809,7 @@ if(jQuery) (function($) {
 			if( !input.data('minicolors-initialized') ) return;
 			show(input);
 		})
-		// Fix hex and hide on blur
+		// Fix hex on blur
 		.on('blur.minicolors', '.minicolors-input', function(event) {
 			var input = $(this),
 				settings = input.data('minicolors-settings');
@@ -786,7 +824,6 @@ if(jQuery) (function($) {
 			// Adjust case
 			input.val( convertCase(input.val(), settings.letterCase) );
 			
-			hide(input);
 		})
 		// Handle keypresses
 		.on('keydown.minicolors', '.minicolors-input', function(event) {

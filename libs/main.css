@@ -1,0 +1,188 @@
+body {
+	padding-top: 20px;
+	padding-bottom: 60px;
+	color: #5a5a5a;
+}
+
+.center {
+	text-align: center;
+}
+
+/** Main **/
+#id_button_tooltip {
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 4px 0px #66666;
+	box-shadow: 4px 4px 4px 0px #66666;
+	text-shadow: 2px 2px px #000000;
+	filter: dropshadow(color=#000000, offx=2, offy=2);
+	color: #cccccc;
+	background: #b5bdc8; /* Old browsers */
+	background: -moz-linear-gradient(top,  #b5bdc8 0%, #828c95 36%, #28343b 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b5bdc8), color-stop(36%,#828c95), color-stop(100%,#28343b)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#28343b',GradientType=0 ); /* IE6-9 */
+	text-decoration: none;
+}
+#id_button_tooltip:hover {
+	border: 1px solid #667e93;
+	-webkit-box-shadow: 6px 6px 6px 0px #66666;
+	box-shadow: 6px 6px 6px 0px #66666;
+	text-shadow: 2px 2px px #000000;
+	filter: dropshadow(color=#000000, offx=2, offy=2);
+	color: #ffffff;
+	background: #83a0c6; /* Old browsers */
+background: -moz-linear-gradient(top,  #83a0c6 0%, #667e93 36%, #141b1e 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#83a0c6), color-stop(36%,#667e93), color-stop(100%,#141b1e)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #83a0c6 0%,#667e93 36%,#141b1e 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #83a0c6 0%,#667e93 36%,#141b1e 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #83a0c6 0%,#667e93 36%,#141b1e 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #83a0c6 0%,#667e93 36%,#141b1e 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#83a0c6', endColorstr='#141b1e',GradientType=0 ); /* IE6-9 */
+	
+}
+
+/* Custom container */
+.container {
+	margin: 0 auto;
+	max-width: 1000px;
+}
+.container > hr {
+	margin: 60px 0;
+}
+
+.feat-left {
+	float:left;
+	max-width: 450px;
+	margin: 0px 10px; 
+}
+.feat-right {
+	float:left;
+	max-width: 450px;
+	margin: 0px 20px; 
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+	margin: 80px 0;
+	text-align: center;
+}
+.jumbotron h1 {
+	font-size: 100px;
+	line-height: 1;
+}
+.jumbotron .lead {
+	font-size: 24px;
+	line-height: 1.25;
+}
+.jumbotron .btn {
+	font-size: 21px;
+	padding: 14px 24px;
+}
+
+ /* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar .navbar-inner {
+	padding: 0;
+}
+.navbar .nav {
+	margin: 0;
+	display: table;
+	width: 100%;
+}
+.navbar .nav li {
+	display: table-cell;
+	width: 1%;
+	float: none;
+}
+.navbar .nav li a {
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid rgba(255,255,255,.75);
+	border-right: 1px solid rgba(0,0,0,.1);
+}
+.navbar .nav li:first-child a {
+	border-left: 0;
+	border-radius: 3px 0 0 3px;
+}
+
+.navbar .nav li:last-child a {
+	border-right: 0;
+	border-radius: 0 3px 3px 0;
+}
+ 
+/* MARKETING CONTENT -------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing .span4 {
+	text-align: center;
+}
+.marketing h2 {
+	font-weight: normal;
+}
+.marketing .span4 p {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+
+/* Featurettes ------------------------- */
+
+.featurette-divider {
+	margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
+.featurette {
+	/*padding-top: 120px;*/ /* Vertically center images part 1: add padding above and below text. */
+	overflow: hidden; /* Vertically center images part 2: clear their floats. */
+}
+.featurette-image {
+	/*margin-top: -120px;*/ /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+}
+
+/* Give some space on the sides of the floated elements so text doesn't run right into it. */
+.featurette-image.pull-left {
+	margin-right: 40px;
+}
+.featurette-image.pull-right {
+	margin-left: 40px;
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+	font-size: 50px;
+	font-weight: 300;
+	line-height: 1;
+	letter-spacing: -1px;
+}
+
+
+/* RESPONSIVE CSS -------------------------------------------------- */
+
+@media (max-width: 979px) {
+
+	.featurette {
+    	height: auto;
+    	padding: 0;
+  	}
+  	.featurette-image.pull-left,
+  	.featurette-image.pull-right {
+    	display: block;
+	    float: none;
+	    max-width: 40%;
+	    margin: 0 auto 20px;
+  	}
+}
+
+
+@media (max-width: 767px) {
+
+	.featurette-heading {
+    	font-size: 30px;
+  	}
+  	.featurette .lead {
+    	font-size: 18px;
+    	line-height: 1.5;
+  	}
+}

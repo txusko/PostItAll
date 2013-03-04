@@ -1,0 +1,56 @@
+.center { text-align: center; }
+.float-left { float: left; }
+.float-right { float: right; }
+.vertical-bottom { vertical-align: bottom; }
+.vertical-middle { vertical-align: middle; }
+.vertical-top { vertical-align: top; }
+.clear { clear: both; }
+.red { color: red; }
+.red a { color: red; font-weight: bold; text-decoration: none; }
+.red a:hover { text-decoration: underline; }
+
+/* Add Post It button */
+#idAddPostItButton {
+	height: 150px; 
+	width: 50px; 
+	position: fixed; 
+	top: 200px; 
+	left: 40px;
+	z-index: 9999;
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg); 
+	-moz-transform: rotate(-90deg); 
+	-o-transform: rotate(-90deg); 
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+#idAddPostItButton a {
+	display: block;
+  height: 20px; 
+  width: 80px; 
+  padding: 7px 0px 0px 20px;
+  color: #fff; 
+  font-family: Arial, sans-serif; 
+  font-size: 12px; 
+  font-weight: bold; 
+  text-decoration: none; 
+  -webkit-border-radius: 0px 0px 15px 0px;
+  -moz-border-radius: 0px 0px 15px 15px;
+  border-radius: 0px 0px 15px 15px;
+  background-color:#10446B;
+  -webkit-box-shadow: #B3B3B3 0px 0px 6px;
+  -moz-box-shadow: #B3B3B3 0px 0px 6px;
+  box-shadow: #B3B3B3 0px 0px 6px;
+}
+#idAddPostItButton a:hover {
+	background: #FFFC7F;
+	height: 25px; 
+	padding: 14px 0px 0px 20px;
+	color: #10446B;
+	-webkit-border-radius: 0px 0px 15px 0px;
+  -moz-border-radius: 0px 0px 15px 15px;
+  border-radius: 0px 0px 15px 15px;
+  background-color:#FFFC7F;
+  -webkit-box-shadow: #B3B3B3 0px 0px 6px;
+  -moz-box-shadow: #B3B3B3 0px 0px 6px;
+  box-shadow: #B3B3B3 0px 0px 6px;
+}
