@@ -1,7 +1,5 @@
 ##Post It All!
 
-Add a post it to any webpage, and recover it later with Post it all!
-
 ###jQuery Plugin
 A jQuery plugin to add postits to your site.
 
