@@ -109,6 +109,7 @@ if(typeof(Storage)!=="undefined") {
 		 */
 		var storageManager = {
 		        add: function (obj) {
+		        	console.log(JSON.stringify(obj));
 		            $storage.setItem(obj.id, JSON.stringify(obj));
 		        },
 		
@@ -169,7 +170,7 @@ if(typeof(Storage)!=="undefined") {
 	    var checkReady = function(callback) {
 	    	
 	    	//Check jquery library again (not necessary)
-	        if (window.jQuery && $.fn.jquery == expectedVersion) {
+	        //if (window.jQuery && $.fn.jquery == expectedVersion) {
 	        	
 	        	var ok = false;
 	        	
@@ -210,12 +211,12 @@ if(typeof(Storage)!=="undefined") {
 	                window.setTimeout(function() { checkReady(callback); }, 100);
 	            }
 	        
-	        } else {
+	        //} else {
 	        
 	        	//Recheck until library is loaded
-	        	window.setTimeout(function() { checkReady(callback); }, 100);
+	        	//window.setTimeout(function() { checkReady(callback); }, 100);
 	        
-	        }
+	        //}
 	    };
 	    // Jquery loaded ok
 	    checkJqueryReady(function($) {
@@ -327,7 +328,7 @@ if(typeof(Storage)!=="undefined") {
 								var text = $('#kk').text();
 								$('#kk').remove();
 								
-								if(tempheight) {
+								if(tempheight >= 400) {
 									tempheight = tempheight / 2;
 								} else {
 									tempheight	= "200";
@@ -366,6 +367,7 @@ if(typeof(Storage)!=="undefined") {
 								var o = storageManager.get(key);
 								if(o && typeof o.id !== "undefined") {
 									console.log('Loaded '+o.id);
+									o.id = key;
 									o.newPostit = true;
 									$('#PostItAll').postitall(o);
 									PIAid = o.id;
@@ -382,7 +384,9 @@ if(typeof(Storage)!=="undefined") {
 						storageManager.clear();
 						// Then each postit into the LocalStorage
 						$('.PIApostit').each(function () {
+							//console.log($(this).postitall('options'));
 							storageManager.add($(this).postitall('options'));
+							//$(this).postitall('destroy');
 						});
 					};
 					
@@ -399,6 +403,7 @@ if(typeof(Storage)!=="undefined") {
 				
 		    	// TODO: Set time interval to save postits
 		    	//PIA.save();
+		    	//window.setTimeout(function() { PIA.save(); }, 5000);
 				
 		        // Save all the postits when the user leaves the page
 		        window.onbeforeunload = function () {

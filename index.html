@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+  <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="libs/bootstrap.min.css">
+		<link rel="stylesheet" href="libs/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="libs/jquery.minicolors.css">
+		<link rel="stylesheet" href="plugin/jquery.postitall.css">
+		
+		<link rel="stylesheet" href="libs/main.css">
+
+  </head>
+
+  <body>
+	<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+	<![endif]-->
+
+
+	<div class="container wrapper" id="top">
+
+		<div class="navbar navbar-fixed-top">
+		  <div class="navbar-inner">
+			<div class="container" id="navigation">
+			  <ul class="nav">
+				<li class="active"><a class="navegable" href="#home">Post It All</a></li>
+				<li><a href="plugin.html">jQuery Plugin</a></li>
+				<li><a href="bookmarklet.html">Bookmarklet</a></li>
+				<li><a class="navegable" href="index.html#about">About Post It All!</a></li>
+				<li><a class="navegable" href="index.html#licenses">Credits &amp; License</a></li>
+				<li><a class="navegable" href="index.html#contact">Contact</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</div><!-- /.navbar -->
+	
+		<!-- Jumbotron -->
+		<div class="jumbotron wrapper" id="home">
+			<h1>Post It All!</h1>
+			<p class="lead">Add a post it to any webpage, and recover it later with <b>Post it all!</b></p>
+				<!-- a href="https://github.com/txusko/PostItAll">GitHub project</a -->
+			<p>
+			</p>
+		</div>
+		
+		<div class="row-fluid center">
+			<div class="span6">
+				<h2><a href="plugin.html">jQuery Plugin</a></h2>
+				<img class="img-circle" data-src="holder.js/140x140" src="img/jquery_plugin.png">
+				<p class="lead">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the <a href="https://github.com/txusko/PostItAll">"Post It All" GitHub repository</a></p>
+				<a href="plugin.html" class="btn btn-large btn-primary button_tooltip" data-placement="bottom" title="View the plugin in action">Try the demo</a>
+				<a href="#" class="btn btn-large btn-primary button_tooltip" data-placement="bottom" title="Download the plugin">Download plugin</a>
+			</div>
+			<div class="span6">
+				<h2><a href="bookmarklet.html" style="color:#46a546">Bookmarklet</a></h2>
+				<img class="img-circle" data-src="holder.js/140x140" src="img/bookmarklet_drag_and_drop.png">
+				<p class="lead">Add a post it to any webpage, and recover it later.<br><span class="label label-inversed">Install:</span> Drag &amp; drop the button below to you bookmarks toolbar and Click It.</p>
+				<a class="btn btn-large btn-success button_tooltip" data-placement="bottom" title="Drag this button to your Bookmarks toolbar and Click on it!" href="javascript:(function(){ver='0.4';PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='http://www.txusko.com/PostItAll/'+ver+'/postitall.js?'+Math.random();document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();">Post It All!</a>
+			</div>
+		</div>
+	
+	</div>
+	
+	<!-- Wrap the rest of the page in another container to center all the content. -->
+	
+    <div class="container marketing">
+	
+		<hr class="featurette-divider">
+
+      <!-- START THE FEATURETTES -->
+
+      <div class="featurette wrapper" id="about">
+        <img class="featurette-image pull-left" src="img/about_us3.png">
+        <h2 class="featurette-heading">About Post It All. <span class="muted">What, who, how and why.</span></h2>
+        <p class="lead">"Post It All!", is just another sticky notes javascript plugin for the web.</p>
+        <p class="lead">You can add it to your site as a <a href="plugin.html">jQuery plugin</a>, or use the <a href="bookmarklet.html">Bookmarklet</a> to add sticky notes to any page you visit for a later recovery.</p>
+        <p class="lead">It was developed in my spare time just for fun. You can check my entery profile here: <a href="http://www.txusko.com">Javi Filella</a></p>
+        <div style="clear:both;">
+        <h4>Current Features</h4>
+        <img class="pull-right" src="img/config.png" alt="Configuration">
+        <h5>jQuey plugin:</h5>
+        <ul>
+        	<li><b>Drag &amp; Drop</b> your post it's to the position you chose in the page.</li>
+        	<li><b>Autoheight</b> the height of the postit will automaticly feet to the content.</li>
+        	<li><b>Resize</b> the width of your post it's and feet better to the content. <span class="label label-warning">jQuery UI dependancy</span></li>
+        	<li>Personalize every postit with diferent <b>background colors, text color and text shadow</b>.
+        	<li>Easy color-change interface throw Minicolors Plugin. <span class="label label-warning">Minicolors depandecy</span></li>
+        </ul>
+        <h5>Bookmarklet:</h5>
+        <p>The data is saved throw <a href="http://www.w3schools.com/html/html5_webstorage.asp">HTML5 Web Storage</a> locally. So, all the data you store, is only accesible in this machine and in this browser.</p>
+        <ul>
+        	<li><b>Autosave</b> Save all the post it's content data locally in the browser for a later recover. Just press again the button when you want to recover all your stuff.</li>
+        	<li>Create a postit with the <b>"Add postit" button</b> in the middle-left side of the page (try to select some text before)</li>
+        	<li><b>Hotkey</b> Create a postit in your mouse position by pressing: <b>"Caps + mouse click"</b> (try to select some text before)</li>
+        </ul>
+        <h4>Limits &amp; problems</h4>
+        <ul>
+        	<li>Post It All will not work in old browsers. For the Bookmarklet, ensure your browser have support for the <a href="http://www.w3schools.com/html/html5_webstorage.asp">HTML5 Web Storage</a> technology</li>
+        	<li>For the bookmarklet, in Chrome browser, the <a href="http://www.html5rocks.com/en/tutorials/security/content-security-policy/">Content Security Policy</a> restrict the use of this bookmarklet in some pages such like google. I'm currently working in the "Post It All! Chrome Extension", that will not be limited, and will be autoloaded in the begining of each page.</li>
+        	<li>Note that for the "autoheight" feature, the sticky will try to resize to the content while you type in. In some cases (for example when you paste html content), this could result in a strange behaviour. Try to resize it, or to add an extra space at the end of the note to forze the autoresize.</li>
+        </ul>
+		<h4>Coming soon</h4>
+		<ul>
+			<li>Chrome extension (you will be able to set the autoload of the plugin on every page)</li>
+			<li>Filter notes by domain (visibles in all the pages of the domain.com) or by domain and uri (showing only the created notes in the domain.com/page)</li>
+			<li>Possibility to fix the position of a note in the page (position absolute, disabling dragable and resizable of the note)</li>
+		</ul>
+        </div>
+        <p><span class="label label-inverse">Note:</span> While I was developing "Post It All!", I discovered tons of similar plugins, service and extensions for browsers that make the same work or have similar characteristics as "Post It All!". Be free to check it out and use the one who fit your needs.</p>
+      </div>
+
+      <hr class="featurette-divider">
+      
+      <div class="featurette wrapper" id=licenses>
+        <img class="featurette-image pull-right" src="img/license.png">
+        <h2 class="featurette-heading">Licenses <span class="muted">Post It All! uses and abuses...</span></h2>
+        <p class="lead">You can check the source code or fork this project in the
+        <a class="btn btn-large btn-link" href="https://github.com/txusko/PostItAll">"Post It All" GitHub repository</a></p>
+        <h4>Post It All! could not be without the following libraries and plugins:</h4>
+        <ul>
+        	<li><a href="http://jquery.com/">jQuery</a> &amp; <a href="http://jqueryui.com/">jQuery UI</a> - Copyright © 2013 <a href="http://jquery.org/team/">The jQuery Foundation</a> and other contributors</li>
+        	<li><a href="http://labs.abeautifulsite.net/jquery-miniColors/">jQuery MiniColors 2.0</a></li>
+        </ul>
+        <h4>Part of the source code is based or inspired by the following posts:</h4>
+        <ul>
+        	<li><a href="http://snipplr.com/view/68715/load-jquery-dynamically-from-javascript/">http://snipplr.com/view/68715/load-jquery-dynamically-from-javascript/</a></li>
+        	<li><a href="http://demo.tutorialzine.com/2010/01/sticky-notes-ajax-php-jquery/demo.php">http://demo.tutorialzine.com/2010/01/sticky-notes-ajax-php-jquery/demo.php</a></li>
+        	<li><a href="http://www.admixweb.com/2011/03/22/create-a-posticks-sticky-notes-app-with-html5-css3-and-jquery/">http://www.admixweb.com/2011/03/22/create-a-posticks-sticky-notes-app-with-html5-css3-and-jquery/</a></li>
+        	<li><a href="http://css3playground.com/flip-card.php">http://css3playground.com/flip-card.php</a></li>
+			<li><a href="http://stackoverflow.com/questions/1391278/contenteditable-change-events">http://stackoverflow.com/questions/1391278/contenteditable-change-events</a></li>
+			<li><a href="http://stackoverflow.com/questions/9703342/get-height-of-div-dependent-on-text-inside">http://stackoverflow.com/questions/9703342/get-height-of-div-dependent-on-text-inside</a></li>
+			<li><a href="http://stackoverflow.com/questions/5643635/how-to-get-selected-html-text-with-javascript">http://stackoverflow.com/questions/5643635/how-to-get-selected-html-text-with-javascript</a></li>
+        </ul>
+      </div>
+      
+      <hr class="featurette-divider">
+
+      <div class="featurette wrapper" id="contact">
+        <img class="featurette-image pull-left" src="img/contact2.png">
+        <h2 class="featurette-heading">Contact. <span class="muted">Another way to say, email me!</span></h2>
+        <p class="lead">If you have questions, suggestions, or for whatever you need, don't be shy and email me at: <a href="mailto:postitall@txusko.com">postitall@txusko.com</a>.</p>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a class="navegable" href="#top"><i class="icon-circle-arrow-up"></i> Back to top</a></p>
+        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a> &middot; <a href="#modalPrivacy" role="button" data-toggle="modal">Privacy</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+    
+    <!-- Modals -->
+    <div id="modalPrivacy" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    	<h3 id="myModalLabel">Privacy</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Privacy</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    </div>
+    </div>
+    <div id="modalTerms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    	<h3 id="myModalLabel">Terms of service</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Terms of service</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    </div>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="libs/jquery-1.9.1.min.js"><\/script>')</script>
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+	<script>window.jQuery || document.write('<script src="libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
+	
+	<script src="libs/bootstrap.min.js"></script>
+
+	<script src="libs/jquery.minicolors.js"></script>
+	<script src="plugin/jquery.postitall.js"></script>
+	
+	<script src="libs/main.js"></script>
+
+	<script>
+		var _gaq=[['_setAccount','UA-XXXXXXXX-X'],['_trackPageview']];
+		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+		s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+	
+	<script>
+	$(document).ready(function() {
+		$('.button_tooltip').tooltip();
+	});
+	</script>
+  </body>
+</html>

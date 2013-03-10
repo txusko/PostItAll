@@ -78,6 +78,7 @@ if(jQuery) (function( $ ) {
 		// Basic Settings
 		id				: 0, //Id
 		created			: Date.now(),
+		domain			: window.location.origin, //Domain in the url
 		page			: window.location.pathname, //Page in the url
 		backgroundcolor	: '#FFFC7F', //Background color
 		textcolor		: '#333333', //Text color
@@ -125,7 +126,12 @@ if(jQuery) (function( $ ) {
 			
 			//New postit
 			options.newPostit = false;
-			index = getIndex();
+			if(options.id <= 0) {
+				index = getIndex();
+				options.id = index;
+			} else {
+				index = options.id;
+			}
 			console.log('PIA:new content '+index);
 			PIAcontent = $('<div />', { 'id' : 'newPostIt_'+index });
 			obj.append(PIAcontent);
@@ -158,14 +164,19 @@ if(jQuery) (function( $ ) {
 	
 	function create(obj,options) {
 		//Increase index
-		index = getIndex();
+		if(options.id <= 0) {
+			index = getIndex();
+			options.id = index;
+		} else {
+			index = options.id;
+		}
 		obj.data('PIA-id', index)
 			.data('PIA-initialized', true)
 			.data('PIA-options', options);
 		
 		//Postit editable content
 		kk = obj.html();
-		note = options.description?options.description:kk?kk:'';
+		options.description = options.description?options.description:kk?kk:'';
 	
 		//Front page: toolbar
 		toolbar = $('<div />', { id: 'pia_toolbar_'+index, class: 'PIAtoolbar'});
@@ -217,10 +228,12 @@ if(jQuery) (function( $ ) {
 		//Front page: content
 		content = $('<div />', { id: 'pia_editable_'+index, class: 'PIAeditable PIAcontent'})
 			.change(function() {
+				options.description = $(this).html();
+				obj.data('PIA-options', options);
 				autoresize(obj);
 			})
 			.attr('contenteditable', true)
-			.html(note);
+			.html(options.description);
 		//Front page
 		front = $('<div />', { 
 			class: 'front'
@@ -359,6 +372,7 @@ if(jQuery) (function( $ ) {
 			})
 			.resizable({
 				animate: false,
+				helper: 'ui-resizable-helper',
 				minHeight: options.minHeight,
 				minWidth: options.minWidth,
 				stop: function(e, ui) { 
@@ -380,30 +394,42 @@ if(jQuery) (function( $ ) {
 		$('#textshadow_'+index).click(function() {
 			if($(this).is(':checked')) {
 				$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '1px 1px 0 white');
+				options.textshadow = true;
 			} else {
 				$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '0px 0px 0');
+				options.textshadow = false;
 			}
+			setOptions(options);
 		});
 		
+		//Background and text color
 		if($.minicolors) {
 			//Config: change background-color
 			$('#minicolors_bg_'+index).minicolors({
 				change: function(hex, opacity) {
 					$(this).closest('.PIApostit').css('background-color', hex);
+					options.backgroundcolor = hex;
+					setOptions(options);
 				}
 			});
 			//Config: text color
 			$('#minicolors_text_'+index).minicolors({
 				change: function(hex, opacity) {
 					$(this).closest('.PIApostit').css('color', hex);
+					options.textcolor = hex;
+					setOptions(options);
 				}
 			});
 		} else {
 			$('#minicolors_bg_'+index).change(function() {
 				$(this).closest('.PIApostit').css('background-color', $(this).val());
+				options.backgroundcolor = $(this).val();
+				setOptions(options);
 			});
 			$('#minicolors_text_'+index).change(function() {
 				$(this).closest('.PIApostit').css('color', $(this).val());
+				options.textcolor = $(this).val();
+				setOptions(options);
 			});
 		}
 		
@@ -414,21 +440,16 @@ if(jQuery) (function( $ ) {
 	function autoresize(obj) {
 		var id = obj.data('PIA-id'),
 			options = obj.data('PIA-options'),
-			divWidth = $('#idPostIt_'+id).find('.PIAeditable').width(),
+			posY = $('#idPostIt_'+id).parent().css('left'),
+			posX = $('#idPostIt_'+id).parent().css('top'),
+			divWidth = $('#idPostIt_'+id).width(),
 			divHeight = $('#idPostIt_'+id).find('.PIAeditable').height(),
-			minDivHeight = options.height,
-			minDivWidth = options.width;
-		
-		/*if(divWidth > minDivWidth) {
-			obj.css('width',divWidth);
-			obj.resizable({
-				minWidth: divWidth
-			});
-		}*/
+			minDivHeight = options.minHeight,
+			minDivWidth = options.minWidth;
 		
 		if(divHeight >= minDivHeight) {
-			//divHeight = minDivHeight + ((divHeight - minDivHeight) / 2) + 30;
 			divHeight += 30;
+			options.height = divHeight;
 			obj.css('height',divHeight);
 			if($.ui) {
 				obj.resizable({
@@ -436,9 +457,14 @@ if(jQuery) (function( $ ) {
 				});
 			}
 		} else if(divHeight < minDivHeight) {
+			options.height = minDivHeight;
 			minDivHeight += 30;
 			obj.css('height',minDivHeight);
 		}
+		options.posY = posY;
+		options.posX = posX;
+		options.width = divWidth;
+		//setOptions(options);
 	}
 	
 	function destroy(obj) {
@@ -455,7 +481,7 @@ if(jQuery) (function( $ ) {
 
 
 //Drag postits
-//used if ui is not loaded
+//used if jQuery UI is not loaded
 (function($) {
     $.fn.drags = function(opt) {
 
