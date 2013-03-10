@@ -1,8 +1,12 @@
-#Post It All!
-============
+##Post It All!
 
 Add a post it to any webpage, and recover it later with Post it all!
-Just add the bookmarklet in your bookmark toolbar and start "Postit-ing" all!!
+
+###jQuery Plugin
+A jQuery plugin to add postits to your site.
+
+###Bookmarklet
+Add a post it to any webpage, and recover it later.
 
 ## About
 
@@ -19,6 +23,8 @@ jQuery (https://github.com/jquery/jquery)
 jQuery UI (https://github.com/jquery/jquery-ui)
 
 jQuery MiniColors (https://github.com/claviska/jquery-miniColors)
+
+Bootstrap (http://twitter.github.com/bootstrap/index.html)
 
 ## Demo & Documentation
 
