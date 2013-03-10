@@ -41,7 +41,7 @@
 		<div class="jumbotron wrapper" id="home">
 			<h1>Post It All! <small>Bookmarklet</small></h1>
 			<p class="lead">Add a post it to any webpage, and recover it later with <b>Post it all!</b><br>Just add the bookmarklet in your bookmark toolbar and start "Postit-ing" all!!</p>
-			<a class="btn btn-large btn-success" id="id_button_tooltip" data-placement="right" title="Drag this button to your Bookmarks toolbar" href="javascript:(function(){ver='0.4';PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='http://www.txusko.com/PostItAll/'+ver+'/postitall.js?'+Math.random();document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();">Post It All!</a>
+			<a id="idPIAbmkl" class="btn btn-large btn-success" id="id_button_tooltip" data-placement="right" title="Drag this button to your Bookmarks toolbar" href="javascript:(function(){PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();">Post It All!</a>
 		</div>
 
 		<!-- Three columns of text below the carousel -->
@@ -97,6 +97,13 @@
 		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
 		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
 		s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+	
+	<script>
+	$(document).ready(function() {
+		var bmkl = "javascript:(function(){PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='"+GetSitePath()+"bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();";
+		$('#idPIAbmkl').attr('href', bmkl);
+	});
 	</script>
 
   </body>

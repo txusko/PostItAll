@@ -52,7 +52,7 @@
 			<div class="span6">
 				<h2><a href="plugin.html">jQuery Plugin</a></h2>
 				<img class="img-circle" data-src="holder.js/140x140" src="img/jquery_plugin.png">
-				<p class="lead">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the <a href="https://github.com/txusko/PostItAll">"Post It All" GitHub repository</a></p>
+				<p class="lead">A jQuery plugin to add postits to your site.<br>See it in action, Download the plugin now or Fork the <a href="https://github.com/txusko/PostItAll">"Post It All" GitHub repository</a></p>
 				<a href="plugin.html" class="btn btn-large btn-primary button_tooltip" data-placement="bottom" title="View the plugin in action">Try the demo</a>
 				<a href="#" class="btn btn-large btn-primary button_tooltip" data-placement="bottom" title="Download the plugin">Download plugin</a>
 			</div>
@@ -60,7 +60,7 @@
 				<h2><a href="bookmarklet.html" style="color:#46a546">Bookmarklet</a></h2>
 				<img class="img-circle" data-src="holder.js/140x140" src="img/bookmarklet_drag_and_drop.png">
 				<p class="lead">Add a post it to any webpage, and recover it later.<br><span class="label label-inversed">Install:</span> Drag &amp; drop the button below to you bookmarks toolbar and Click It.</p>
-				<a class="btn btn-large btn-success button_tooltip" data-placement="bottom" title="Drag this button to your Bookmarks toolbar and Click on it!" href="javascript:(function(){ver='0.4';PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='http://www.txusko.com/PostItAll/'+ver+'/postitall.js?'+Math.random();document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();">Post It All!</a>
+				<a id="idPIAbmkl" class="btn btn-large btn-success button_tooltip" data-placement="bottom" title="Drag this button to your Bookmarks toolbar and Click on it!" href="javascript:(function(){PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='/bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();">Post It All!</a>
 			</div>
 		</div>
 	
@@ -208,6 +208,9 @@
 	<script>
 	$(document).ready(function() {
 		$('.button_tooltip').tooltip();
+		
+		var bmkl = "javascript:(function(){PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='"+GetSitePath()+"bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();";
+		$('#idPIAbmkl').attr('href', bmkl);
 	});
 	</script>
   </body>

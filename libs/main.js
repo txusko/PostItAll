@@ -15,3 +15,16 @@ $(function() {
 	});
 });
 
+function GetSitePath() {
+    var rootPath = window.location.protocol + "//" + window.location.host;
+    var path = window.location.pathname;
+    if (path.lastIndexOf("/") == 0) {
+    	path = path.substring(1);
+    }
+    path = path.substr(0,path.lastIndexOf("/"));
+    if (path != "") {
+    	rootPath = rootPath + path + '/';
+    }
+    return rootPath;
+}
+
