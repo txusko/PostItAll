@@ -40,7 +40,7 @@
 		</div><!-- /.navbar -->
 	</div>
 	
-	<div class="container marketing">
+	<div class="container">
 		<!-- Jumbotron -->
 		<div class="jumbotron wrapper" id="home">
 			<h1>Post It All! <small>jQuery plugin</small></h1>
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span8">
 				<h4>Code</h4>
 <pre class="prettyprint lang-html">
 // HTML
@@ -73,7 +73,7 @@ $(document).ready(function() {
 &lt;/script&gt;
 </pre>
 			</div>
-			<div class="span6">
+			<div class="span4">
 				<h4>Result</h4>
 				<div id="idAddDemoPostit">Content of the postit 1</div>
 				<div class="classAddDemoPostit">Content of the postit 2</div>
@@ -92,18 +92,29 @@ $(document).ready(function() {
 		</div>
 		
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span8">
 				<h4>Code</h4>
 <pre class="prettyprint lang-html">
 // HTML
 &lt;form&gt;
-  &lt;label for="idBgTextColor"&gt;Background-Color:&lt;/label&gt; 
-  &lt;input id="idBgTextColor" type="text" value="#0000ff"&gt;
-  &lt;label for="idTextColor"&gt;Color:&lt;/label&gt; 
-  &lt;input id="idTextColor" type="text" value="#333333"&gt;
-  &lt;label for="idContent"&gt;Content:&lt;/label&gt; 
-  &lt;textarea id="idContent"&gt;This is anoteher demo&lt;/textarea&gt;
-  &lt;p&gt;&lt;input type="button" class="btn btn-primary" value="Add this as a postit" id="idAddDemoPostit2"&gt;&lt;/p&gt;
+&lt;div&gt;
+  &lt;label for="idBgTextColor"&gt;Background-Color:&lt;/label&gt;
+  &lt;input id="idBgTextColor" type="text" name="bgColor" value="#0000ff" class="minicolors"&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div&gt;
+  &lt;label for="idTextColor"&gt;Color:&lt;/label&gt;
+  &lt;input id="idTextColor" type="text" name="textColor" value="#333333" class="minicolors"&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div&gt;
+  &lt;label for="idContent"&gt;Content:&lt;/label&gt;
+  &lt;textarea id="idContent" name="textColor"&gt;This is anoteher demo&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;input type="button" class="btn btn-primary" value="Add this as a postit" id="idAddDemoPostit2"&gt;
+&lt;/div&gt;
+&lt;div id="idAddDemoPostit2_result"&gt;&lt;/div&gt;
 &lt;/form&gt;
 
 // JAVASCRIPT
@@ -121,7 +132,7 @@ $(document).ready(function() {
 &lt;/script&gt;
 </pre>
 			</div>
-			<div class="span6">
+			<div class="span4">
 				<h4>Result</h4>
 				<form>
 					<div>
@@ -149,20 +160,20 @@ $(document).ready(function() {
 		
 		<div class="row-fluid">
 			<div class="span12">
-				<h3>Form example</h3>
+				<h3>Recover options</h3>
 				<p class="lead">
-				In this example, we pass the parameters of the form to create a new postit. With the 'newPostit' parameter set to true, you can create as many post it's as you want.
+				You can recover the options (position, dimensions, content, ...) of a postit by calling the 'options' method
 				</p>
 			</div>
 		</div>
 		
 		<div class="row-fluid">
-			<div class="span6">
+			<div class="span8">
 				<h4>Code</h4>
 <pre class="prettyprint lang-html">
 // HTML
-&lt;input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"&gt;&lt;br&gt;
-&lt;textarea id="idRecoverOptions" style="width:100%;height:300px;"&gt;
+&lt;p&gt;&lt;input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"&gt;&lt;/p&gt;
+&lt;textarea id="idRecoverOptions" style="width:100%;height:350px;"&gt;
 &lt;/textarea&gt;
 
 // JAVASCRIPT
@@ -178,10 +189,50 @@ $('#idRecoverButton').click(function() {
 &lt;/script&gt;
 </pre>
 			</div>
-			<div class="span6">
-			<input id="idRecoverButton" type="button" class="btn" value="Recover all postit options">
-			<br><textarea id="idRecoverOptions" style="width:100%;height:300px;">
+			<div class="span4">
+			<p><input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"></p>
+			<textarea id="idRecoverOptions" style="width:100%;height:350px;">
 			</textarea>
+			</div>
+		</div>
+		
+		
+		<div class="row-fluid">
+			<div class="span12">
+				<h3>Load data</h3>
+				<p class="lead">
+				You can save the postit options and load later
+				</p>
+			</div>
+		</div>
+		
+		<div class="row-fluid">
+			<div class="span8">
+				<h4>Code</h4>
+<pre class="prettyprint lang-html">
+// HTML
+&lt;textarea id="idLoadOptions" style="width:100%;height:350px;"&gt;{"id":10,"created":1362924534460,"domain":"http://txusko.com","page":"/PostItAll/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"absolute","posX":"2346px","posY":"53px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"&gt;&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"&gt;&lt;a href=\"http://txusko.com/PostItAll/plugin.html\"&gt;jQuery Plugin&lt;/a&gt;&lt;/h2&gt;&lt;img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"http://txusko.com/PostItAll/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;/span&gt;&lt;p class=\"lead\"&gt;A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the&lt;a href=\"https://github.com/txusko/PostItAll\"&gt;\"Post It All\" GitHub repository&lt;/a&gt;&lt;/p&gt;&lt;/h2&gt;","newPostit":true}&lt;/textarea&gt;
+&lt;p&gt;&lt;input id="idLoadButton" type="button" class="btn" value="Load content"&gt;&lt;/p&gt;
+&lt;div id="idLoadContent"&gt;&lt;/div&gt;
+				
+// JAVASCRIPT
+&lt;script&gt;
+$('#idLoadButton').click(function() {
+  var lines = $('#idLoadOptions').val().split('\n');
+  for(var i = 0;i < lines.length;i++) {
+    if(lines[i]) {
+      var o = JSON.parse(lines[i]+'\n');
+      $('#idLoadContent').postitall(o);
+    }
+  }
+});
+&lt;/script&gt;
+</pre>
+			</div>
+			<div class="span4">
+				<textarea id="idLoadOptions" style="width:100%;height:350px;">{"id":10,"created":1362924534460,"domain":"http://txusko.com","page":"/PostItAll/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"absolute","posX":"2346px","posY":"53px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"<h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"><h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"><a href=\"http://txusko.com/PostItAll/plugin.html\">jQuery Plugin</a></h2><img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"http://txusko.com/PostItAll/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"><span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"></span><p class=\"lead\">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the<a href=\"https://github.com/txusko/PostItAll\">\"Post It All\" GitHub repository</a></p></h2>","newPostit":true}</textarea>
+				<p><input id="idLoadButton" type="button" class="btn" value="Load content"></p>
+				<div id="idLoadContent"></div>
 			</div>
 		</div>
 		
@@ -339,7 +390,7 @@ $('#some_id').postitall({
 	width           : 200,                      //width
 	minHeight       : 152,                      //resizable min-width
 	minWidth        : 131,                      //resizable min-height
-	description     : '',      //content
+	description     : '',                       //content
 	newPostit       : false,                    //create a new postit
 });
 &lt;/script&gt;
@@ -396,6 +447,8 @@ $('#some_id').postitall({
 	<script>window.jQuery || document.write('<script src="libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
 	
 	<script src="libs/bootstrap.min.js"></script>
+	
+	<script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css" defer="defer"></script>
 
 	<script src="libs/jquery.minicolors.js"></script>
 	<script src="plugin/jquery.postitall.js"></script>
@@ -446,6 +499,7 @@ $('#some_id').postitall({
 			});
 		});
 		
+		//Postit options
 		$('#idRecoverButton').click(function() {
 			$('#idRecoverOptions').val('Options:\n');
 			$('.PIApostit').each(function() {
@@ -454,6 +508,17 @@ $('#some_id').postitall({
 					+JSON.stringify($(this).postitall('options'))
 					+'\n');
 			});
+		});
+		
+		//Load content
+		$('#idLoadButton').click(function() {
+			var lines = $('#idLoadOptions').val().split('\n');
+			for(var i = 0;i < lines.length;i++) {
+			    if(lines[i]) {
+			    	var o = JSON.parse(lines[i]+'\n');
+					$('#idLoadContent').postitall(o);
+			    }
+			}
 		});
 	});
 	</script>

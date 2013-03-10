@@ -101,7 +101,8 @@
 	
 	<script>
 	$(document).ready(function() {
-		var bmkl = "javascript:(function(){PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='"+GetSitePath()+"bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();";
+		var sitepath = GetSitePath();
+		var bmkl = "javascript:(function(){var%20sitepath='"+sitepath+"';PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='"+sitepath+"bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();";
 		$('#idPIAbmkl').attr('href', bmkl);
 	});
 	</script>
