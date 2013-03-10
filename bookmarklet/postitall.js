@@ -2,8 +2,7 @@
 if(typeof(Storage)!=="undefined") {
 
 	//Global config
-	var PIAversion = "0.4";
-	var PIAurl = "http://www.txusko.com/PostItAll/"+PIAversion+"/";
+	var PIAurl = "https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/";
 	
 	// Jquery version
 	var expectedVersion = "1.9.1";
@@ -100,7 +99,7 @@ if(typeof(Storage)!=="undefined") {
 	        document.getElementsByTagName("head")[0].appendChild(scriptCss);
 	    }
 		// Load CSS content    
-		loadCss(PIAurl + 'postitall.css?'+Math.floor((Math.random()*1000000)+1)); //Load the PIA css
+		loadCss(PIAurl + 'bookmarklet/postitall.css?'+Math.floor((Math.random()*1000000)+1)); //Load the PIA css
 		
 		var PIAid = 0;
 		
@@ -222,16 +221,15 @@ if(typeof(Storage)!=="undefined") {
 	    checkJqueryReady(function($) {
 	    	
 	    	//Load Jquery UI
-	    	loadJs('https://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/jquery-ui.min.js'); // Load the jquery ui
-			//loadJs(PIAurl+'jquery-ui.min.js');
-	    	loadCss('http://code.jquery.com/ui/'+expectedVersionUI+'/themes/base/jquery-ui.css'); //Load the jquery ui css
+	    	loadJs('http://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/jquery-ui.min.js'); // Load the jquery ui
+	    	loadCss('http://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/themes/base/minified/jquery-ui.min.css'); // Load the jquery ui
 	    	
 	    	//Load more stuff
-	    	loadJs(PIAurl+'jquery.minicolors.js'); // Load the jquery minicolors plugin
-	    	loadCss(PIAurl+'jquery.minicolors.css'); // Load the jquery ui
+	    	loadJs(PIAurl+'libs/jquery.minicolors.js'); // Load the jquery minicolors plugin
+	    	loadCss(PIAurl+'libs/jquery.minicolors.css'); // Load the jquery ui
 	    	
-	    	loadJs(PIAurl+'jquery.postitall.js?'+Math.floor((Math.random()*1000000)+1)); // Load the jquery minicolors plugin
-	    	loadCss(PIAurl+'jquery.postitall.css?'+Math.floor((Math.random()*1000000)+1)); // Load the jquery ui
+	    	loadJs(PIAurl+'plugin/jquery.postitall.js?'+Math.floor((Math.random()*1000000)+1)); // Load the jquery minicolors plugin
+	    	loadCss(PIAurl+'plugin/jquery.postitall.css?'+Math.floor((Math.random()*1000000)+1)); // Load the jquery ui
 	    	
 	    	
 	    	//All stuff loaded OK

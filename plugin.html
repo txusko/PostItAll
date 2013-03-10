@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="libs/jquery-ui-1.10.0.custom.css">
         <link rel="stylesheet" href="libs/bootstrap.min.css">
 		<link rel="stylesheet" href="libs/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="libs/jquery.minicolors.css">
@@ -190,9 +190,10 @@ $('#idRecoverButton').click(function() {
 </pre>
 			</div>
 			<div class="span4">
-			<p><input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"></p>
-			<textarea id="idRecoverOptions" style="width:100%;height:350px;">
-			</textarea>
+				<h4>Result</h4>
+				<p><input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"></p>
+				<textarea id="idRecoverOptions" style="width:100%;height:350px;">
+				</textarea>
 			</div>
 		</div>
 		
@@ -230,6 +231,7 @@ $('#idLoadButton').click(function() {
 </pre>
 			</div>
 			<div class="span4">
+				<h4>Result</h4>
 				<textarea id="idLoadOptions" style="width:100%;height:350px;">{"id":10,"created":1362924534460,"domain":"http://txusko.com","page":"/PostItAll/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"absolute","posX":"2346px","posY":"53px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"<h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"><h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"><a href=\"http://txusko.com/PostItAll/plugin.html\">jQuery Plugin</a></h2><img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"http://txusko.com/PostItAll/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"><span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"></span><p class=\"lead\">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the<a href=\"https://github.com/txusko/PostItAll\">\"Post It All\" GitHub repository</a></p></h2>","newPostit":true}</textarea>
 				<p><input id="idLoadButton" type="button" class="btn" value="Load content"></p>
 				<div id="idLoadContent"></div>
