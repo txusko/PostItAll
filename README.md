@@ -1,10 +1,10 @@
 ##Post It All!
 
 ###jQuery Plugin
-A jQuery plugin to add postits to your site.
+A jQuery plugin to add post it's to your site.
 
 ###Bookmarklet
-Add a post it to any webpage, and recover it later.
+Add a post it to any webpage you visit, and recover it later.
 
 ## About
 
@@ -21,6 +21,8 @@ jQuery (https://github.com/jquery/jquery)
 jQuery UI (https://github.com/jquery/jquery-ui)
 
 jQuery MiniColors (https://github.com/claviska/jquery-miniColors)
+
+For the demo layout:
 
 Bootstrap (http://twitter.github.com/bootstrap/index.html)
 
