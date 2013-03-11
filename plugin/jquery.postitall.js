@@ -90,7 +90,8 @@ if(jQuery) (function( $ ) {
 		minHeight		: 152, //resizable min-width
 		minWidth		: 131, //resizable min-height
 		description		: '', //content
-		newPostit		: false,
+		newPostit		: false, //Create a new postit
+		autoheight      : true, //Set autoheight feature on or off
 
 		// Callbacks / Event Handlers
 		onChange: function () {},
@@ -157,7 +158,7 @@ if(jQuery) (function( $ ) {
 				index = id; 
 			}
 		});
-		index = index + 1
+		index = index + 1;
 		return parseInt(index);
 	}
 	
@@ -244,7 +245,10 @@ if(jQuery) (function( $ ) {
 		//Back page: toolbar
 		toolbar = $('<div />', { class: 'PIAtoolbar'})
 			//Close config icon
-			.append($('<div />', { id: 'pia_close_'+index, class: 'PIAclose PIAicon'})
+			.append($('<div />', { 
+					id: 'pia_close_'+index, 
+					class: 'PIAclose PIAicon'
+				})
 				.click(function(e) {
 					//var id = $(this).closest('.PIApostit').children().attr('data-id');
 					var id = obj.data('PIA-id');
@@ -252,6 +256,10 @@ if(jQuery) (function( $ ) {
 					$('#idPostIt_'+id).parent().removeClass('flip');
 					e.preventDefault();
 				})
+			)
+			.append($('<span />', {  
+					class: 'float_right'
+				}).html(options.created)
 			);
 		//Back page: content
 		bgLabel = $('<label />', { 
@@ -277,7 +285,7 @@ if(jQuery) (function( $ ) {
 			'data-default-value': options.textcolor 
 		});
 		if(options.textshadow) {
-			checked = 'checked'
+			checked = 'checked';
 		} else {
 			checked = '';
 		}
@@ -366,7 +374,7 @@ if(jQuery) (function( $ ) {
 				stop: function() {
 					//Enable draggable postit option
 					$(this).draggable('enable');
-					autoresize($(this))
+					autoresize($(this));
 				}
 			})
 			.resizable({
@@ -375,7 +383,7 @@ if(jQuery) (function( $ ) {
 				minHeight: options.minHeight,
 				minWidth: options.minWidth,
 				stop: function(e, ui) { 
-					autoresize($(this))
+					autoresize($(this));
 				}
 			})
 			.show("scale",{percent:100},1000, function() {
@@ -437,33 +445,35 @@ if(jQuery) (function( $ ) {
 	}
 	
 	function autoresize(obj) {
-		var id = obj.data('PIA-id'),
-			options = obj.data('PIA-options'),
-			posY = $('#idPostIt_'+id).parent().css('left'),
-			posX = $('#idPostIt_'+id).parent().css('top'),
-			divWidth = $('#idPostIt_'+id).width(),
-			divHeight = $('#idPostIt_'+id).find('.PIAeditable').height(),
-			minDivHeight = options.minHeight,
-			minDivWidth = options.minWidth;
-		
-		if(divHeight >= minDivHeight) {
-			divHeight += 30;
-			options.height = divHeight;
-			obj.css('height',divHeight);
-			if($.ui) {
-				obj.resizable({
-					minHeight: divHeight
-				});
+		if(options.autoheight) {
+			var id = obj.data('PIA-id'),
+				options = obj.data('PIA-options'),
+				posY = $('#idPostIt_'+id).parent().css('left'),
+				posX = $('#idPostIt_'+id).parent().css('top'),
+				divWidth = $('#idPostIt_'+id).width(),
+				divHeight = $('#idPostIt_'+id).find('.PIAeditable').height(),
+				minDivHeight = options.minHeight;
+			
+			if(divHeight >= minDivHeight) {
+				divHeight += 30;
+				options.height = divHeight;
+				obj.css('height',divHeight);
+				if($.ui) {
+					obj.resizable({
+						minHeight: divHeight
+					});
+				}
+			} else if(divHeight < minDivHeight) {
+				options.height = minDivHeight;
+				minDivHeight += 30;
+				obj.css('height',minDivHeight);
 			}
-		} else if(divHeight < minDivHeight) {
-			options.height = minDivHeight;
-			minDivHeight += 30;
-			obj.css('height',minDivHeight);
+			
+			options.posY = posY;
+			options.posX = posX;
+			options.width = divWidth;
+			//setOptions(options);
 		}
-		options.posY = posY;
-		options.posX = posX;
-		options.width = divWidth;
-		//setOptions(options);
 	}
 	
 	function destroy(obj) {
@@ -486,17 +496,17 @@ if(jQuery) (function( $ ) {
 
         opt = $.extend({handle:"",cursor:"move"}, opt);
 
-        if(opt.handle === "") {
-            var $el = this;
-        } else {
-            var $el = this.find(opt.handle);
+        var $el = this;
+        if(opt.handle !== "") {
+            $el = this.find(opt.handle);
         }
 
         return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
+        	var $drag;
             if(opt.handle === "") {
-                var $drag = $(this).parent().parent().parent().addClass('draggable');
+                $drag = $(this).parent().parent().parent().addClass('draggable');
             } else {
-                var $drag = $(this).parent().parent().parent().addClass('active-handle').parent().addClass('draggable');
+                $drag = $(this).parent().parent().parent().addClass('active-handle').parent().addClass('draggable');
             }
             var z_idx = $drag.css('z-index'),
                 drg_h = $drag.outerHeight(),
@@ -520,5 +530,5 @@ if(jQuery) (function( $ ) {
             }
         });
 
-    }
+    };
 })(jQuery);
