@@ -4,6 +4,8 @@ if(typeof(Storage)!=="undefined") {
 	//Global config
 	var PIAurl = "https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/";
 	
+	console.log('Init loading PIA library : '+PIAurl);
+	
 	// Jquery version
 	var expectedVersion = "1.9.1";
 	
@@ -11,11 +13,13 @@ if(typeof(Storage)!=="undefined") {
 	var expectedVersionUI = "1.10.1";
 	
 	//Loading message
-	var loadingMessage = document.createElement('span');
-	loadingMessage.setAttribute('id','PIAloading');
-	loadingMessage.setAttribute('style','z-index:9999;top:0px;left:0px;position:fixed;background-color:#FFFC7F;color:#333;');
-	loadingMessage.innerHTML="Loading \"Post It All!\" ...";
-	document.getElementsByTagName("body")[0].appendChild(loadingMessage);
+	if(typeof(document.getElementById("kk")) !== "undefined") {
+		var loadingMessage = document.createElement('span');
+		loadingMessage.setAttribute('id','PIAloading');
+		loadingMessage.setAttribute('style','z-index:9999;top:0px;left:0px;position:fixed;background-color:#FFFC7F;color:#333;');
+		loadingMessage.innerHTML="Loading \"Post It All!\" ...";
+		document.getElementsByTagName("body")[0].appendChild(loadingMessage);
+	}
 	
 	// Begin execution
 	(function($storage) {

@@ -74,6 +74,31 @@
 		  </div><!-- /.row -->
 		
       <hr class="featurette-divider">
+      
+      <h2>How it works</h2>
+		
+		<div class="row-fluid">
+			<div class="span12">
+				<img class="featurette-image pull-left" src="img/bookmarklet_drag_and_drop.png">
+				<h3>Install</h3>
+				<p>Drag and drop the green botton below to your bookmarks toolbar</p>
+				<h3>Use it</h3>
+				<p>When you want to add an annotation or you want to recover an old note from the site your are visiting, just press the <b>"Post It All!"</b> link you have already added to your bookmark toolbar. If the library load correctly you will see a fixed blue button in the middle-left of your browser window.</p>
+				<h3>Internal storage</h3>
+				<p>All the data you add to a note is stored locally throw <a href="http://www.w3schools.com/html/html5_webstorage.asp">HTML5 Web Storage</a>.
+				<h3>Features</h3>
+				<ul>
+					<li><b>Post it features</b> Change background-color, text-color, resize it, move it ...</li>
+					<li><b>Autosave</b> All data-notes saved automatically on before unload event.</li>
+		        	<li><b>Add Postit button</b> Just press it if you want a sticky note floating next to the button. (try to select some text before)</li>
+		        	<li><b>Hotkey</b> Create a postit in your mouse position by pressing: <b>"Caps + mouse click"</b>. (try to select some text before)</li>
+				</ul>
+				<h3>Host your own version</h3>
+				<p>Edit /bookmarklet/postitall.js and change <b>PIAurl</b> by your server PostItAll url (Ex: http://localhost/PostItAll/)</p>
+			</div>
+		</div>
+		
+      <hr class="featurette-divider">
 
       <!-- /END THE FEATURETTES -->
 
@@ -101,7 +126,7 @@
 	<script>
 	$(document).ready(function() {
 		var sitepath = GetSitePath();
-		var bmkl = "javascript:(function(){var%20sitepath='"+sitepath+"';PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='"+sitepath+"bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();";
+		var bmkl = "javascript:(function(){var%20sitepath='"+sitepath+"';PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='"+sitepath+"bookmarklet/postitall.js?"+Math.floor((Math.random()*1000000)+1)+"';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();";
 		$('#idPIAbmkl').attr('href', bmkl);
 	});
 	</script>

@@ -241,6 +241,7 @@ if(jQuery) (function( $ ) {
 		.append(toolbar)
 		.append(content);
 		
+		var d = new Date(options.created);
 		
 		//Back page: toolbar
 		toolbar = $('<div />', { class: 'PIAtoolbar'})
@@ -258,12 +259,13 @@ if(jQuery) (function( $ ) {
 				})
 			)
 			.append($('<span />', {  
-					class: 'float_right'
-				}).html(options.created)
+					class: 'float-right'
+				}).html(d.toLocaleDateString()+"<br>"+d.toLocaleTimeString())
 			);
 		//Back page: content
 		bgLabel = $('<label />', { 
-			'for': 'minicolors_bg_'+index 
+			'for': 'minicolors_bg_'+index,
+			'style': 'display:block;'
 		}).html('Background-color:');
 		bgString = $('<input />', { 
 			'class': 'minicolors', 
@@ -274,7 +276,8 @@ if(jQuery) (function( $ ) {
 			'data-default-value': options.backgroundcolor 
 		});
 		tcLabel = $('<label />', { 
-			'for': 'minicolors_text_'+index 
+			'for': 'minicolors_text_'+index,
+			'style': 'display:block;' 
 		}).html('Text color:');
 		tcString = $('<input />', { 
 			'class': 'minicolors', 
@@ -291,12 +294,12 @@ if(jQuery) (function( $ ) {
 		}
 		tsString = $('<input />', {
 			'id': 'textshadow_'+index,
-			'style': 'vertical-align:top;',
 			'type': 'checkbox',
 			'checked': checked
 		});
 		tsLabel = $('<label />', { 
-			'for': 'textshadow_'+index 
+			'for': 'textshadow_'+index,
+			'style': 'display:block;'
 		}).append(tsString).append(' Text shadow');
 		content = $('<div />', { class: 'PIAcontent'})
 			.append(bgLabel).append(bgString) // Bg color
@@ -445,10 +448,11 @@ if(jQuery) (function( $ ) {
 	}
 	
 	function autoresize(obj) {
+		var id = obj.data('PIA-id'),
+			options = obj.data('PIA-options');
+		
 		if(options.autoheight) {
-			var id = obj.data('PIA-id'),
-				options = obj.data('PIA-options'),
-				posY = $('#idPostIt_'+id).parent().css('left'),
+			var posY = $('#idPostIt_'+id).parent().css('left'),
 				posX = $('#idPostIt_'+id).parent().css('top'),
 				divWidth = $('#idPostIt_'+id).width(),
 				divHeight = $('#idPostIt_'+id).find('.PIAeditable').height(),
