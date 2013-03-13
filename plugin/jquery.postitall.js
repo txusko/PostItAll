@@ -30,19 +30,19 @@
 
 if(jQuery) (function( $ ) {
 	
-	//Debugging
-	var debugging = true; // or true
-	if (typeof(console) === "undefined") { 
-		console = { 
-			log: function() {} 
-		};
-	} else if (!debugging || typeof(console.log) === "undefined") {
-		console.log = function() {};
-	}
-	
 	// Public methods
 	$.extend($.fn, {
 		postitall: function(method, data) {
+			
+			//Debugging
+			var debugging = true; // or true
+			if (typeof(console) === "undefined") { 
+				console = { 
+					log: function() {} 
+				};
+			} else if (!debugging || typeof(console.log) === "undefined") {
+				console.log = function() {};
+			}
 			
 			switch(method) {
 				
@@ -174,6 +174,7 @@ if(jQuery) (function( $ ) {
 	
 	function create(obj,options) {
 		//Increase index
+		var index = 0;
 		if(options.id <= 0) {
 			index = getIndex();
 			options.id = index;
@@ -189,87 +190,99 @@ if(jQuery) (function( $ ) {
 		options.description = options.description?options.description:kk?kk:'';
 	
 		//Front page: toolbar
-		toolbar = $('<div />', { id: 'pia_toolbar_'+index, class: 'PIAtoolbar'});
-			//Grag support without jQuery UI
-			if(!$.ui) {
-				toolbar.drags();
-			}
-			//Config icon
-			toolbar.append(
-					$('<div />', { 
-						id: 'pia_config_'+index, 
-						class: 'PIAconfig PIAicon'
-					})
-					.click(function(e) {
-						var id = obj.data('PIA-id');
-						console.log('PIA:config #idPostIt_'+id);
-						$('#idPostIt_'+id).parent().addClass('flip');
-						//$(this).parent().parent().parent().parent().addClass('flip');
-						e.preventDefault();
-					})
-			)
-			//Delete icon
-			.append($('<div />', { id: 'pia_delete_'+index, class: 'PIAdelete PIAicon'})
-				.click(function (e) {
-					if($(this).parent().find('.ui-widget').length <= 0) {
-						var cont = '<div class="ui-widget float-left">'
-							+'<div class="PIAwarning">'
-							+'<span class="PIAdelwar float-left"></span>&nbsp;Sure?&nbsp;'
-							+'<a id="sure_delete_'+index+'" href="#"><span class="PIAdelyes float-right"></span></a>'
-							+'<a id="cancel_'+index+'" href="#"><span class="PIAdelno float-right"></span></a>'
-							+'</div>'
-							+'</div>';
-						$(this).parent().append(cont);
-						$('#sure_delete_'+index).click(function(e) {
-							//var id = $(this).closest('.PIApostit').children().attr('data-id');
-							var id = obj.data('PIA-id');
-							console.log('PIA:destroy #idPostIt_'+id);
-							destroy($('#idPostIt_'+id).parent());
-							e.preventDefault();
-						});
-						$('#cancel_'+index).click(function(e) {
-							$(this).parent().parent().remove();
-							e.preventDefault();
-						});
-					}
+		toolbar = $('<div />', { 
+			'id': 'pia_toolbar_'+index.toString(), 
+			'class': 'PIAtoolbar'
+		});
+		//Grag support without jQuery UI
+		if(!$.ui) {
+			toolbar.drags();
+		}
+		//Config icon
+		toolbar.append(
+				$('<div />', { 
+					'id': 'pia_config_'+index.toString(), 
+					'class': 'PIAconfig PIAicon'
+				})
+				.click(function(e) {
+					var id = obj.data('PIA-id');
+					console.log('PIA:config #idPostIt_'+id);
+					$('#idPostIt_'+id+' > .back').css('visibility','visible');
+					$('#idPostIt_'+id).parent().addClass('flip', function() {
+						$('#idPostIt_'+id+' > .front').css('visibility','hidden');
+					});
+					//$(this).parent().parent().parent().parent().addClass('flip');
 					e.preventDefault();
 				})
-			);
-		//Front page: content
-		content = $('<div />', { id: 'pia_editable_'+index, class: 'PIAeditable PIAcontent'})
-			.change(function() {
-				options.description = $(this).html();
-				obj.data('PIA-options', options);
-				autoresize(obj);
+		)
+		//Delete icon
+		.append($('<div />', { 'id': 'pia_delete_'+index.toString(), 'class': 'PIAdelete PIAicon'})
+			.click(function (e) {
+				if($(this).parent().find('.ui-widget').length <= 0) {
+					var cont = '<div class="ui-widget float-left">'
+						+'<div class="PIAwarning">'
+						+'<span class="PIAdelwar float-left"></span>&nbsp;Sure?&nbsp;'
+						+'<a id="sure_delete_'+index+'" href="#"><span class="PIAdelyes float-right"></span></a>'
+						+'<a id="cancel_'+index+'" href="#"><span class="PIAdelno float-right"></span></a>'
+						+'</div>'
+						+'</div>';
+					$(this).parent().append(cont);
+					$('#sure_delete_'+index).click(function(e) {
+						//var id = $(this).closest('.PIApostit').children().attr('data-id');
+						var id = obj.data('PIA-id');
+						console.log('PIA:destroy #idPostIt_'+id);
+						destroy($('#idPostIt_'+id).parent());
+						e.preventDefault();
+					});
+					$('#cancel_'+index).click(function(e) {
+						$(this).parent().parent().remove();
+						e.preventDefault();
+					});
+				}
+				e.preventDefault();
 			})
-			.attr('contenteditable', true)
-			.html(options.description);
+		);
+		//Front page: content
+		content = $('<div />', { 
+			'id': 'pia_editable_'+index.toString(), 
+			'class': 'PIAeditable PIAcontent'
+		}).change(function() {
+			options.description = $(this).html();
+			obj.data('PIA-options', options);
+			autoresize(obj);
+		}).attr('contenteditable', true)
+		.html(options.description);
+		
 		//Front page
 		front = $('<div />', { 
-			class: 'front'
-		})
-		.append(toolbar)
+			'class': 'front'
+		}).append(toolbar)
 		.append(content);
 		
 		var d = new Date(options.created);
 		
 		//Back page: toolbar
-		toolbar = $('<div />', { class: 'PIAtoolbar'})
+		toolbar = $('<div />', { 'class': 'PIAtoolbar'})
 			//Close config icon
 			.append($('<div />', { 
-					id: 'pia_close_'+index, 
-					class: 'PIAclose PIAicon'
+					'id': 'pia_close_'+index.toString(), 
+					'class': 'PIAclose PIAicon'
 				})
 				.click(function(e) {
 					//var id = $(this).closest('.PIApostit').children().attr('data-id');
 					var id = obj.data('PIA-id');
 					console.log('PIA:close config #idPostIt_'+id);
-					$('#idPostIt_'+id).parent().removeClass('flip');
+					
+					$('#idPostIt_'+id+' > .front').css('visibility','visible');
+					$('#idPostIt_'+id).parent().removeClass('flip', function() {
+						$('#idPostIt_'+id+' > .back').css('visibility','hidden');
+					});
 					e.preventDefault();
 				})
 			)
 			.append($('<span />', {  
-					class: 'float-right'
+					'class': 'float-right',
+					'style': 'line-height:10px;'
 				}).html(d.toLocaleDateString()+"<br>"+d.toLocaleTimeString())
 			);
 		//Back page: content
@@ -311,20 +324,21 @@ if(jQuery) (function( $ ) {
 			'for': 'textshadow_'+index,
 			'style': 'display:block;'
 		}).append(tsString).append(' Text shadow');
-		content = $('<div />', { class: 'PIAcontent'})
+		content = $('<div />', { 'class': 'PIAcontent'})
 			.append(bgLabel).append(bgString) // Bg color
 			.append(tcLabel).append(tcString) // Text color
 			.append(tsLabel) // Text shadow
 			;
 		//Back page
 		back = $('<div />', { 
-			class: 'back'
+			'class': 'back',
+			'style': 'visibility: hidden;'
 		})
 		.append(toolbar)
 		.append(content);
 		
 		//Create postit
-		postit = $('<div />', { id: 'idPostIt_'+index, 'data-id': index })
+		postit = $('<div />', { 'id': 'idPostIt_'+index.toString(), 'data-id': index })
 			.append(front).append(back);
 		
 		//Convert relative position to prevent height and width object in html layout
@@ -398,15 +412,21 @@ if(jQuery) (function( $ ) {
 				stop: function(e, ui) { 
 					autoresize($(this));
 				}
-			})
-			.show("scale",{percent:100},1000, function() {
-				autoresize($(this));
 			});
-		} else {
+			/*.show("scale",{percent:100},1500, function() {
+				autoresize($(this));
+				//sometimes, the postit hide magically before scale ... trying to fix it ...
+				$(this).show();
+			});*/
+		} /*else {
 			obj.slideDown('slow', function() {
 				autoresize($(this));
 			});
-		}
+		}*/
+		
+		obj.slideDown('slow', function() {
+			autoresize($(this));
+		});
 		
 		//Rest of actions
 		

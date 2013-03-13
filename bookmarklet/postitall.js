@@ -45,7 +45,7 @@ if(typeof(Storage)!=="undefined") {
 		
 		// Get user selection text on page
 		function getSelectedText() {
-			var ret = "<div id='kk' style='width:175px;display:hidden;'>"
+			var ret = "<div id='kk' style='width:175px;display:hidden;'>";
 		    if (window.getSelection) {
 		        return ret + window.getSelection() + "</div>";
 		    }
@@ -111,7 +111,7 @@ if(typeof(Storage)!=="undefined") {
 	        scriptCss.setAttribute("type", "text/css");
 	        scriptCss.setAttribute("href", url);
 	        document.getElementsByTagName("head")[0].appendChild(scriptCss);
-	    }
+	    };
 		// Load CSS content    
 		loadCss(PIAurl + 'bookmarklet/postitall.css?'+Math.floor((Math.random()*1000000)+1)); //Load the PIA css
 		
@@ -123,7 +123,7 @@ if(typeof(Storage)!=="undefined") {
 		var storageManager = {
 		        add: function (obj) {
 		        	console.log(JSON.stringify(obj));
-		            $storage.setItem(obj.id, JSON.stringify(obj));
+		            $storage.setItem(parseInt(obj.id), JSON.stringify(obj));
 		        },
 		
 		        get: function (id) {
@@ -147,6 +147,19 @@ if(typeof(Storage)!=="undefined") {
 		        clear: function () {
 		        	PIAid = 0;
 		            $storage.clear();
+		        },
+		        
+		        clearPage: function () {
+		        	var i;
+		        	var obj;
+		        	for(i=0;i<$storage.length;i++) {
+		        		if($storage.getItem(i)) {
+		        			obj = JSON.parse($storage.getItem(i));
+		        			if(obj.page === window.location.pathname) {
+		        				$storage.removeItem(i);
+		        			}
+		        		}
+		        	}
 		        },
 		        
 		        getlength: function() {
@@ -235,8 +248,8 @@ if(typeof(Storage)!=="undefined") {
 	    checkJqueryReady(function($) {
 	    	
 	    	//Load Jquery UI
-	    	loadJs('http://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/jquery-ui.min.js'); // Load the jquery ui
-	    	loadCss('http://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/themes/base/minified/jquery-ui.min.css'); // Load the jquery ui
+	    	loadJs('https://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/jquery-ui.min.js'); // Load the jquery ui
+	    	loadCss('https://ajax.googleapis.com/ajax/libs/jqueryui/'+expectedVersionUI+'/themes/base/minified/jquery-ui.min.css'); // Load the jquery ui
 	    	
 	    	//Load more stuff
 	    	loadJs(PIAurl+'libs/jquery.minicolors.js'); // Load the jquery minicolors plugin
@@ -253,7 +266,6 @@ if(typeof(Storage)!=="undefined") {
 				var PIAMain = ( function () {
 					'use strict';
 					var p = PIAMain.prototype;
-					var postit;
 					
 					function PIAMain () {
 						$('#PIAloading').html('Creating PIA layer ...');
@@ -367,7 +379,7 @@ if(typeof(Storage)!=="undefined") {
 						
 					}
 					
-					p.load = function () {
+					p.load = function (pageFilter) {
 						$('#PIAloading').html('Loading Postits ...');
 						console.log('Loading Postits');
 						// Create all posticks saved in localStorage
@@ -378,11 +390,17 @@ if(typeof(Storage)!=="undefined") {
 								key = storageManager.getkey(i);
 								var o = storageManager.get(key);
 								if(o && typeof o.id !== "undefined") {
-									console.log('Loaded '+o.id);
-									o.id = key;
-									o.newPostit = true;
-									$('#PostItAll').postitall(o);
-									PIAid = o.id;
+									
+									//page filter: show only notes from the current page
+									if(o.page === window.location.pathname || !pageFilter) {
+										
+										console.log('Loaded '+o.id);
+										o.id = parseInt(key);
+										o.newPostit = true;
+										$('#PostItAll').postitall(o);
+										PIAid = o.id;	
+									}
+									
 								} else {
 									storageManager.remove(key);
 								}
@@ -390,10 +408,17 @@ if(typeof(Storage)!=="undefined") {
 						}
 					};
 					
-					p.save = function () {
+					p.save = function (pageFilter) {
 						console.log('Saving Postits');
-						// Clean the localStorage
-						storageManager.clear();
+						// Clean the localStorage (activate if page filter off)
+						if(!pageFilter) {
+							//Clean all
+							storageManager.clear();
+						} else {
+							//Clean only page
+							storageManager.clearPage();
+						}
+						
 						// Then each postit into the LocalStorage
 						$('.PIApostit').each(function () {
 							//console.log($(this).postitall('options'));
@@ -406,25 +431,27 @@ if(typeof(Storage)!=="undefined") {
 				} )();
 				
 				
-		    	
-		    	// Main
-		    	var PIA = new PIAMain;
-		    	
-		    	// Load local postits
-		    	PIA.load();
-				
-		    	// TODO: Set time interval to save postits
-		    	//PIA.save();
-		    	//window.setTimeout(function() { PIA.save(); }, 5000);
-				
-		        // Save all the postits when the user leaves the page
-		        window.onbeforeunload = function () {
-		        	PIA.save();
-		        }
-		        
 		        //End execution
-		        $('#PIAloading').html('All done. Let\'s go!!').delay(1000).hide('slow', function() {
-		        	$(this).remove();
+		        $('#PIAloading').html('All done. Loading notes ...').hide('slow', function() {
+		        	// Main
+			    	var PIA = new PIAMain;
+			    	var pageFilter = true;
+			    	
+			    	// Set time interval to save postits each 3 seconds
+			    	window.setInterval(function() { PIA.save(pageFilter); }, 3000);
+					
+			        // Save all the postits when the user leaves the page
+			        window.onbeforeunload = function () {
+			        	PIA.save(pageFilter);
+			        };
+			        
+		        	// Load local postits
+			    	PIA.load(pageFilter);
+			    	
+			    	//TODO: Moves to the first loaded note
+			    	
+			    	//Remove PIAloading
+		        	$(this).html('Let\'s go!!').remove();
 		        });
 		        
 		    });
