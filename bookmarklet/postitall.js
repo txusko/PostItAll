@@ -1,5 +1,15 @@
 // Check if the browser supports localStorage
 if(typeof(Storage)!=="undefined") {
+	
+	//Debugging
+	var debugging = true; // or true
+	if (typeof(console) === "undefined") { 
+		console = { 
+			log: function() {} 
+		};
+	} else if (!debugging || typeof(console.log) === "undefined") {
+		console.log = function() {};
+	}
 
 	//Global config
 	var PIAurl = "https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/";

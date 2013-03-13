@@ -30,6 +30,16 @@
 
 if(jQuery) (function( $ ) {
 	
+	//Debugging
+	var debugging = true; // or true
+	if (typeof(console) === "undefined") { 
+		console = { 
+			log: function() {} 
+		};
+	} else if (!debugging || typeof(console.log) === "undefined") {
+		console.log = function() {};
+	}
+	
 	// Public methods
 	$.extend($.fn, {
 		postitall: function(method, data) {

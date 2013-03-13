@@ -93,8 +93,16 @@
 		        	<li><b>Add Postit button</b> Just press it if you want a sticky note floating next to the button. (try to select some text before)</li>
 		        	<li><b>Hotkey</b> Create a postit in your mouse position by pressing: <b>"Caps + mouse click"</b>. (try to select some text before)</li>
 				</ul>
+				<h3>Limits &amp; problems</h3>
+				<p>
+					In Chrome browser, the <a href="http://www.html5rocks.com/en/tutorials/security/content-security-policy/">Content Security Policy</a> restrict the use of this bookmarklet in some pages such like google. I'm currently working in the "Post It All! Chrome Extension", that will not be limited, and will be autoloaded in the begining of each page.<br>
+					Anyway, if you want to load Insecure content, you need to follow this steps: <a href="https://support.google.com/chrome/bin/answer.py?hl=en&answer=1342714">"This page has insecure content."</a>  
+				</p>
 				<h3>Host your own version</h3>
-				<p>Edit /bookmarklet/postitall.js and change <b>PIAurl</b> by your server PostItAll url (Ex: http://localhost/PostItAll/)</p>
+				<p>
+				Edit /bookmarklet/postitall.js and change <b>PIAurl</b> by your server PostItAll url (Ex: http://localhost/PostItAll/). After this change, all the external loaded libraries (jQuery, jQuery UI, CSS, Minicolors plugin &amp; PostItAll plugin) will be called and loaded from your site PostItAll directory.
+				<br>If you don't change this, the bookmarklet will try to load the extra content from the default <b>PIAurl</b> : <a href="https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/">https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/</a>
+				</p>
 			</div>
 		</div>
 		
