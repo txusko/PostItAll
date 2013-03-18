@@ -64,11 +64,15 @@
 <pre class="prettyprint lang-html">
 // HTML
 &lt;div id="idAddDemoPostit"&gt;Content of the postit 1&lt;/div&gt;
+&lt;div class="classAddDemoPostit"&gt;Content of the postit 2&lt;/div&gt;
+&lt;div class="classAddDemoPostit"&gt;Content of the postit 3&lt;/div&gt;
+&lt;div class="classAddDemoPostit"&gt;Content of the postit 4&lt;/div&gt;
 
 //JAVASCRIPT
 &lt;script&gt;
 $(document).ready(function() {
   $('#idAddDemoPostit').postitall();
+  $('.classAddDemoPostit').postitall();
 });
 &lt;/script&gt;
 </pre>
@@ -212,7 +216,7 @@ $('#idRecoverButton').click(function() {
 				<h4>Code</h4>
 <pre class="prettyprint lang-html">
 // HTML
-&lt;textarea id="idLoadOptions" style="width:100%;height:350px;"&gt;{"id":10,"created":1362924534460,"domain":"http://txusko.com","page":"/PostItAll/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"absolute","posX":"2346px","posY":"53px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"&gt;&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"&gt;&lt;a href=\"http://txusko.com/PostItAll/plugin.html\"&gt;jQuery Plugin&lt;/a&gt;&lt;/h2&gt;&lt;img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"http://txusko.com/PostItAll/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;/span&gt;&lt;p class=\"lead\"&gt;A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the&lt;a href=\"https://github.com/txusko/PostItAll\"&gt;\"Post It All\" GitHub repository&lt;/a&gt;&lt;/p&gt;&lt;/h2&gt;","newPostit":true}&lt;/textarea&gt;
+&lt;textarea id="idLoadOptions" style="width:100%;height:350px;"&gt;{"id":10,"created":1362924534460,"domain":"https://googledrive.com","page":"/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"relative","posX":"0px","posY":"0px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"&gt;&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"&gt;&lt;a href=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html\"&gt;jQuery Plugin&lt;/a&gt;&lt;/h2&gt;&lt;img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;/span&gt;&lt;p class=\"lead\"&gt;A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the&lt;a href=\"https://github.com/txusko/PostItAll\"&gt;\"Post It All\" GitHub repository&lt;/a&gt;&lt;/p&gt;&lt;/h2&gt;","newPostit":true}&lt;/textarea&gt;
 &lt;p&gt;&lt;input id="idLoadButton" type="button" class="btn" value="Load content"&gt;&lt;/p&gt;
 &lt;div id="idLoadContent"&gt;&lt;/div&gt;
 				
@@ -232,8 +236,8 @@ $('#idLoadButton').click(function() {
 			</div>
 			<div class="span4">
 				<h4>Result</h4>
-				<textarea id="idLoadOptions" style="width:100%;height:350px;">{"id":10,"created":1362924534460,"domain":"http://txusko.com","page":"/PostItAll/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"absolute","posX":"2346px","posY":"53px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"<h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"><h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"><a href=\"http://txusko.com/PostItAll/plugin.html\">jQuery Plugin</a></h2><img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"http://txusko.com/PostItAll/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"><span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"></span><p class=\"lead\">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the<a href=\"https://github.com/txusko/PostItAll\">\"Post It All\" GitHub repository</a></p></h2>","newPostit":true}</textarea>
-				<p><input id="idLoadButton" type="button" class="btn" value="Load content"></p>
+				<textarea id="idLoadOptions" style="width:100%;height:350px;">{"id":10,"created":1362924534460,"domain":"https://googledrive.com","page":"/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"relative","posX":"0px","posY":"0px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"<h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"></h2><h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"><a href=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html\">jQuery Plugin</a></h2><img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"><span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"></span><p class=\"lead\">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the<a href=\"https://github.com/txusko/PostItAll\">\"Post It All\" GitHub repository</a></p>","newPostit":true,"autoheight":true}</textarea>
+				<br><input id="idLoadButton" type="button" class="btn" value="Load content">
 				<div id="idLoadContent"></div>
 			</div>
 		</div>
@@ -411,7 +415,7 @@ $('#some_id').postitall({
       <!-- FOOTER -->
       <footer>
         <p class="pull-right"><a class="navegable" href="#top"><i class="icon-circle-arrow-up"></i> Back to top</a></p>
-        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a> &middot; <a href="#modalPrivacy" role="button" data-toggle="modal">Privacy</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
+        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com/sobre-mi">Javi Filella</a> &middot; <a href="#modalPrivacy" role="button" data-toggle="modal">Privacy</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
       </footer>
 
     </div><!-- /.container -->
@@ -485,15 +489,11 @@ $('#some_id').postitall({
 		
 		//Default postit
 		$('#idAddDemoPostit').postitall();
-		
 		$('.classAddDemoPostit').postitall();
 		
 		//Recovering data from a form
 		$('#idAddDemoPostit2').click(function() {
 			$('#idAddDemoPostit2_result').postitall({
-				'position'			: 'relative',
-				'posX'				: '10px',
-				'posY'				: '10px',
 				'textcolor' 		: $('#idTextColor').val(),
 				'backgroundcolor' 	: $('#idBgTextColor').val(),
 				'description' 		: $('#idContent').val(),
@@ -518,6 +518,8 @@ $('#some_id').postitall({
 			for(var i = 0;i < lines.length;i++) {
 			    if(lines[i]) {
 			    	var o = JSON.parse(lines[i]+'\n');
+			    	o.draggable = false;
+			    	o.resizable = false;
 					$('#idLoadContent').postitall(o);
 			    }
 			}

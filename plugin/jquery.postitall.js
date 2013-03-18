@@ -102,6 +102,10 @@ if(jQuery) (function( $ ) {
 		description		: '', //content
 		newPostit		: false, //Create a new postit
 		autoheight      : true, //Set autoheight feature on or off
+		draggable       : true, //Set draggable feature on or off
+		resizable       : true, //Set resizable feature on or off
+		removable       : true, //Set removable feature on or off
+		changeoptions   : true, //Set options feature on or off
 
 		// Callbacks / Event Handlers
 		onChange: function () {},
@@ -190,16 +194,24 @@ if(jQuery) (function( $ ) {
 		options.description = options.description?options.description:kk?kk:'';
 	
 		//Front page: toolbar
+		var barCursor = "cursor: inherit;";
+		if(options.draggable) {
+			barCursor = "cursor: move;";
+		}
 		toolbar = $('<div />', { 
 			'id': 'pia_toolbar_'+index.toString(), 
-			'class': 'PIAtoolbar'
+			'class': 'PIAtoolbar',
+			'style': barCursor
 		});
 		//Grag support without jQuery UI
 		if(!$.ui) {
-			toolbar.drags();
+			if(options.draggable) {
+				toolbar.drags();
+			}
 		}
 		//Config icon
-		toolbar.append(
+		if(options.changeoptions) {
+			toolbar.append(
 				$('<div />', { 
 					'id': 'pia_config_'+index.toString(), 
 					'class': 'PIAconfig PIAicon'
@@ -214,34 +226,37 @@ if(jQuery) (function( $ ) {
 					//$(this).parent().parent().parent().parent().addClass('flip');
 					e.preventDefault();
 				})
-		)
+			);
+		}
 		//Delete icon
-		.append($('<div />', { 'id': 'pia_delete_'+index.toString(), 'class': 'PIAdelete PIAicon'})
-			.click(function (e) {
-				if($(this).parent().find('.ui-widget').length <= 0) {
-					var cont = '<div class="ui-widget float-left">'
-						+'<div class="PIAwarning">'
-						+'<span class="PIAdelwar float-left"></span>&nbsp;Sure?&nbsp;'
-						+'<a id="sure_delete_'+index+'" href="#"><span class="PIAdelyes float-right"></span></a>'
-						+'<a id="cancel_'+index+'" href="#"><span class="PIAdelno float-right"></span></a>'
-						+'</div>'
-						+'</div>';
-					$(this).parent().append(cont);
-					$('#sure_delete_'+index).click(function(e) {
-						//var id = $(this).closest('.PIApostit').children().attr('data-id');
-						var id = obj.data('PIA-id');
-						console.log('PIA:destroy #idPostIt_'+id);
-						destroy($('#idPostIt_'+id).parent());
-						e.preventDefault();
-					});
-					$('#cancel_'+index).click(function(e) {
-						$(this).parent().parent().remove();
-						e.preventDefault();
-					});
-				}
-				e.preventDefault();
-			})
-		);
+		if(options.removable) {
+			toolbar.append($('<div />', { 'id': 'pia_delete_'+index.toString(), 'class': 'PIAdelete PIAicon'})
+				.click(function (e) {
+					if($(this).parent().find('.ui-widget').length <= 0) {
+						var cont = '<div class="ui-widget float-left">'
+							+'<div class="PIAwarning">'
+							+'<span class="PIAdelwar float-left"></span>&nbsp;Sure?&nbsp;'
+							+'<a id="sure_delete_'+index+'" href="#"><span class="PIAdelyes float-right"></span></a>'
+							+'<a id="cancel_'+index+'" href="#"><span class="PIAdelno float-right"></span></a>'
+							+'</div>'
+							+'</div>';
+						$(this).parent().append(cont);
+						$('#sure_delete_'+index).click(function(e) {
+							//var id = $(this).closest('.PIApostit').children().attr('data-id');
+							var id = obj.data('PIA-id');
+							console.log('PIA:destroy #idPostIt_'+id);
+							destroy($('#idPostIt_'+id).parent());
+							e.preventDefault();
+						});
+						$('#cancel_'+index).click(function(e) {
+							$(this).parent().parent().remove();
+							e.preventDefault();
+						});
+					}
+					e.preventDefault();
+				})
+			);
+		}
 		//Front page: content
 		content = $('<div />', { 
 			'id': 'pia_editable_'+index.toString(), 
@@ -266,7 +281,8 @@ if(jQuery) (function( $ ) {
 			//Close config icon
 			.append($('<div />', { 
 					'id': 'pia_close_'+index.toString(), 
-					'class': 'PIAclose PIAicon'
+					'class': 'PIAclose PIAicon',
+					'style': barCursor
 				})
 				.click(function(e) {
 					//var id = $(this).closest('.PIApostit').children().attr('data-id');
@@ -386,33 +402,41 @@ if(jQuery) (function( $ ) {
 			.click(function() {
 				$('.PIApostit').css('z-index', 9995);
 				$(this).css('z-index', 9999);
+			})
+			.load(function(){
+				//Autoresize to fit content when content load is done
+				autoresize($(this));
 			});
 		
 		if($.ui) {
-			obj.draggable({ 
-				handle: ".PIAtoolbar",
-				scroll: false,
-				start: function() {
-					//Remove draggable postit option
-					$('.PIApostit').css('z-index', 9995);
-					$(this).css('z-index', 9999);
-					$(this).draggable('disable');
-				},
-				stop: function() {
-					//Enable draggable postit option
-					$(this).draggable('enable');
-					autoresize($(this));
-				}
-			})
-			.resizable({
-				animate: false,
-				helper: 'ui-resizable-helper',
-				minHeight: options.minHeight,
-				minWidth: options.minWidth,
-				stop: function(e, ui) { 
-					autoresize($(this));
-				}
-			});
+			if(options.draggable) {
+				obj.draggable({ 
+					handle: ".PIAtoolbar",
+					scroll: false,
+					start: function() {
+						//Remove draggable postit option
+						$('.PIApostit').css('z-index', 9995);
+						$(this).css('z-index', 9999);
+						$(this).draggable('disable');
+					},
+					stop: function() {
+						//Enable draggable postit option
+						$(this).draggable('enable');
+						autoresize($(this));
+					}
+				});
+			}
+			if(options.resizable) {
+				obj.resizable({
+					animate: false,
+					helper: 'ui-resizable-helper',
+					minHeight: options.minHeight,
+					minWidth: options.minWidth,
+					stop: function(e, ui) { 
+						autoresize($(this));
+					}
+				});
+			}
 			/*.show("scale",{percent:100},1500, function() {
 				autoresize($(this));
 				//sometimes, the postit hide magically before scale ... trying to fix it ...
@@ -425,54 +449,51 @@ if(jQuery) (function( $ ) {
 		}*/
 		
 		obj.slideDown('slow', function() {
-			autoresize($(this));
-		});
-		
-		//Rest of actions
-		
-		//Config: text shadow
-		$('#textshadow_'+index).click(function() {
-			if($(this).is(':checked')) {
-				$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '1px 1px 0 white');
-				options.textshadow = true;
+			//Rest of actions
+			
+			//Config: text shadow
+			$('#textshadow_'+index).click(function() {
+				if($(this).is(':checked')) {
+					$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '1px 1px 0 white');
+					options.textshadow = true;
+				} else {
+					$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '0px 0px 0');
+					options.textshadow = false;
+				}
+				setOptions(options);
+			});
+			
+			//Background and text color
+			if($.minicolors) {
+				//Config: change background-color
+				$('#minicolors_bg_'+index).minicolors({
+					change: function(hex, opacity) {
+						$(this).closest('.PIApostit').css('background-color', hex);
+						options.backgroundcolor = hex;
+						setOptions(options);
+					}
+				});
+				//Config: text color
+				$('#minicolors_text_'+index).minicolors({
+					change: function(hex, opacity) {
+						$(this).closest('.PIApostit').css('color', hex);
+						options.textcolor = hex;
+						setOptions(options);
+					}
+				});
 			} else {
-				$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '0px 0px 0');
-				options.textshadow = false;
+				$('#minicolors_bg_'+index).change(function() {
+					$(this).closest('.PIApostit').css('background-color', $(this).val());
+					options.backgroundcolor = $(this).val();
+					setOptions(options);
+				});
+				$('#minicolors_text_'+index).change(function() {
+					$(this).closest('.PIApostit').css('color', $(this).val());
+					options.textcolor = $(this).val();
+					setOptions(options);
+				});
 			}
-			setOptions(options);
 		});
-		
-		//Background and text color
-		if($.minicolors) {
-			//Config: change background-color
-			$('#minicolors_bg_'+index).minicolors({
-				change: function(hex, opacity) {
-					$(this).closest('.PIApostit').css('background-color', hex);
-					options.backgroundcolor = hex;
-					setOptions(options);
-				}
-			});
-			//Config: text color
-			$('#minicolors_text_'+index).minicolors({
-				change: function(hex, opacity) {
-					$(this).closest('.PIApostit').css('color', hex);
-					options.textcolor = hex;
-					setOptions(options);
-				}
-			});
-		} else {
-			$('#minicolors_bg_'+index).change(function() {
-				$(this).closest('.PIApostit').css('background-color', $(this).val());
-				options.backgroundcolor = $(this).val();
-				setOptions(options);
-			});
-			$('#minicolors_text_'+index).change(function() {
-				$(this).closest('.PIApostit').css('color', $(this).val());
-				options.textcolor = $(this).val();
-				setOptions(options);
-			});
-		}
-		
 		//chaining
 		return obj;
 	}
@@ -493,9 +514,11 @@ if(jQuery) (function( $ ) {
 				options.height = divHeight;
 				obj.css('height',divHeight);
 				if($.ui) {
-					obj.resizable({
-						minHeight: divHeight
-					});
+					if(options.resizable) {
+						obj.resizable({
+							minHeight: divHeight
+						});
+					}
 				}
 			} else if(divHeight < minDivHeight) {
 				options.height = minDivHeight;
