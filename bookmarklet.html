@@ -93,11 +93,6 @@
 		        	<li><b>Add Postit button</b> Just press it if you want a sticky note floating next to the button. (try to select some text before)</li>
 		        	<li><b>Hotkey</b> Create a postit in your mouse position by pressing: <b>"Caps + mouse click"</b>. (try to select some text before)</li>
 				</ul>
-				<h3>Limits &amp; problems</h3>
-				<p>
-					In Chrome browser, the <a href="http://www.html5rocks.com/en/tutorials/security/content-security-policy/">Content Security Policy</a> restrict the use of this bookmarklet in some pages such like google. I'm currently working in the "Post It All! Chrome Extension", that will not be limited, and will be autoloaded in the begining of each page.<br>
-					Anyway, if you want to load Insecure content, you need to follow this steps: <a href="https://support.google.com/chrome/bin/answer.py?hl=en&answer=1342714">"This page has insecure content."</a>  
-				</p>
 				<h3>Host your own version</h3>
 				<p>
 				Edit /bookmarklet/postitall.js and change <b>PIAurl</b> by your server PostItAll url (Ex: http://localhost/PostItAll/). After this change, all the external loaded libraries (jQuery, jQuery UI, CSS, Minicolors plugin &amp; PostItAll plugin) will be called and loaded from your site PostItAll directory.
@@ -114,14 +109,57 @@
       <!-- FOOTER -->
       <footer>
         <p class="pull-right"><a class="navegable" href="#top"><i class="icon-circle-arrow-up"></i> Back to top</a></p>
-        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com/sobre-mi">Javi Filella</a> &middot; <a href="#modalPrivacy" role="button" data-toggle="modal">Privacy</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
+        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
       </footer>
 
     </div><!-- /.container -->
+    
+    <!-- Modals -->
+    <div id="modalTerms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    	<h3 id="myModalLabel">Terms of service</h3>
+	    </div>
+	    <div class="modal-body">
+<pre>
+jquery.postitall.js v0.1
+jQuery Post It All Plugin - released under MIT License
+Author: Javi Filella
+http://github.com/txusko/PostItAll
+Copyright (c) 2013 Javi Filella
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+</pre>
+		</div>
+	    <div class="modal-footer">
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    </div>
+    </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="libs/jquery-1.9.1.min.js"><\/script>')</script>
 
+	<script src="libs/bootstrap.min.js"></script>
+	
 	<script src="libs/main.js"></script>
 
 	<script>

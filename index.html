@@ -51,7 +51,7 @@
 			<div class="span6">
 				<h2><a href="bookmarklet.html" style="color:#46a546">Bookmarklet</a></h2>
 				<img class="img-circle" data-src="holder.js/140x140" src="img/bookmarklet_drag_and_drop.png">
-				<p class="lead">Add a post it to any webpage, and recover it later.<br><span class="label label-inversed">Install:</span> Drag &amp; drop the button below to you bookmarks toolbar and Press It each time you want to add or recover a note. <a href="bookmarklet.html">More info</a></p>
+				<p class="lead">Add a post it to any webpage, and recover it later.<br><span class="label label-inversed">Install</span> Drag &amp; drop the button below to you bookmarks toolbar and Press It each time you want to add or recover a note. <a href="bookmarklet.html">More info</a></p>
 				<a id="idPIAbmkl" class="btn btn-large btn-success button_tooltip" data-placement="bottom" title="Drag this button to your Bookmarks toolbar and Click on it!" href="javascript:(function(){PIA_SCRIPT=document.createElement('SCRIPT');PIA_SCRIPT.type='text/javascript';PIA_SCRIPT.src='/bookmarklet/postitall.js';document.getElementsByTagName('head')[0].appendChild(PIA_SCRIPT)})();">Post It All!</a>
 			</div>
 			<div class="span6">
@@ -100,17 +100,16 @@
         <h4>Limits &amp; problems</h4>
         <ul>
         	<li>Post It All will not work in old browsers. For the Bookmarklet, ensure your browser have support for the <a href="http://www.w3schools.com/html/html5_webstorage.asp">HTML5 Web Storage</a> technology</li>
-        	<li>For the bookmarklet, in Chrome browser, the <a href="http://www.html5rocks.com/en/tutorials/security/content-security-policy/">Content Security Policy</a> restrict the use of this bookmarklet in some pages such like google. I'm currently working in the "Post It All! Chrome Extension", that will not be limited, and will be autoloaded in the begining of each page.</li>
         	<li>Note that for the "autoheight" feature, the sticky will try to resize to the content while you type in. In some cases (for example when you paste html content), this could result in a strange behaviour. Try to resize it, or to add an extra space at the end of the note to forze the autoresize.</li>
         </ul>
 		<h4>Coming soon</h4>
 		<ul>
-			<li>Chrome extension (you will be able to set the autoload of the plugin on every page)</li>
+			<li>I'm currently working in the "Post It All! Chrome Extension", that will not be limited, and will be autoloaded in the begining of each page.</li>
 			<li>Filter notes by domain (visibles in all the pages of the domain.com) or by domain and uri (showing only the created notes in the domain.com/page)</li>
 			<li>Possibility to fix the position of a note in the page (position absolute, disabling dragable and resizable of the note)</li>
 		</ul>
         </div>
-        <p><span class="label label-inverse">Note:</span> While I was developing "Post It All!", I discovered tons of similar plugins, service and extensions for browsers that make the same work or have similar characteristics as "Post It All!". Be free to check it out and use the one who fit your needs.</p>
+        <p><span class="label label-inverse">Note</span> While I was developing "Post It All!", I discovered tons of similar plugins, service and extensions for browsers that make the same work or have similar characteristics as "Post It All!". Be free to check it out and use the one who fit your needs.</p>
       </div>
 
       <hr class="featurette-divider">
@@ -153,24 +152,12 @@
       <!-- FOOTER -->
       <footer>
         <p class="pull-right"><a class="navegable" href="#top"><i class="icon-circle-arrow-up"></i> Back to top</a></p>
-        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a> &middot; <a href="#modalPrivacy" role="button" data-toggle="modal">Privacy</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
+        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
       </footer>
 
     </div><!-- /.container -->
     
     <!-- Modals -->
-    <div id="modalPrivacy" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	    <div class="modal-header">
-	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    	<h3 id="myModalLabel">Privacy</h3>
-	    </div>
-	    <div class="modal-body">
-	    	<p>Privacy</p>
-	    </div>
-	    <div class="modal-footer">
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	    </div>
-    </div>
     <div id="modalTerms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	    <div class="modal-header">
 	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -178,32 +165,32 @@
 	    </div>
 	    <div class="modal-body">
 <pre>
- jquery.postitall.js v0.1
- jQuery Post It All Plugin - released under MIT License
- Author: Javi Filella
- http://github.com/txusko/PostItAll
- Copyright (c) 2013 Javi Filella
+jquery.postitall.js v0.1
+jQuery Post It All Plugin - released under MIT License
+Author: Javi Filella
+http://github.com/txusko/PostItAll
+Copyright (c) 2013 Javi Filella
 
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
 
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 </pre>
 		</div>
 	    <div class="modal-footer">
