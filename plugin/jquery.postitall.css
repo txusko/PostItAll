@@ -66,6 +66,13 @@
 	position:relative;
 	min-height:50px;
 }
+/** xxx **/
+.PIAeditable > input, .PIAeditable > textarea, .PIAeditable[contenteditable="true"], .PIAeditable > select {
+	border: 0px;
+	background-color: transparent;	
+	box-shadow: none;
+}
+
 .PIApostit div.PIAeditable:focus {
 	outline: none;
 	/*border: 1px dotted gray;*/
@@ -222,3 +229,4 @@
 	-moz-box-shadow: 0 15px 50px rgba(0,0,0,0);
 	-webkit-box-shadow: 0 15px 50px rgba(0,0,0,0);
 }
+
