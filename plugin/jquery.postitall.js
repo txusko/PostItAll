@@ -28,7 +28,23 @@
 *
 */
 
-if(jQuery) (function( $ ) {
+if(jQuery) (function( $, $storage ) {
+
+	//// Global Vars
+	var pageFilter = false;
+	var PIAid = 0;
+
+	// Manage localStorage
+	var storageManager = {
+        add: function (obj) { $storage.setItem('PostIt_' + parseInt(obj.id), JSON.stringify(obj)); },
+        get: function (id) { return JSON.parse($storage.getItem('PostIt_' + id)); },
+        nextId: function() { PIAid++; if($storage.getItem('PostIt_' + PIAid)) { return this.nextId(); } else { return PIAid; } },
+        remove: function (id) { PIAid = 0; $storage.removeItem('PostIt_' + id); },
+        clear: function () { PIAid = 0; $storage.clear(); },
+        getlength: function() { var len = $storage.length; return len; },
+        getkey: function(i) { var key = $storage.key('PostIt_' + i); return key; },
+        clearPage: function () { var i; for(i=0;i<$storage.length;i++) { if($storage.getItem('PostIt_' + i)) { $storage.removeItem('PostIt_' + i); } } },
+    };
 	
 	// Public methods
 	$.extend($.fn, {
@@ -66,6 +82,13 @@ if(jQuery) (function( $ ) {
 						});
 						return $(this);
 					}
+
+				// Save object
+				case 'save':
+					$(this).each( function() {
+						save($(this));
+					});
+					return $(this);
 					
 				// Initializes the control
 				case 'create':
@@ -80,8 +103,8 @@ if(jQuery) (function( $ ) {
 			
 		}
 	});
-	
-	// Global Defaults
+
+	// Default Plugin Vars
 	$.fn.postitall.defaults = {
 	
 		// Basic Settings
@@ -106,6 +129,7 @@ if(jQuery) (function( $ ) {
 		resizable       : true, //Set resizable feature on or off
 		removable       : true, //Set removable feature on or off
 		changeoptions   : true, //Set options feature on or off
+		savable			: true, //Set the save postit option
 
 		// Callbacks / Event Handlers
 		onChange: function () {},
@@ -115,12 +139,16 @@ if(jQuery) (function( $ ) {
 	};
 	
 	// Set options
-	function setOptions( opt ) {
+	function setOptions( opt, save ) {
 		if (typeof(opt) !== 'object') opt = {};
+		if (typeof(save) === 'undefined') save = false;
 		options = $.extend(options, opt);
 		$.each(['onChange','onSelect','onRelease','onDblClick'],function(i,e) {
 			if (typeof(options[e]) !== 'function') options[e] = function () {};
 		});
+		if(save && options.savable) {
+			storageManager.add(options);
+		}
 	}
 	
 	// Initialize elements
@@ -146,7 +174,6 @@ if(jQuery) (function( $ ) {
 			} else {
 				index = options.id;
 			}
-			console.log('PIA:new content '+index);
 			PIAcontent = $('<div />', { 'id' : 'newPostIt_'+index });
 			obj.append(PIAcontent);
 			return create(PIAcontent, options);
@@ -157,7 +184,6 @@ if(jQuery) (function( $ ) {
 			if( obj.data('PIA-initialized') ) return;
 			
 			//Modify page content
-			console.log('PIA:modified content');
 			return create(obj, options);
 			
 		}
@@ -165,14 +191,15 @@ if(jQuery) (function( $ ) {
 	}
 	
 	function getIndex() {
-		var index = 0;
+		/*var index = 0;
 		$('.PIApostit').each(function() {
 			var id = $(this).data('PIA-id');
 			if(id > index) {
 				index = id; 
 			}
 		});
-		index = index + 1;
+		index = index + 1;*/
+		var index = storageManager.nextId();
 		return parseInt(index);
 	}
 	
@@ -218,7 +245,6 @@ if(jQuery) (function( $ ) {
 				})
 				.click(function(e) {
 					var id = obj.data('PIA-id');
-					console.log('PIA:config #idPostIt_'+id);
 					$('#idPostIt_'+id+' > .back').css('visibility','visible');
 					$('#idPostIt_'+id).parent().addClass('flip', function() {
 						$('#idPostIt_'+id+' > .front').css('visibility','hidden');
@@ -228,6 +254,20 @@ if(jQuery) (function( $ ) {
 				})
 			);
 		}
+		//Save icon
+		/*if(options.savable) {
+			toolbar.append(
+				$('<div />', { 
+					'id': 'pia_save_'+index.toString(), 
+					'class': 'PIAsave PIAicon'
+				})
+				.click(function(e) {
+					var id = obj.data('PIA-id');
+					save($('#idPostIt_'+id).parent());
+					e.preventDefault();
+				})
+			);
+		}*/
 		//Delete icon
 		if(options.removable) {
 			toolbar.append($('<div />', { 'id': 'pia_delete_'+index.toString(), 'class': 'PIAdelete PIAicon'})
@@ -236,15 +276,14 @@ if(jQuery) (function( $ ) {
 						var cont = '<div class="ui-widget float-left">'
 							+'<div class="PIAwarning">'
 							+'<span class="PIAdelwar float-left"></span>&nbsp;Sure?&nbsp;'
-							+'<a id="sure_delete_'+index+'" href="#"><span class="PIAdelyes float-right"></span></a>'
-							+'<a id="cancel_'+index+'" href="#"><span class="PIAdelno float-right"></span></a>'
+							+'<a id="sure_delete_'+index+'" href="#"><span class="PIAdelyes PIAicon float-right"></span></a>'
+							+'<a id="cancel_'+index+'" href="#"><span class="PIAdelno PIAicon float-right"></span></a>'
 							+'</div>'
 							+'</div>';
 						$(this).parent().append(cont);
 						$('#sure_delete_'+index).click(function(e) {
 							//var id = $(this).closest('.PIApostit').children().attr('data-id');
 							var id = obj.data('PIA-id');
-							console.log('PIA:destroy #idPostIt_'+id);
 							destroy($('#idPostIt_'+id).parent());
 							e.preventDefault();
 						});
@@ -265,6 +304,9 @@ if(jQuery) (function( $ ) {
 			options.description = $(this).html();
 			obj.data('PIA-options', options);
 			autoresize(obj);
+			if(options.savable) {
+				storageManager.add(options);
+			}
 		}).attr('contenteditable', true)
 		.html(options.description);
 		
@@ -287,8 +329,6 @@ if(jQuery) (function( $ ) {
 				.click(function(e) {
 					//var id = $(this).closest('.PIApostit').children().attr('data-id');
 					var id = obj.data('PIA-id');
-					console.log('PIA:close config #idPostIt_'+id);
-					
 					$('#idPostIt_'+id+' > .front').css('visibility','visible');
 					$('#idPostIt_'+id).parent().removeClass('flip', function() {
 						$('#idPostIt_'+id+' > .back').css('visibility','hidden');
@@ -423,6 +463,9 @@ if(jQuery) (function( $ ) {
 						//Enable draggable postit option
 						$(this).draggable('enable');
 						autoresize($(this));
+						if(options.savable) {
+							storageManager.add(options);
+						}
 					}
 				});
 			}
@@ -460,7 +503,7 @@ if(jQuery) (function( $ ) {
 					$(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '0px 0px 0');
 					options.textshadow = false;
 				}
-				setOptions(options);
+				setOptions(options, true);
 			});
 			
 			//Background and text color
@@ -470,7 +513,7 @@ if(jQuery) (function( $ ) {
 					change: function(hex, opacity) {
 						$(this).closest('.PIApostit').css('background-color', hex);
 						options.backgroundcolor = hex;
-						setOptions(options);
+						setOptions(options, true);
 					}
 				});
 				//Config: text color
@@ -478,22 +521,28 @@ if(jQuery) (function( $ ) {
 					change: function(hex, opacity) {
 						$(this).closest('.PIApostit').css('color', hex);
 						options.textcolor = hex;
-						setOptions(options);
+						setOptions(options, true);
 					}
 				});
 			} else {
 				$('#minicolors_bg_'+index).change(function() {
 					$(this).closest('.PIApostit').css('background-color', $(this).val());
 					options.backgroundcolor = $(this).val();
-					setOptions(options);
+					setOptions(options, true);
 				});
 				$('#minicolors_text_'+index).change(function() {
 					$(this).closest('.PIApostit').css('color', $(this).val());
 					options.textcolor = $(this).val();
-					setOptions(options);
+					setOptions(options, true);
 				});
 			}
 		});
+
+		//Save in localstorage
+		if(options.savable) {
+			storageManager.add(options);
+		}
+
 		//chaining
 		return obj;
 	}
@@ -510,7 +559,7 @@ if(jQuery) (function( $ ) {
 				minDivHeight = options.minHeight;
 			
 			if(divHeight >= minDivHeight) {
-				divHeight += 30;
+				divHeight += 50;
 				options.height = divHeight;
 				obj.css('height',divHeight);
 				if($.ui) {
@@ -522,7 +571,7 @@ if(jQuery) (function( $ ) {
 				}
 			} else if(divHeight < minDivHeight) {
 				options.height = minDivHeight;
-				minDivHeight += 30;
+				minDivHeight += 50;
 				obj.css('height',minDivHeight);
 			}
 			
@@ -532,8 +581,21 @@ if(jQuery) (function( $ ) {
 			//setOptions(options);
 		}
 	}
+
+	function save(obj) {
+		storageManager.add(obj.data('PIA-options'));
+	}
 	
 	function destroy(obj) {
+		var id = obj.data('PIA-id'),
+			options = obj.data('PIA-options');
+
+		//Remove from localstorage
+		if(options.savable) {
+			storageManager.remove(id);
+		}
+
+		//Destroy object
 		obj
 			.removeData('PIA-id')
 			.removeData('PIA-initialized')
@@ -542,8 +604,60 @@ if(jQuery) (function( $ ) {
 				$(this).remove();
 			});
 	}
+
+	//Load Local Storage Postits
+	$.loadPostItAll = function(scrollToElement) {
+		if (typeof(scrollToElement) === 'undefined') scrollToElement = false;
+		var len = storageManager.getlength(); 
+		console.log("Load Postits from Local Storage");
+		if (len > 0) {
+			var key = 0;
+			var scrollTo = "";
+			for (var i = 0; i < len; i++) {
+				key = storageManager.getkey(i);
+				var o = storageManager.get(i);
+				if(o && typeof o.id !== "undefined") {
+					if(o.page === window.location.pathname) {
+						o.id = parseInt(i);
+						if(scrollTo === "") scrollTo = "idPostIt_" + o.id;
+						if($('#idPostIt_' + o.id).length) {
+							$('#idPostIt_' + o.id).postitall('options', options)
+						} else {
+							o.newPostit = true;
+							$('body').postitall(o);
+							PIAid = o.id;
+						}
+					}
+				}/* else {
+					storageManager.remove(key);
+				}*/
+			}
+			if(scrollToElement && scrollTo !== "")
+			{
+				$('html, body').animate({
+			        scrollTop: $('#'+scrollTo).offset().top - 50
+			    }, 2000);
+			}
+
+		}
+	};
+	//Save Local Storage Postits
+	$.savePostItAll = function() {
+		console.log("Save Postits to Local Storage");
+		$('.PIApostit').each(function() {
+			$(this).postitall('save');
+		});
+	};
+	//Remove all postits
+	$.removePostItAll = function() {
+		//Remove all postits
+		console.log("Remove loaded Postits");
+		$('.PIApostit').each(function() {
+			$(this).postitall('destroy');
+		});
+	};
 	
-})( jQuery );
+})( jQuery, window.localStorage );
 
 
 //Drag postits
@@ -588,4 +702,4 @@ if(jQuery) (function( $ ) {
         });
 
     };
-})(jQuery);
+})( jQuery );
