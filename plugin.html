@@ -242,7 +242,7 @@ $('#idRecoverButton').click(function() {
 			</div>
 		</div>
 
-		<div class="row-fluid">
+		<!--div class="row-fluid">
 			<div class="span12">
 				<h3>Global / Local Storage</h3>
 				<p class="lead"></p>
@@ -253,7 +253,7 @@ $('#idRecoverButton').click(function() {
 				<input type="button" class="btn btn-primary" value="Remove all postits" id="idRemoveAll">
 				<input type="button" class="btn btn-primary" value="Load all postits from Local Storage" id="idLoadAll">
 			</div>
-		</div>
+		</div-->
 		
 		<hr class="featurette-divider">
 			
@@ -409,6 +409,11 @@ If you want the friendly color-plugin choser, you should add the <a href="http:/
 				<td>Show or hide the "options" icon
 				<br><span class="label">Default</span> true</td>
 			</tr>
+			<tr>
+				<td>savable</td>
+				<td>Saves post it in Local Storage
+				<br><span class="label">Default</span> false</td>
+			</tr>
 			</tbody>
 			</table>
 			
@@ -441,6 +446,7 @@ $('#some_id').postitall({
 	resizable       : true,                     //Set resizable feature on or off
 	removable       : true,                     //Set removable feature on or off
 	changeoptions   : true,                     //Set options feature on or off
+	savable         : false,                    //Save postit in local storage
 });
 &lt;/script&gt;
 </pre>
