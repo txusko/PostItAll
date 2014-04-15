@@ -1,3 +1,33 @@
+/**
+* jquery.postitall.js v0.1
+* jQuery Post It All Plugin - released under MIT License
+* Author: Javi Filella <txusko@gmail.com>
+* http://github.com/txusko/PostItAll
+* Copyright (c) 2013 Javi Filella
+*
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the "Software"), to deal in the Software without
+* restriction, including without limitation the rights to use,
+* copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the
+* Software is furnished to do so, subject to the following
+* conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+*
+*/
+
 // Check if the browser supports localStorage
 if(typeof(Storage)!=="undefined") {
 	
@@ -113,64 +143,6 @@ if(typeof(Storage)!=="undefined") {
 		// Load CSS content    
 		loadCss(PIAurl + 'bookmarklet/postitall.css?'+Math.floor((Math.random()*1000000)+1)); //Load the PIA css
 		
-		var PIAid = 0;
-		
-		/**
-		 * Manage localStorage
-		 */
-		var storageManager = {
-		        add: function (obj) {
-		        	console.log(JSON.stringify(obj));
-		            $storage.setItem(parseInt(obj.id), JSON.stringify(obj));
-		        },
-		
-		        get: function (id) {
-		            return JSON.parse($storage.getItem(id));
-		        },
-		        
-		        nextId: function() {
-		        	PIAid++;
-		        	if($storage.getItem(PIAid)) {
-		        		return this.nextId();
-		        	} else {
-		        		return PIAid;
-		        	}
-		        },
-		
-		        remove: function (id) {
-		        	PIAid = 0;
-		        	$storage.removeItem(id);
-		        },
-		
-		        clear: function () {
-		        	PIAid = 0;
-		            $storage.clear();
-		        },
-		        
-		        clearPage: function () {
-		        	var i;
-		        	var obj;
-		        	for(i=0;i<$storage.length;i++) {
-		        		if($storage.getItem(i)) {
-		        			obj = JSON.parse($storage.getItem(i));
-		        			if(obj.page === window.location.pathname) {
-		        				$storage.removeItem(i);
-		        			}
-		        		}
-		        	}
-		        },
-		        
-		        getlength: function() {
-		        	var len = $storage.length;
-		        	return len;
-		        },
-		        
-		        getkey: function(i) {
-		        	var key = $storage.key(i);
-		        	return key;
-		        }
-		
-		    };
 		
 	    /**
 	     * 1st Check for jquery
@@ -228,7 +200,7 @@ if(typeof(Storage)!=="undefined") {
 	        		//Called when jquery and UI (the expected version) are loaded
 	        		$('#PIAloading').html('All plugins loaded ...');
 					//Google analytics
-					loadtracking();
+					//loadtracking();
 	                callback(jQuery);
 	        	} else {
 	        		//Recheck until all stuff is loaded
@@ -271,8 +243,6 @@ if(typeof(Storage)!=="undefined") {
 						// Check container
 						if ($('#PostItAll').length) {
 							console.log('PIA exists');
-							//Save created postits
-							this.save();
 							//Remove old container
 							$('#PostItAll').remove();
 							//Remove the "Add postit" button
@@ -309,18 +279,16 @@ if(typeof(Storage)!=="undefined") {
 							} else {
 								tempheight	= 200;
 							}
-							var id = storageManager.nextId();
 							$('#PostItAll').postitall({
-								'id': id,
 								'position': 'absolute',
 								'posX': e.pageY - 100,
 								'posY': e.pageX + 50,
 								'width': 200,
 								'height': tempheight,
 								'description': text,
-								'newPostit': true
+								'newPostit': true,
+								'savable': true
 							}).delay(1000);
-							storageManager.add($('#newPostIt_'+id).postitall('options'));
 							e.preventDefault();
 						});
 						
@@ -356,14 +324,14 @@ if(typeof(Storage)!=="undefined") {
 									tempheight	= "200";
 								}
 								$('#PostItAll').postitall({
-									'id': storageManager.nextId(),
 									'position': 'absolute',
 									'posX': e.pageY,
 									'posY': e.pageX,
 									'width': tempheight,
 									'height': tempheight,
 									'description': text,
-									'newPostit': true
+									'newPostit': true,
+									'savable': true
 								});
 								//postit.save();
 								paso = false;
@@ -380,49 +348,12 @@ if(typeof(Storage)!=="undefined") {
 					p.load = function (pageFilter) {
 						$('#PIAloading').html('Loading Postits ...');
 						console.log('Loading Postits');
-						// Create all posticks saved in localStorage
-						var len = storageManager.getlength(); 
-						if (len > 0) {
-							var key = 0;
-							for (var i = 0; i < len; i++) {
-								key = storageManager.getkey(i);
-								var o = storageManager.get(key);
-								if(o && typeof o.id !== "undefined") {
-									
-									//page filter: show only notes from the current page
-									if(o.page === window.location.pathname || !pageFilter) {
-										
-										console.log('Loaded '+o.id);
-										o.id = parseInt(key);
-										o.newPostit = true;
-										$('#PostItAll').postitall(o);
-										PIAid = o.id;	
-									}
-									
-								} else {
-									storageManager.remove(key);
-								}
-							}
-						}
+						$.loadPostItAll(true);
 					};
 					
 					p.save = function (pageFilter) {
 						console.log('Saving Postits');
-						// Clean the localStorage (activate if page filter off)
-						if(!pageFilter) {
-							//Clean all
-							storageManager.clear();
-						} else {
-							//Clean only page
-							storageManager.clearPage();
-						}
-						
-						// Then each postit into the LocalStorage
-						$('.PIApostit').each(function () {
-							//console.log($(this).postitall('options'));
-							storageManager.add($(this).postitall('options'));
-							//$(this).postitall('destroy');
-						});
+						$.savePostItAll();
 					};
 					
 					return PIAMain;
@@ -433,20 +364,17 @@ if(typeof(Storage)!=="undefined") {
 		        $('#PIAloading').html('All done. Loading notes ...').hide('slow', function() {
 		        	// Main
 			    	var PIA = new PIAMain;
-			    	var pageFilter = true;
 			    	
-			    	// Set time interval to save postits each 3 seconds
-			    	window.setInterval(function() { PIA.save(pageFilter); }, 3000);
+			    	// Set time interval to save postits each 5 seconds
+			    	window.setInterval(function() { PIA.save(); }, 5000);
 					
 			        // Save all the postits when the user leaves the page
 			        window.onbeforeunload = function () {
-			        	PIA.save(pageFilter);
+			        	PIA.save();
 			        };
 			        
 		        	// Load local postits
-			    	PIA.load(pageFilter);
-			    	
-			    	//TODO: Moves to the first loaded note
+			    	PIA.load();
 			    	
 			    	//Remove PIAloading
 		        	$(this).html('Let\'s go!!').remove();

@@ -37,7 +37,7 @@
     // Global Vars
     var options;
     var PIAid = 0;
-    var console;
+    //var console;
 
     // Manage localStorage
     var storageManager = {
@@ -103,20 +103,11 @@
             options.posY = posY;
             options.posX = posX;
             options.width = divWidth;
-            //setOptions(options);
         }
     }
 
     //Get Next Postit Id
     function getIndex() {
-        /*var index = 0;
-        $('.PIApostit').each(function () {
-            var id = $(this).data('PIA-id');
-            if (id > index) {
-                index = id; 
-            }
-        });
-        index = index + 1;*/
         var index = storageManager.nextId();
         return parseInt(index, 10);
     }
@@ -171,7 +162,7 @@
             'class': 'PIAtoolbar',
             'style': barCursor
         });
-        //Grag support without jQuery UI
+        //Drag support without jQuery UI
         if (!$.ui) {
             if (options.draggable) {
                 toolbar.drags();
@@ -404,16 +395,7 @@
                     }
                 });
             }
-            /*.show("scale",{percent:100},1500, function () {
-                autoresize($(this));
-                //sometimes, the postit hide magically before scale ... trying to fix it ...
-                $(this).show();
-            });*/
-        }/*else {
-            obj.slideDown('slow', function () {
-                autoresize($(this));
-            });
-        }*/
+        }
         obj.slideDown('slow', function () {
             //Rest of actions
             //Config: text shadow
@@ -552,28 +534,28 @@
     // Default Plugin Vars
     $.fn.postitall.defaults = {
         // Basic Settings
-        id                : 0, //Id
-        created            : Date.now(),
-        domain            : window.location.origin, //Domain in the url
+        id              : 0, //Id
+        created         : Date.now(),
+        domain          : window.location.origin, //Domain in the url
         page            : window.location.pathname, //Page in the url
-        backgroundcolor    : '#FFFC7F', //Background color
-        textcolor        : '#333333', //Text color
-        textshadow        : true, //Shadow in the text
+        backgroundcolor : '#FFFC7F', //Background color
+        textcolor       : '#333333', //Text color
+        textshadow      : true, //Shadow in the text
         position        : 'relative', //Position absolute or relative
         posX            : '5px', //top position
         posY            : '5px', //left position
-        height            : 180, //height
-        width            : 200, //width
-        minHeight        : 152, //resizable min-width
+        height          : 180, //height
+        width           : 200, //width
+        minHeight       : 152, //resizable min-width
         minWidth        : 131, //resizable min-height
-        description        : '', //content
-        newPostit        : false, //Create a new postit
+        description     : '', //content
+        newPostit       : false, //Create a new postit
         autoheight      : true, //Set autoheight feature on or off
         draggable       : true, //Set draggable feature on or off
         resizable       : true, //Set resizable feature on or off
         removable       : true, //Set removable feature on or off
         changeoptions   : true, //Set options feature on or off
-        savable            : true, //Set the save postit option
+        savable         : false, //Save postit in local storage
         // Callbacks / Event Handlers
         onChange: function () { return undefined; },
         onSelect: function () { return undefined; },
@@ -595,7 +577,7 @@
                 //key = storageManager.getkey(i);
                 o = storageManager.get(i);
                 if (o && o.id !== undefined) {
-                    if (o.page === window.location.pathname) {
+                    //if (o.page === window.location.pathname) {
                         o.id = parseInt(i, 10);
                         if (scrollTo === "") {
                             scrollTo = "idPostIt_" + o.id;
@@ -607,10 +589,8 @@
                             $('body').postitall(o);
                             PIAid = o.id;
                         }
-                    }
-                }/* else {
-                    storageManager.remove(key);
-                }*/
+                    //}
+                }
             }
             if (scrollToElement && scrollTo !== "") {
                 $('html, body').animate({
@@ -623,7 +603,10 @@
     $.savePostItAll = function () {
         console.log("Save Postits to Local Storage");
         $('.PIApostit').each(function () {
-            $(this).postitall('save');
+            options = $(this).data('PIA-options');
+            if(options.savable) {
+                $(this).postitall('save');
+            }
         });
     };
     //Remove all postits
