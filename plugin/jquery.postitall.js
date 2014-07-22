@@ -485,7 +485,7 @@
         postitall: function (method, data) {
             //Debugging
             var debugging = true; // or true
-            if (console === undefined) {
+            if (typeof console === "undefined") {
                 console = {
                     log: function () { return undefined; }
                 };
