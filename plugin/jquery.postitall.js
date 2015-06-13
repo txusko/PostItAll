@@ -31,7 +31,7 @@
 /*global window */
 /*global jQuery */
 
-(function ($, $storage) {
+(function ($, $localStorage) {
     "use strict";
 
     // Global Vars
@@ -39,17 +39,129 @@
     var PIAid = 0;
     //var console;
 
+    
+
     // Manage localStorage
     var storageManager = {
-        add: function (obj) { $storage.setItem('PostIt_' + parseInt(obj.id, 10), JSON.stringify(obj)); },
-        get: function (id) { return JSON.parse($storage.getItem('PostIt_' + id)); },
-        nextId: function () { PIAid += 1; if ($storage.getItem('PostIt_' + PIAid)) { return this.nextId(); } return PIAid; },
-        remove: function (id) { PIAid = 0; $storage.removeItem('PostIt_' + id); },
-        clear: function () { PIAid = 0; $storage.clear(); },
-        getlength: function () { var len = $storage.length; return len; },
-        getkey: function (i) { var key = $storage.key('PostIt_' + i); return key; },
-        clearPage: function () { var i; for (i = 0; i < $storage.length; i += 1) { if ($storage.getItem('PostIt_' + i)) { $storage.removeItem('PostIt_' + i); } } }
+        add: function (obj, callback) { 
+            $storage.add(obj, function() {
+                if(callback != null) callback();
+            }); 
+        },
+        get: function (id, callback) { 
+            $storage.get(id, function(varvalue) {
+                if(callback != null) callback(varvalue);
+            }); 
+        },
+        nextId: function (callback) { 
+            storageManager.getlength(function(length) {
+                length++;
+                PIAid = length;
+            });
+            return PIAid;
+        },
+        remove: function (id, callback) { 
+            PIAid = 0;
+            $storage.remove(id, function(varvalue) {
+                if(callback != null) callback();
+            });
+        },
+        clear: function (callback) { 
+            PIAid = 0;
+            $storage.clear(id, function(varvalue) {
+                if(callback != null) callback();
+            });
+        },
+        getlength: function (callback) { 
+            $storage.getlength(function(length) {
+                if(callback != null) callback(length);
+            });
+        }
     };
+
+    var localManager = {
+        add: function (obj, callback) { 
+            var varname = 'PostIt_' + parseInt(obj.id, 10);
+            var testPrefs = JSON.stringify(obj);
+            $localStorage.setItem(varname, testPrefs);
+            console.log('Saved', varname, testPrefs);
+            if(callback != null) callback();
+        },
+        get: function (id, callback) { 
+            var varname = 'PostIt_' + parseInt(id, 10);
+            var varvalue = $localStorage.getItem(varname);
+            if(varvalue != null)
+                varvalue = JSON.parse(varvalue);
+            else
+                varvalue = "";
+            //console.log('Loaded', varname, varvalue);
+            if(callback != null) callback(varvalue);
+        },
+        remove: function (id, callback) { 
+            PIAid = 0; 
+            $localStorage.removeItem('PostIt_' + id);
+            if(callback != null) callback();
+        },
+        clear: function (callback) { 
+            PIAid = 0; 
+            $localStorage.clear();
+            if(callback != null) callback(); 
+        },
+        getlength: function (callback) {
+            callback($localStorage.length); 
+        }
+    };
+
+    //Manage chrome storage
+    var chromeManager = {
+        add: function(obj, callback) {
+            var varname = 'PostIt_' + parseInt(obj.id, 10);
+            var testPrefs = JSON.stringify(obj);
+            var jsonfile = {};
+            jsonfile[varname] = testPrefs;
+            chrome.storage.sync.set(jsonfile, function () {
+                console.log('Saved', varname, testPrefs);
+                if(callback != null) callback();
+            });
+        },
+        get: function(id, callback) {
+            var varvalue;
+            var varname = 'PostIt_' + parseInt(id, 10);
+            chrome.storage.sync.get(null, function(retVal) {
+                //Recover vars
+                if(retVal[varname] !== undefined)
+                    varvalue = JSON.parse(retVal[varname]);
+                else
+                    varvalue = "";
+                console.log('Loaded', varname, varvalue);
+                if(callback != null) callback(varvalue);
+            });
+        },
+        remove: function(varname, callback) {
+            chrome.storage.sync.remove(varname, function() {
+                console.log('Removed',varname);
+                if(callback != null) callback();
+            });
+        },
+        clear: function(callback) {
+            chrome.storage.sync.clear(function() {
+                console.log('Clear chrome storage');
+                if(callback != null) callback();
+            });
+        },
+        getlength: function(callback) {
+            var total = 0;
+            chrome.storage.sync.get(null,function(data) {
+                total = Object.keys(data).length;
+                console.log('Chrome storage length ' + total);
+                if(callback != null) callback(total);
+            });
+        }
+    };
+
+
+    var $storage = localManager;
+
 
     //Save object
     function save(obj) {
@@ -110,6 +222,13 @@
     function getIndex() {
         var index = storageManager.nextId();
         return parseInt(index, 10);
+        /*var index = 0;
+        do {
+            storageManager.nextId(function(index) {
+                index = parseInt(index, 10);
+            });
+        } while (index <= 0)
+        return index;*/
     }
 
     // Set options
@@ -334,7 +453,7 @@
             .css('left', options.posY)
             .css('top', options.posX)
             .css('width', options.width + 'px')
-            .css('height', (options.height + 30) + 'px') //Increase 30 pixels for the toolbar
+            .css('height', (options.height + 2) + 'px') //Increase 30 pixels for the toolbar
             .css('background-color', options.backgroundcolor)
             .css('color', options.textcolor);
         if (options.textshadow) {
@@ -439,11 +558,16 @@
                     setOptions(options, true);
                 });
             }
+            autoresize($('#idPostIt_' + index).parent());
         });
         //Save in localstorage
         if (options.savable) {
             storageManager.add(options);
         }
+        //Stop key propagation on contenteditable
+        $("#pia_editable_" + index).keydown(function (e) {
+            e.stopPropagation();
+        });
         //chaining
         return obj;
     }
@@ -569,7 +693,6 @@
             scrollToElement = false;
         }
         var len = storageManager.getlength();
-        console.log("Load Postits from Local Storage");
         if (len > 0) {
             //var key = 0;
             var scrollTo = "", i = 0, o;
