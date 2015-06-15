@@ -550,18 +550,33 @@ OTHER DEALINGS IN THE SOFTWARE.
 		
 		//Minicolors for the form
 		$('.minicolors').minicolors();
+
+		var defOpt = {
+			savable: false,
+			position: 'relative'
+		};
 		
 		//Default postit
-		$('#idAddDemoPostit').postitall({'savable': false});
-		$('.classAddDemoPostit').postitall({'savable': false});
+		$('#idAddDemoPostit').postitall(defOpt);
+		$('.classAddDemoPostit').postitall(defOpt);
 		
 		//Recovering data from a form
-		$('#idAddDemoPostit2').click(function() {
-			$('#idAddDemoPostit2_result').postitall({
+		$('#idAddDemoPostit2').click(function(e) {
+			/*$('#idAddDemoPostit2_result').postitall({
 				'textcolor' 		: $('#idTextColor').val(),
 				'backgroundcolor' 	: $('#idBgTextColor').val(),
 				'description' 		: $('#idContent').val(),
-				'newPostit' 		: true
+				'newPostit' 		: true,
+				'position'			: 'relative'
+			});*/
+			$.newPostItAll($('#idContent').val(), {
+				'savable'			: false,
+				'textcolor' 		: $('#idTextColor').val(),
+				'backgroundcolor' 	: $('#idBgTextColor').val(),
+				'description' 		: $('#idContent').val(),
+				'position'			: 'absolute',
+				'posX'				: e.pageX,
+				'posY'				: e.pageY
 			});
 		});
 		

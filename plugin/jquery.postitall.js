@@ -441,7 +441,7 @@
                     cpOpt.position = 'absolute';
                     cpOpt.posY = e.pageX;
                     cpOpt.posX = e.pageY;
-                    $.newPostItAll('', cpOpt, function() {
+                    $.newPostItAll('', cpOpt, undefined, function() {
                         console.log('aki');
                         //$('.PIApostit').css('z-index', 9995);
                         //$(this).css('z-index', 9999);
@@ -885,8 +885,11 @@
                 if (method !== 'create') {
                     data = method;
                 }
+                var datacp = {};
                 $(this).each(function () {
-                    init($(this), data);
+                    datacp = data;
+                    console.log('col1:'+datacp.backgroundcolor);
+                    $.newPostItAll('', datacp, $(this));
                 });
                 return $(this);
             }
@@ -949,11 +952,13 @@
         }
     };
 
-    $.newPostItAll = function(content, opt, callback) {
-        var obj = $('<div />', {
-            text: (content !== undefined ? content : '')
-        });
-        $('body').append(obj);
+    $.newPostItAll = function(content, opt, obj, callback) {
+        if(obj === undefined) {
+            obj = $('<div />', {
+                text: (content !== undefined ? content : '')
+            });
+            $('body').append(obj);
+        }
         if(opt === undefined) {
             opt = $.extend({}, $.fn.postitall.defaults);
             opt.backgroundcolor = getRandomColor();
