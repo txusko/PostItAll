@@ -37,140 +37,77 @@
 
     // Global Vars
     var options;
-    //var console;
 
-    $(window).mousemove(function(e){
-        //console.log(e);
-          window.mouseXPos = e.pageX;
-          window.mouseYPos = e.pageY;
-       }); 
+    var $storage = null;
 
-
-    // Manage localStorage
+    // Storage Manager
     var storageManager = {
         add: function (obj, callback) { 
-            $storage.add(obj, function() {
-                if(callback != null) callback();
-            }); 
+            loadManager(function() {
+                $storage.add(obj, function() {
+                    if(callback != null) callback();
+                }); 
+            });
         },
         get: function (id, callback) { 
-            $storage.get(id, function(varvalue) {
-                if(callback != null) callback(varvalue);
-            }); 
+            loadManager(function() {
+                $storage.get(id, function(varvalue) {
+                    if(callback != null) callback(varvalue);
+                }); 
+            });
         },
         nextId: function (callback) { 
-            storageManager.getlength(function(length) {
-                length++;
-                callback(parseInt(length, 10));
+            loadManager(function() {
+                storageManager.getlength(function(length) {
+                    length++;
+                    callback(parseInt(length, 10));
+                });
             });
         },
         remove: function (id, callback) { 
-            $storage.remove(id, function(varvalue) {
-                if(callback != null) callback();
+            loadManager(function() {
+                $storage.remove(id, function(varvalue) {
+                    if(callback != null) callback();
+                });
             });
         },
         clear: function (callback) { 
-            $storage.clear(id, function(varvalue) {
-                if(callback != null) callback();
+            loadManager(function() {
+                $storage.clear(id, function(varvalue) {
+                    if(callback != null) callback();
+                });
             });
         },
         getlength: function (callback) { 
-            $storage.getlength(function(length) {
-                if(callback != null) callback(length);
+            loadManager(function() {
+                $storage.getlength(function(length) {
+                    if(callback != null) callback(length);
+                });
             });
         },
         key: function (i, callback) {
-            $storage.key(i, function(name) {
-                if(callback != null) callback(name);
+            loadManager(function() {
+                $storage.key(i, function(name) {
+                    if(callback != null) callback(name);
+                });
             });
         }
     };
 
-    var localManager = {
-        add: function (obj, callback) { 
-            var varname = 'PostIt_' + parseInt(obj.id, 10);
-            var testPrefs = JSON.stringify(obj);
-            $localStorage.setItem(varname, testPrefs);
-            //console.log('Saved', varname, testPrefs);
-            if(callback != null) callback();
-        },
-        get: function (id, callback) { 
-            var varname = 'PostIt_' + parseInt(id, 10);
-            var varvalue = $localStorage.getItem(varname);
-            if(varvalue != null)
-                varvalue = JSON.parse(varvalue);
-            else
-                varvalue = "";
-            //console.log('Loaded', varname, varvalue);
-            if(callback != null) callback(varvalue);
-        },
-        remove: function (id, callback) { 
-            $localStorage.removeItem('PostIt_' + id);
-            if(callback != null) callback();
-        },
-        clear: function (callback) { 
-            $localStorage.clear();
-            if(callback != null) callback(); 
-        },
-        getlength: function (callback) {
-            callback($localStorage.length); 
-        },
-        key: function (i, callback) {
-            var name = $localStorage.key(i);
-            callback(name);
+    function loadManager(callback) {
+        if($storage === null) {
+            $.ajax({
+              url: $.fn.postitall.globals.storage.manager,
+              dataType: "script",
+              success: function() {
+                $storage = getStorageManager();
+                if(callback != null) callback($storage);
+              }
+            });
+        } else {
+            callback(null);
         }
-    };
-
-    //Manage chrome storage
-    var chromeManager = {
-        add: function(obj, callback) {
-            var varname = 'PostIt_' + parseInt(obj.id, 10);
-            var testPrefs = JSON.stringify(obj);
-            var jsonfile = {};
-            jsonfile[varname] = testPrefs;
-            chrome.storage.sync.set(jsonfile, function () {
-                console.log('Saved', varname, testPrefs);
-                if(callback != null) callback();
-            });
-        },
-        get: function(id, callback) {
-            var varvalue;
-            var varname = 'PostIt_' + parseInt(id, 10);
-            chrome.storage.sync.get(null, function(retVal) {
-                //Recover vars
-                if(retVal[varname] !== undefined)
-                    varvalue = JSON.parse(retVal[varname]);
-                else
-                    varvalue = "";
-                console.log('Loaded', varname, varvalue);
-                if(callback != null) callback(varvalue);
-            });
-        },
-        remove: function(varname, callback) {
-            chrome.storage.sync.remove(varname, function() {
-                console.log('Removed',varname);
-                if(callback != null) callback();
-            });
-        },
-        clear: function(callback) {
-            chrome.storage.sync.clear(function() {
-                console.log('Clear chrome storage');
-                if(callback != null) callback();
-            });
-        },
-        getlength: function(callback) {
-            var total = 0;
-            chrome.storage.sync.get(null,function(data) {
-                total = Object.keys(data).length;
-                console.log('Chrome storage length ' + total);
-                if(callback != null) callback(total);
-            });
-        }
-    };
-
-
-    var $storage = localManager;
-
+    }
 
     //Save object
     function save(obj) {
@@ -228,7 +165,7 @@
                 options.height = divHeight;
                 obj.css('height', divHeight);
                 if ($.ui) {
-                    if (options.resizable) {
+                    if ($.fn.postitall.globals.features.resizable && options.resizable) {
                         var newMinHeight = parseInt(options.minHeight,10);
                         if((contentHeight + 25) > newMinHeight)
                             newMinHeight = contentHeight + 25;
@@ -684,7 +621,7 @@
                     }
                 });
             }
-            if (options.resizable) {
+            if ($.fn.postitall.globals.features.resizable && options.resizable) {
                 var pos = false;
                 obj.resizable({
                     animate: true,
@@ -803,9 +740,15 @@
     }
 
     function getRandomColor() {
-        //var colors = ["red", "blue", "yellow", "black", "green"];
-        //return colors[Math.floor(Math.random() * colors.length)];
-        return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        if($.fn.postitall.globals.style.randomColor) {
+            //Random color
+            //var colors = ["red", "blue", "yellow", "black", "green"];
+            //return colors[Math.floor(Math.random() * colors.length)];
+            return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        } else {
+            //Default postit color
+            return $.fn.postitall.defaults.backgroundcolor;
+        }
     }
 
     function reorderIndex() {
@@ -896,34 +839,62 @@
         }
     });
 
+    //Global vars
+    $.fn.postitall.globals = {
+        storage : {
+            manager  : 'plugin/jquery.postitall.localManager.js',
+        },        
+        style : {
+            randomColor     : true,         //Random color in new postits
+            backgroundcolor : '#FFFC7F',    //Background color in new postits when randomColor = false
+            textcolor       : '#333333',    //Text color
+            textshadow      : true,         //Shadow in the text
+            position        : 'fixed',      //Position absolute or relative
+            posX            : '10px',       //top position
+            posY            : '10px',       //left position
+            minHeight       : 160,          //resizable min-width
+            minWidth        : 125,          //resizable min-height
+        },
+        features : {
+            autoheight      : true,         //Set autoheight feature on or off
+            draggable       : true,         //Set draggable feature on or off
+            resizable       : true,         //Set resizable feature on or off
+            removable       : true,         //Set removable feature on or off
+            changeoptions   : true,         //Set options feature on or off
+            savable         : false,        //Save postit in storage
+            blocked         : false,        //Postit can not be modified
+            minimized       : false,        //true = minimized, false = maximixed
+            addNew          : false,        //Create a new postit
+        }
+    };
+
     // Default Plugin Vars
     $.fn.postitall.defaults = {
         // Basic Settings
         id              : 0, //Id
-        addNew          : false,
         created         : Date.now(),
         domain          : window.location.origin, //Domain in the url
         page            : window.location.pathname, //Page in the url
-        backgroundcolor : '#FFFC7F', //Background color
-        textcolor       : '#333333', //Text color
-        textshadow      : true, //Shadow in the text
-        position        : 'fixed', //Position absolute or relative
-        posX            : '5px', //top position
-        posY            : '5px', //left position
-        height          : 160, //height
-        width           : 120, //width
-        minHeight       : 160, //resizable min-width
-        minWidth        : 125, //resizable min-height
         description     : '', //content
-        newPostit       : false, //Create a new postit
-        autoheight      : true, //Set autoheight feature on or off
-        draggable       : true, //Set draggable feature on or off
-        resizable       : true, //Set resizable feature on or off
-        removable       : true, //Set removable feature on or off
-        changeoptions   : true, //Set options feature on or off
-        savable         : false, //Save postit in local storage
-        blocked         : false, //Postit can not be modified
-        minimized       : false,
+        backgroundcolor : $.fn.postitall.globals.style.backgroundcolor, //Background color
+        textcolor       : $.fn.postitall.globals.style.textcolor, //Text color
+        textshadow      : $.fn.postitall.globals.style.textshadow, //Shadow in the text
+        position        : $.fn.postitall.globals.style.position, //Position absolute or relative
+        posX            : $.fn.postitall.globals.style.posX, //top position
+        posY            : $.fn.postitall.globals.style.posY, //left position
+        height          : $.fn.postitall.globals.style.minHeight, //height
+        width           : $.fn.postitall.globals.style.minWidth, //width
+        minHeight       : $.fn.postitall.globals.style.minHeight, //resizable min-width
+        minWidth        : $.fn.postitall.globals.style.minWidth, //resizable min-height
+        autoheight      : $.fn.postitall.globals.features.autoheight, //Set autoheight feature on or off
+        draggable       : $.fn.postitall.globals.features.draggable, //Set draggable feature on or off
+        resizable       : $.fn.postitall.globals.features.resizable, //Set resizable feature on or off
+        removable       : $.fn.postitall.globals.features.removable, //Set removable feature on or off
+        changeoptions   : $.fn.postitall.globals.features.changeoptions, //Set options feature on or off
+        savable         : $.fn.postitall.globals.features.savable, //Save postit in storage
+        blocked         : $.fn.postitall.globals.features.blocked, //Postit can not be modified
+        minimized       : $.fn.postitall.globals.features.minimized, //true = minimized, false = maximixed
+        addNew          : $.fn.postitall.globals.features.addNew,   
         // Callbacks / Event Handlers
         onChange: function () { return undefined; },
         onSelect: function () { return undefined; },
@@ -934,7 +905,6 @@
     //Create a new postit
     $.newPostItAllOptions = function(obj, options, callback) {
         if(options.id > 0) {
-            options.newPostit = false;
             var PIAcontent = $('<div />', { 'id' : 'newPostIt_' + options.id });
             obj.append(PIAcontent);
             init(obj, options);
@@ -943,7 +913,6 @@
         } else {
             getIndex(function(index) {
                 options.id = index;
-                options.newPostit = false;
                 var PIAcontent = $('<div />', { 'id' : 'newPostIt_' + index });
                 obj.append(PIAcontent);
                 init(obj, options);
@@ -961,6 +930,7 @@
         }
         if(opt === undefined) {
             opt = $.extend({}, $.fn.postitall.defaults);
+            console.log('aki',opt);
             opt.backgroundcolor = getRandomColor();
         }
         if(opt.backgroundcolor === undefined)

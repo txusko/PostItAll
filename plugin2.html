@@ -165,6 +165,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 		//$.newPostItAll('Hola que ase!');
 		//$.newPostItAll('Hola que ase2!');
 
+		$.fn.postitall.globals.storageManager = 'plugin/jquery.postitall.localManager.js';
+		$.fn.postitall.globals.features.resizable = true;
+		$.fn.postitall.defaults.resizable = false;
+
 		$('#idAddPostIt').click(function() {
 			$.newPostItAll('', {
 				addNew: true,
@@ -176,7 +180,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 		});
 
 		$('#idAddPostIt2').click(function() {
-			$.newPostItAll();
+			$.newPostItAll('');
 		});
 
 		$.loadPostItAll(true);
