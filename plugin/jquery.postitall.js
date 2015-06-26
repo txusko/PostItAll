@@ -263,6 +263,38 @@
                 toolbar.drags();
             }
         }
+
+        //Delete icon
+        if (options.removable) {
+            toolbar.append($('<div />', { 'id': 'pia_delete_' + index.toString(), 'class': 'PIAdelete PIAicon'})
+                .click(function (e) {
+                    if ($(this).parent().find('.ui-widget2').length <= 0) {
+                        var cont = '<div class="ui-widget2" id="pia_confirmdel_' + index + '">' +
+                            '<div class="PIAwarning">' +
+                            '<span class="PIAdelwar float-left"></span>Do you want to delete this note?' +
+                            '<div class="PIAconfirmOpt"><a id="sure_delete_' + index + '" href="#"><span class="PIAdelyes PIAicon"> Yes</span></a></div>' +
+                            '<div class="PIAconfirmOpt"><a id="cancel_' + index + '" href="#"><span class="PIAdelno PIAicon"> Cancel</span></a></div>' +
+                            '</div>' +
+                            '</div>';
+                        $(this).parent().parent().append(cont);
+                        $('#pia_confirmdel_' + index).css('height', options.minHeight - 25);
+                        $('#pia_editable_' + index).hide();
+                        $('#sure_delete_' + index).click(function (e) {
+                            //var id = $(this).closest('.PIApostit').children().attr('data-id');
+                            var id = obj.data('PIA-id');
+                            destroy($('#idPostIt_' + id).parent());
+                            e.preventDefault();
+                        });
+                        $('#cancel_' + index).click(function (e) {
+                            $('#pia_editable_' + index).show();
+                            $('#pia_confirmdel_' + index).remove();
+                            e.preventDefault();
+                        });
+                    }
+                    e.preventDefault();
+                }));
+        }
+
         //Config icon
         if (options.changeoptions) {
             toolbar.append(
@@ -330,6 +362,7 @@
             })
         );
 
+        //MINIMIZE
         toolbar.append(
                 $('<div />', {
                     'id': 'pia_minimize_' + index.toString(), 
@@ -344,20 +377,79 @@
                         $('#pia_editable_'+id).hide();
                         $('#pia_minimize_'+index.toString()).removeClass('PIAminimize').addClass('PIAmaximize');
                         options.minimized = true;
-                        options.originalHeight = $('#idPostIt_'+id).parent().css('height');
+                        
+                        if ($.fn.postitall.globals.features.resizable && options.resizable) {
+                            //resizable
+                            obj.resizable("disable");
+                        }
+                        if (options.draggable) {
+                            //draggable
+                            obj.draggable({ axis: "x" });
+                            $('#pia_toolbar_'+index.toString()).css('cursor', 'inherit');
+                        }
+                        var txtContent = " " + $('#pia_editable_'+id).text();
+                        if(txtContent.length > 18)
+                            txtContent = txtContent.substring(0,15) + "...";
+                        var smallText = $('<div id="pia_minimized_text_'+index.toString()+'" class="PIAminimizedText" />').text(txtContent);
+                        $('#pia_toolbar_'+index.toString()).append(smallText);
+                        //toolbar
+                        $('#pia_config_'+index.toString()).hide();
+                        $('#pia_fixed_'+index.toString()).hide();
+                        $('#pia_delete_'+index.toString()).hide();
+                        $('#pia_blocked_'+index.toString()).hide();
+
                         //animate resize
-                        $('#idPostIt_'+id).parent().animate({
+                        var propCss = {
+                            'position': $('#idPostIt_'+id).parent().css('position'),
+                            'left': $('#idPostIt_'+id).parent().css('left'),
+                            'top': $('#idPostIt_'+id).parent().css('top'),
+                            'height': $('#idPostIt_'+id).parent().css('height'),
+                            'width': $('#idPostIt_'+id).parent().css('width')
+                        };
+                        options.oldPosition = propCss;
+                        $('#idPostIt_'+id).parent()
+                        .animate({
+                            position: 'fixed',
+                            bottom: '0',
+                            left: $.fn.postitall.globals.leftPosMinified,
+                            width: $.fn.postitall.globals.style.minWidth + 20,
                             height: "20px"
-                        }, 500);
+                        }, 500)
+                        .css('position', 'fixed')
+                        .css('top', 'auto');
+                        $.fn.postitall.globals.leftPosMinified += $.fn.postitall.globals.style.minWidth + 20;
                     } else {
                         //$('#pia_blocked_'+id).click();
                         $('#pia_editable_'+id).show();
                         $('#pia_minimize_'+index.toString()).removeClass('PIAmaximize').addClass('PIAminimize');
                         options.minimized = false;
+
+                        if ($.fn.postitall.globals.features.resizable && options.resizable) {
+                            obj.resizable("enable");
+                        }
+                        if (options.draggable) {
+                            obj.draggable({ axis: "none" });
+                            $('#pia_toolbar_'+index.toString()).css('cursor', 'move');
+                        }
+                        //toolbar
+                        $('#pia_config_'+index.toString()).show();
+                        $('#pia_fixed_'+index.toString()).show();
+                        $('#pia_delete_'+index.toString()).show();
+                        $('#pia_blocked_'+index.toString()).show();
+                        $('#pia_minimized_text_'+index.toString()).remove();
+
                         //animate resize
                         $('#idPostIt_'+id).parent().animate({
-                            height: options.originalHeight
-                        }, 500);
+                            position: options.oldPosition.position,
+                            bottom: 'auto',
+                            left: options.oldPosition.left,
+                            top: options.oldPosition.top,
+                            width: options.oldPosition.width,
+                            height: options.oldPosition.height
+                        }, 500)
+                        .css('position', options.oldPosition.position);
+
+                        $.fn.postitall.globals.leftPosMinified -= $.fn.postitall.globals.style.minWidth - 20;
                     }
                     
                     obj.data('PIA-options', options);
@@ -400,27 +492,37 @@
                 if(!options.blocked) {
                     $('#pia_blocked_'+index.toString()).removeClass('PIAblocked').addClass('PIAblocked2');
                     $('#pia_editable_'+index.toString()).attr('contenteditable', false);
-                    //resizable
-                    obj.resizable("disable");
-                    //draggable
-                    obj.draggable("disable");
-                    $('#pia_toolbar_'+index.toString()).css('cursor', 'inherit');
+                    if ($.fn.postitall.globals.features.resizable && options.resizable) {
+                        //resizable
+                        obj.resizable("disable");
+                    }
+                    if (options.draggable) {
+                        //draggable
+                        obj.draggable("disable");
+                        $('#pia_toolbar_'+index.toString()).css('cursor', 'inherit');
+                    }
                     //toolbar
                     $('#pia_config_'+index.toString()).hide();
                     $('#pia_fixed_'+index.toString()).hide();
                     $('#pia_delete_'+index.toString()).hide();
+                    $('#pia_minimize_'+index.toString()).hide();
 
                     options.blocked = true;
                 } else {
                     $('#pia_blocked_'+index.toString()).removeClass('PIAblocked2').addClass('PIAblocked');
                     $('#pia_editable_'+index.toString()).attr('contenteditable', true);
-                    obj.resizable("enable");
-                    obj.draggable("enable");
-                    $('#pia_toolbar_'+index.toString()).css('cursor', 'move');
+                    if ($.fn.postitall.globals.features.resizable && options.resizable) {
+                        obj.resizable("enable");
+                    }
+                    if (options.draggable) {
+                        obj.draggable("enable");
+                        $('#pia_toolbar_'+index.toString()).css('cursor', 'move');
+                    }
                     //toolbar
                     $('#pia_config_'+index.toString()).show();
                     $('#pia_fixed_'+index.toString()).show();
                     $('#pia_delete_'+index.toString()).show();
+                    $('#pia_minimize_'+index.toString()).show();
                     options.blocked = false;
                 }
                 obj.data('PIA-options', options);
@@ -429,36 +531,7 @@
             })
         );
 
-        //Delete icon
-        if (options.removable) {
-            toolbar.append($('<div />', { 'id': 'pia_delete_' + index.toString(), 'class': 'PIAdelete PIAicon'})
-                .click(function (e) {
-                    if ($(this).parent().find('.ui-widget2').length <= 0) {
-                        var cont = '<div class="ui-widget2" id="pia_confirmdel_' + index + '">' +
-                            '<div class="PIAwarning">' +
-                            '<span class="PIAdelwar float-left"></span>Do you want to delete this note?' +
-                            '<div class="PIAconfirmOpt"><a id="sure_delete_' + index + '" href="#"><span class="PIAdelyes PIAicon"> Yes</span></a></div>' +
-                            '<div class="PIAconfirmOpt"><a id="cancel_' + index + '" href="#"><span class="PIAdelno PIAicon"> Cancel</span></a></div>' +
-                            '</div>' +
-                            '</div>';
-                        $(this).parent().parent().append(cont);
-                        $('#pia_confirmdel_' + index).css('height', options.minHeight - 25);
-                        $('#pia_editable_' + index).hide();
-                        $('#sure_delete_' + index).click(function (e) {
-                            //var id = $(this).closest('.PIApostit').children().attr('data-id');
-                            var id = obj.data('PIA-id');
-                            destroy($('#idPostIt_' + id).parent());
-                            e.preventDefault();
-                        });
-                        $('#cancel_' + index).click(function (e) {
-                            $('#pia_editable_' + index).show();
-                            $('#pia_confirmdel_' + index).remove();
-                            e.preventDefault();
-                        });
-                    }
-                    e.preventDefault();
-                }));
-        }
+        
         //Front page: content
         var content = $('<div />', {
             'id': 'pia_editable_' + index.toString(),
@@ -865,7 +938,8 @@
             blocked         : false,        //Postit can not be modified
             minimized       : false,        //true = minimized, false = maximixed
             addNew          : false,        //Create a new postit
-        }
+        },
+        leftPosMinified     : 0
     };
 
     // Default Plugin Vars
@@ -894,7 +968,8 @@
         savable         : $.fn.postitall.globals.features.savable, //Save postit in storage
         blocked         : $.fn.postitall.globals.features.blocked, //Postit can not be modified
         minimized       : $.fn.postitall.globals.features.minimized, //true = minimized, false = maximixed
-        addNew          : $.fn.postitall.globals.features.addNew,   
+        addNew          : $.fn.postitall.globals.features.addNew,
+        oldPosition     : {},  
         // Callbacks / Event Handlers
         onChange: function () { return undefined; },
         onSelect: function () { return undefined; },
