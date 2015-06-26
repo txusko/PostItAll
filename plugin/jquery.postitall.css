@@ -144,7 +144,8 @@
 }
 .PIAmaximize {
 	/*background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA81BMVEX6qxb6qxf6rBf6rBj6qQ/6qRD6qRD6qAv6qAv6qAv6qAv6qAz6qAv6qAv6qQz6qQ36rxz6rhz6rxz6tCv7tSv6tCv7tSv7ujv7ujz7ujv80Hj80Xj80Hj80Xj80Hj93Zz93Z393p/93qD+8tr+9N3/0jL/0jT/0jX/0zb/0zf/0zj/1UL/1kX/3Gb/3Gf/3Gj/3Gn/3Wr/3Wv/3nL/33T/4XP/4XX/4Xj/4Yb/4Yj/4nb/4nn/4oj/4on/43z/5IL/5YT/+un/+vH/++3/+/L//PD//PL//PP//PT//Pf//ff//vj//vn//vr//vv//vz///9Rt4pKAAAAHnRSTlMAAAAABwcJSElLTExNTm5ukZOTqqqsrNLS1v39/v6hCHjwAAAAwUlEQVR42j2P5RaCQBBGd0FEsNYuTOzu7kBR1Hn/p3EZ0ftn5txzJj4iciQvi0SY6hJ4zwVVk3n9eNQLSYXagga1GyC3dJByIWvwR5NF4k6ZvHvs9g9ezJSb+EvAMao1w65FHwmVAV73U7d3ur8BymESOwOsWqP5etzeApzjKCaVzmLTry9tgSPW5TAYHi5PHPHh0mujef0udc5a05nlnBU9OfiTlfH19O/1TIBiOCWB4fIJhWBaUZBUFo0yVRJ4/g8/Yi2V+uk3yAAAAABJRU5ErkJggg==);*/
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA8FBMVEX6rBf6rBj6rBn////6qxX6qRH6qRH6qA76qRD6qRH6qhH6qA36qQ/6qhP6qhL6qhL6qhP6ryD6ryD6sCT6sib6sif6sij6syb7tzb7tzf7uDb7tzj7u0H7u0P7u0L7u0P8yGT8yGX8yWT7xmL7xmL8yWf8yWj94Kj94az947H947L95LH95LL95rn+6cH+6cL+6sD+6sH+897/0jb/0zn/2mL/2mP/3nP/3nX/4HH/4HL/4Hj/4Hv/4YT/4Yf/7Kr/77f/77j/8Lv/8Lz/8sT/9tj/9tn//PD//Pb//fr//vr//vv//v3//v7///3///8oS0ShAAAAJ3RSTlMAAAAAAhMmJ0xNTVZfaWpra56gpaqqqqq7u7u+1tbY2O7u7vDx8fEdbeLeAAAAiklEQVQYGQXBwWrCUBAAwNnNM8QEFNqDJ///00rBUxETbPLWmRgAAGFc5q5SD7k+95hu37cCxO/jpy3THYD7a8xhAICxJQCgWiX7K1Id8wmtira9M/p4ZdAGuDwz+oLSDpj6X1wmhBZgfjvDoUWBK0ADBBCZVQDQ99zeBwB9/Y82fp13lXo4rY/tA5CCL7CiWc05AAAAAElFTkSuQmCC);
+	/*background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA8FBMVEX6rBf6rBj6rBn////6qxX6qRH6qRH6qA76qRD6qRH6qhH6qA36qQ/6qhP6qhL6qhL6qhP6ryD6ryD6sCT6sib6sif6sij6syb7tzb7tzf7uDb7tzj7u0H7u0P7u0L7u0P8yGT8yGX8yWT7xmL7xmL8yWf8yWj94Kj94az947H947L95LH95LL95rn+6cH+6cL+6sD+6sH+897/0jb/0zn/2mL/2mP/3nP/3nX/4HH/4HL/4Hj/4Hv/4YT/4Yf/7Kr/77f/77j/8Lv/8Lz/8sT/9tj/9tn//PD//Pb//fr//vr//vv//v3//v7///3///8oS0ShAAAAJ3RSTlMAAAAAAhMmJ0xNTVZfaWpra56gpaqqqqq7u7u+1tbY2O7u7vDx8fEdbeLeAAAAiklEQVQYGQXBwWrCUBAAwNnNM8QEFNqDJ///00rBUxETbPLWmRgAAGFc5q5SD7k+95hu37cCxO/jpy3THYD7a8xhAICxJQCgWiX7K1Id8wmtira9M/p4ZdAGuDwz+oLSDpj6X1wmhBZgfjvDoUWBK0ADBBCZVQDQ99zeBwB9/Y82fp13lXo4rY/tA5CCL7CiWc05AAAAAElFTkSuQmCC);*/
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAB0VBMVEX6rBf6rBj6rBn////6qxX6qRH6qRH6qA76qRD6qRH6qhH6qA36qQ/6qhP6qhL6qhL6qhP6ryD6ryD6sCT6sib6sif6sij6syb7tzb7tzf7uDb7tzj7u0L7u0P7u0H7u0L8yWf8yWj8ymf7xmL7xmL8ymr8ymv7rQD7rgD7sAD7sgP7vDL7vDX8twD8twH8uAD8uAj8ugj8wC78wC/8xC78zWn8zWr9uwD9uwX9uwb9vAD9vAb9vQD9vQX9vgD9wAL9wQn9xyz9ySv9zmL90mL91GH94a3947H957z9573+vQD+vgD+vwD+wAL+wgD+wgf+wwH+wwj+xAD+xAH+xQD+xgD+xgb+xwb+1WD+5rn+573+6Lf+6Ln+6cH+6rr+67r+7Ln+7Lr+7bj+7cr+7c7+7c/+7dD+7sr+8Mz+8cz+8tr+9OH/xgD/yAf/yQj/ygf/ygn/yw3/yw7/zBH/zRb/zRf/zRj/zhf/0CX/0Cb/0Cn/0TP/0jX/0zz/0z3/1kf/1kr/1kv/2Ev/4HH/4nj/5Yb/5Yj/55b/55j/6qX/6qb/7Kv/7Ln/8b3/8cH/8cv/8cz/8sL/8sX/8sb/8sv/9M//+e7/+vD//v3//v7///8RuSgvAAAAJ3RSTlMAAAAAAhMmJ0xNTVZfaWpra56gpaqqqqq7u7u+1tbY2O7u7vDx8fEdbeLeAAAA4ElEQVQYGQXBwU0CURCA4X/mDSsIKwgGgiYe9SCJjdiERViFLdiFlXBQOXDSBEME3bDoovt44/dJAAAAAISsfZhwJQlabaM0RzfXAABMH9+tfTl5yEUGrN03t/N1yCcf853msQ6b4iedvBhfR83e8CzzerH8VHdzpN0bN01sHKsgmHPxdJ2pSur0l1czLHgj73QBKLvPiu2h3AULpFR5Ukwk+vS81ZC6ei1GYMJs2691z76O3ylgHPvvshicsqhXf/FAzd20jlrgZdJuGSUf3ikAAH7/Jpb1WxFXktCoVrt/cABg+sAxbcoAAAAASUVORK5CYII=);
 }
 .PIAblocked {
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABwlBMVEX6rBj6rRf6rhb7sBT7sBX7sxL7tBH7tBL7tRH8txD8ugz8uw38uw78vA39vQz9vQ39vgv9vgz9vwv9wAv+wgf+wgn+wwj+wwn+ww7+xAj+xwb/xwb/yQf/yQj/ygj/ygz/zx76qhH6qxX+xAL7rAf8swP9uQD+vgD+wwD/xwD6qg3+wAH/ygn6qxL9twD6qA76rBL6qA36pwv9uQP+wAT6qAv/xgH7sQT6pwv/zh37sgr/zyP9ugL+wQL/yAP8ugj8ugX/zh77sgv+vwD6sij6syz/1D36sCX8vRv7uDn/1Tr7vkb7xFz8x1n7v0n7wVH8zXL8zXT8znj8znn8z3f8z3j8z3n80Hf80Hj90GD+013+11v/2ln/3Fz+01H/32n8ymv80Xz/3mP/3Wj8y2P8zXX91nD/6Z39yCL92JL93o3936T947L+zCj+233+5p/+5rD+6Kz+6q3+6rv+7b/+78b+78n+9eT+9uD/ygn/0Cr/0Sr/1Df/6qD/66j/7Kb/7Kz/773/8b7/8r//8sb/8sj/88j/9Mz/9M//9NH/9dL/+e//+uf/++z/+/H//PP//PX//ff//vn//vv///7///9MS/QrAAAAaHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBQ0REREREREYGCImJio3Oj5MT1BQVV5gZmZoamprb29wdaioqau2zNnb6Ojs7u7u7u7u7u7u7u7u7u7u7+/y8vP19vb3/mRKdIgAAADRSURBVBjTNci7SgNBFIDh/8yc3RiXhEUSCRYBg4GINjbpfAJfW2wtxCJETAoLYb0gLOx15lgYv/ITSdM0QtcsM99+71D+xNtsLmGfPx7C1qsrYHEfvXiXqptd3tj2rZkmpQKkLjvn6aU4c/NnxcxE/BH1ph8HJno9SqKErIq6LOpm+yV3KxmJqhn9wybXRk8X/JvtXqvWlUB4LyLQcSzmAvDTtxVgZrl3AEPnPGDWhbEC6GcyBcxaTAWIQ4mHQE+AwQUAmbWg+4+kx3mQuowBfgGGNFbV/f+b8wAAAABJRU5ErkJggg==);
@@ -164,7 +165,7 @@
 
 .PIAminimizedText {
 	text-indent: 5px;
-
+	line-height: 18px;
 }
 
 .ui-resizable-helper { border: 1px dotted gray; }
@@ -185,9 +186,18 @@
 	border-radius: 3px; 
 	
 }
+
+.plainpanel {
+	float: left;
+	-webkit-perspective: 600px;
+	-moz-perspective: 600px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px; 	
+}
+
 /* -- make sure to declare a default for every property that you want animated -- */
 /* -- general styles, including Y axis rotation -- */
-.panel .front {
+.panel .front, .plainpanel .front {
 	float: none;
 	position: absolute;
 	top: 5px;
@@ -218,7 +228,7 @@
 	-webkit-transition: all .4s ease-in-out;
 	transition: all .4s ease-in-out;
 }
-.panel.flip .front {
+.panel.flip .front, .plainpanel.flip .front {
 
 	-moz-transform: rotateY(180deg);  /* FF3.5/3.6 */
 	-o-transform: rotateY(180deg);  /* Opera 10.5 */
@@ -236,7 +246,7 @@
 	font-size: 9px; 
 }
 
-.panel .back {
+.panel .back, .plainpanel .back {
 	font-size: 8px; 
 	
 	position: relative;
@@ -268,7 +278,7 @@
 	transition: all .4s ease-in-out;
 }
 
-.panel.flip .back {
+.panel.flip .back, .plainpanel.flip .back  {
 	font-size: 9px; 
 	
 	background: -moz-linear-gradient(top,  rgba(238,238,238,0.2) 0%, rgba(238,238,238,0.2) 100%);

@@ -120,10 +120,11 @@
     function destroy(obj) {
         var id = obj.data('PIA-id');
         options = obj.data('PIA-options');
+        console.log('aki', options)
         //Remove from localstorage
-        if (options.savable) {
+        //if (options.savable) {
             storageManager.remove(id);
-        }
+        //}
         //Destroy object
         obj
             .removeData('PIA-id')
@@ -384,7 +385,8 @@
                         }
                         if (options.draggable) {
                             //draggable
-                            obj.draggable({ axis: "x" });
+                            //obj.draggable({ axis: "x" });
+                            obj.draggable("disable");
                             $('#pia_toolbar_'+index.toString()).css('cursor', 'inherit');
                         }
                         var txtContent = " " + $('#pia_editable_'+id).text();
@@ -411,13 +413,13 @@
                         .animate({
                             position: 'fixed',
                             bottom: '0',
-                            left: $.fn.postitall.globals.leftPosMinified,
-                            width: $.fn.postitall.globals.style.minWidth + 20,
+                            //left: $.fn.postitall.globals.leftPosMinified,
+                            width: ($.fn.postitall.globals.style.minWidth + 20),
                             height: "20px"
                         }, 500)
                         .css('position', 'fixed')
                         .css('top', 'auto');
-                        $.fn.postitall.globals.leftPosMinified += $.fn.postitall.globals.style.minWidth + 20;
+                        $.fn.postitall.globals.leftPosMinified += ($.fn.postitall.globals.style.minWidth + 30);
                     } else {
                         //$('#pia_blocked_'+id).click();
                         $('#pia_editable_'+id).show();
@@ -428,7 +430,8 @@
                             obj.resizable("enable");
                         }
                         if (options.draggable) {
-                            obj.draggable({ axis: "none" });
+                            //obj.draggable({ axis: "none" });
+                            obj.draggable("enable");
                             $('#pia_toolbar_'+index.toString()).css('cursor', 'move');
                         }
                         //toolbar
@@ -449,7 +452,7 @@
                         }, 500)
                         .css('position', options.oldPosition.position);
 
-                        $.fn.postitall.globals.leftPosMinified -= $.fn.postitall.globals.style.minWidth - 20;
+                        $.fn.postitall.globals.leftPosMinified -= ($.fn.postitall.globals.style.minWidth + 30);
                     }
                     
                     obj.data('PIA-options', options);
@@ -569,10 +572,11 @@
         )
         .append($('<span />', {
                 'class': 'float-left',
-                'style': 'line-height:10px;'
-            }).html(d.toLocaleDateString() + "<br>" + d.toLocaleTimeString())
+                'style': 'line-height:10px;padding-left: 10px;'
+            }).html(d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")")
         );
         //Back page: content
+        //Background color
         var bgLabel = $('<label />', {
             'for': 'minicolors_bg_' + index,
             'style': 'display:block;'
@@ -585,6 +589,7 @@
             'value': options.backgroundcolor,
             'data-default-value': options.backgroundcolor
         });
+        //Text color
         var tcLabel = $('<label />', {
             'for': 'minicolors_text_' + index,
             'style': 'display:block;'
@@ -597,6 +602,7 @@
             'value': options.textcolor,
             'data-default-value': options.textcolor
         });
+        //Text shadow
         var checked = '';
         if (options.textshadow) {
             checked = 'checked';
@@ -604,16 +610,35 @@
         var tsString = $('<input />', {
             'id': 'textshadow_' + index,
             'type': 'checkbox',
+            'style': 'margin-top: -2px;',
             'checked': checked
         });
         var tsLabel = $('<label />', {
             'for': 'textshadow_' + index,
             'style': 'display:block;'
         }).append(tsString).append(' Text shadow');
+        //General style
+        checked = '';
+        if (options.tresd) {
+            checked = 'checked';
+        }
+        var gsString = $('<input />', {
+            'id': 'generalstyle_' + index,
+            'type': 'checkbox',
+            'style': 'margin-top: -2px;',
+            'checked': checked
+        });
+        console.log('3d', options.tresd, checked);
+        var gsLabel = $('<label />', {
+            'for': 'generalstyle_' + index,
+            'style': 'display:block;'
+        }).append(gsString).append(' 3D style');
+
         content = $('<div />', { 'class': 'PIAcontent'})
             .append(bgLabel).append(bgString) // Bg color
             .append(tcLabel).append(tcString) // Text color
-            .append(tsLabel); // Text shadow
+            .append(tsLabel)  // Text shadow
+            .append(gsLabel);  // 3d or plain style
         //Back page
         var back = $('<div />', {
             'class': 'back',
@@ -635,7 +660,8 @@
         }
         //Modify final Postit Object
         obj.removeClass()
-            .addClass('block panel PIApostit ' + (options.position == "fixed" ? 'fixed' : ''))
+            .addClass('block PIApostit ' + (options.tresd ? ' panel ' : ' plainpanel ') 
+                + (options.position == "fixed" ? ' fixed ' : ''))
             .css('position', options.position)
             .css('left', options.posY)
             .css('top', options.posX)
@@ -714,10 +740,18 @@
                 });
             }
         }
+        if(!options.tresd) {
+            $('#generalstyle_' + options.id).click();
+        }
         //Postit minimized?
         if(options.minimized) {
             options.minimized = false;
             $('#pia_minimize_' + options.id).click();
+        }
+        //Postit bloqued?
+        if(options.blocked) {
+            options.blocked = false;
+            $('#pia_blocked_' + options.id).click();   
         }
         //Show postit
         obj.slideDown('slow', function () {
@@ -730,6 +764,17 @@
                 } else {
                     $(this).closest('.PIApostit').find('.PIAcontent').css('text-shadow', '0px 0px 0');
                     options.textshadow = false;
+                }
+                setOptions(options, true);
+            });
+            //3d or plain
+            $('#generalstyle_' + index).click(function () {
+                if ($(this).is(':checked')) {
+                    $('#idPostIt_' + index).parent().removeClass('plainpanel').addClass('panel');
+                    options.tresd = true;
+                } else {
+                    $('#idPostIt_' + index).parent().removeClass('panel').addClass('plainpanel');
+                    options.tresd = false;
                 }
                 setOptions(options, true);
             });
@@ -918,10 +963,11 @@
             manager  : 'plugin/jquery.postitall.localManager.js',
         },        
         style : {
+            tresd           : true,         //General style in 3d format
             randomColor     : true,         //Random color in new postits
             backgroundcolor : '#FFFC7F',    //Background color in new postits when randomColor = false
             textcolor       : '#333333',    //Text color
-            textshadow      : true,         //Shadow in the text
+            textshadow      : false,         //Shadow in the text
             position        : 'fixed',      //Position absolute or relative
             posX            : '10px',       //top position
             posY            : '10px',       //left position
@@ -950,6 +996,7 @@
         domain          : window.location.origin, //Domain in the url
         page            : window.location.pathname, //Page in the url
         description     : '', //content
+        tresd           : $.fn.postitall.globals.style.tresd, //3d or plain style
         backgroundcolor : $.fn.postitall.globals.style.backgroundcolor, //Background color
         textcolor       : $.fn.postitall.globals.style.textcolor, //Text color
         textshadow      : $.fn.postitall.globals.style.textshadow, //Shadow in the text
