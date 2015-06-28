@@ -3,7 +3,7 @@ var $localStorage = window.localStorage;
 
 var localManager = {
     add: function (obj, callback) { 
-        var varname = 'PostIt_' + parseInt(obj.id, 10);
+        var varname = 'PostIt_' + parseInt(obj.postit.id, 10);
         var testPrefs = JSON.stringify(obj);
         $localStorage.setItem(varname, testPrefs);
         //console.log('Saved', varname, testPrefs);

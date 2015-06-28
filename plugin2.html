@@ -60,6 +60,7 @@
 				<div id="idAddDemoPostit">Content of the postit 1</div>
 				<input type="button" id="idAddPostIt" value="Saveable">
 				<input type="button" id="idAddPostIt2" value="Add">
+				<input type="button" id="idAddPostIt3" value="Add2">
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -161,26 +162,49 @@ OTHER DEALINGS IN THE SOFTWARE.
 	
 	$(document).ready(function() {
 		
-		//$('#idAddDemoPostit').postitall({'savable': false});
+		//Global defaults
+		$.fn.postitall.defaults.style.randomColor = true;
+
+		//Postit defaults
+		$.fn.postitall.defaults.style.tresd = false;
+		$.fn.postitall.defaults.features.savable = false;
+		//$.fn.postitall.globals.features.resizable = true;
+		//$.fn.postitall.defaults.resizable = false;
+		/*$('.lead').postitall({
+			'postit': {
+				'position': 'relative'
+			}
+		});*/
 		//$.newPostItAll('Hola que ase!');
 		//$.newPostItAll('Hola que ase2!');
 
-		$.fn.postitall.defaults.tresd = false;
-		//$.fn.postitall.globals.features.resizable = true;
-		//$.fn.postitall.defaults.resizable = false;
-
 		$('#idAddPostIt').click(function() {
-			$.newPostItAll('', {
-				addNew: true,
-				savable: true,
-				posX: "10px",
-				posY: "10px",
-				position: "fixed"
+			$.newPostItAll('Aquest postit es salvara!', {
+				features : {
+					savable: true,	
+				},
+				postit : {
+					posX: "10px",
+					posY: "10px",
+					position: "fixed"
+				}
 			});
 		});
 
 		$('#idAddPostIt2').click(function() {
-			$.newPostItAll('');
+			$.newPostItAll();
+		});
+
+		$('#idAddPostIt3').click(function(e) {
+			$.newPostItAll('Mierdon2', {
+				style : {
+					tresd: true,	
+				},
+				postit : {
+					posX: e.pageY,
+					posY: e.pageX,
+				}
+			});
 		});
 
 		$.loadPostItAll(true);
