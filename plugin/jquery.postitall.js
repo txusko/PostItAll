@@ -73,7 +73,7 @@
         },
         clear: function (callback) { 
             loadManager(function() {
-                $storage.clear(id, function(varvalue) {
+                $storage.clear(function() {
                     if(callback != null) callback();
                 });
             });
@@ -96,18 +96,134 @@
 
     function loadManager(callback) {
         if($storage === null) {
-            $.ajax({
-              url: $.fn.postitall.globals.storage.manager,
-              dataType: "script",
-              success: function() {
-                $storage = getStorageManager();
-                if(callback != null) callback($storage);
-              }
+            getStorageManager(function($tmpStorage) {
+                $storage = $tmpStorage;
+                callback($storage)
             });
         } else {
             callback(null);
         }
     }
+
+    // Get storage manager
+    function getStorageManager(callback) {
+        switch($.fn.postitall.globals.storage.type) {    
+            case 'local':
+                callback(localManager);
+            break;
+            case 'chrome':
+                callback(chromeManager);
+            break;
+            case 'external':
+                if($.fn.postitall.globals.storage.manager !== "") {
+                    $.ajax({
+                      url: $.fn.postitall.globals.storage.manager,
+                      dataType: "script",
+                      success: function() {
+                        if(callback != null) callback(getExternalManager());
+                      }
+                    });    
+                } else {
+                    callback(null);
+                }
+            break;
+            default:
+                callback(null);
+            break;
+        }
+    }
+
+    // local storage manager
+    var localManager = {
+        add: function (obj, callback) { 
+            var varname = 'PostIt_' + parseInt(obj.postit.id, 10);
+            var testPrefs = JSON.stringify(obj);
+            $localStorage.setItem(varname, testPrefs);
+            //console.log('Saved', varname, testPrefs);
+            if(callback != null) callback();
+        },
+        get: function (id, callback) { 
+            var varname = 'PostIt_' + parseInt(id, 10);
+            var varvalue = $localStorage.getItem(varname);
+            if(varvalue != null)
+                varvalue = JSON.parse(varvalue);
+            else
+                varvalue = "";
+            //console.log('Loaded', varname, varvalue);
+            if(callback != null) callback(varvalue);
+        },
+        remove: function (id, callback) { 
+            $localStorage.removeItem('PostIt_' + id);
+            if(callback != null) callback();
+        },
+        clear: function (callback) { 
+            $localStorage.clear();
+            if(callback != null) callback(); 
+        },
+        getlength: function (callback) {
+            callback($localStorage.length); 
+        },
+        key: function (i, callback) {
+            var name = $localStorage.key(i);
+            callback(name);
+        }
+    };
+
+
+    // chrome storage Manager
+    var chromeManager = {
+        add: function(obj, callback) {
+            var varname = 'PostIt_' + parseInt(obj.postit.id, 10);
+            var testPrefs = JSON.stringify(obj);
+            var jsonfile = {};
+            jsonfile[varname] = testPrefs;
+            chrome.storage.sync.set(jsonfile, function () {
+                if(callback != null) callback();
+            });
+        },
+        get: function(id, callback) {
+            var varvalue;
+            var varname = 'PostIt_' + parseInt(id, 10);
+            chrome.storage.sync.get(null, function(retVal) {
+                //Recover vars
+                if(retVal[varname] !== undefined)
+                    varvalue = JSON.parse(retVal[varname]);
+                else
+                    varvalue = "";
+                if(callback != null) callback(varvalue);
+            });
+        },
+        remove: function(varname, callback) {
+            //console.log('Remove',varname);
+            chrome.storage.sync.remove(varname, function() {
+                //console.log('Removed',varname);
+                if(callback != null) callback();
+            });
+        },
+        clear: function(callback) {
+            chrome.storage.sync.clear(function() {
+                console.log('Clear chrome storage');
+                if(callback != null) callback();
+            });
+        },
+        getlength: function(callback) {
+            var total = 0;
+            chrome.storage.sync.get(null,function(data) {
+                total = Object.keys(data).length;
+                if(callback != null) callback(total);
+            });
+        },
+        key: function (i, callback) {
+            var varname = 'PostIt_' + parseInt(i, 10);
+            chrome.storage.sync.get(null,function(retVal) {
+                //console.log(retVal);
+                if(retVal[varname] !== undefined)
+                    callback(varname);
+                else
+                    callback(""); 
+            });
+        }
+    };
 
     //Save object
     function save(obj) {
@@ -131,11 +247,17 @@
             });
         }
         //Destroy object
+        hide(obj);
+    }
+
+    //Hide object
+    function hide(obj) {
+        //hide object
         obj
             .removeData('PIA-id')
             .removeData('PIA-initialized')
             .removeData('PIA-settings')
-            .slideUp("slow", function () {
+            .hide("slow", function () {
                 $(this).remove();
             });
     }
@@ -216,7 +338,9 @@
                     }
                 });
             }
-            if(!paso && i >= items) callback(i);
+            if(!paso && i >= items) {
+                callback(i);
+            }
         });
     }
 
@@ -293,8 +417,9 @@
                             destroy($('#idPostIt_' + id).parent());
                             e.preventDefault();
                         });
-                        $('#all_'+index).click(function() {
+                        $('#all_'+index).click(function(e) {
                             $.removePostItAll();
+                            e.preventDefault();
                         });
                         $('#cancel_' + index).click(function (e) {
                             $('#pia_editable_' + index).show();
@@ -318,6 +443,7 @@
                     $('#idPostIt_' + id).parent().addClass('flip', function () {
                         $('#idPostIt_' + id + ' > .front').css('visibility', 'hidden');
                     });
+                    if($.ui) $('#idPostIt_' + id).parent().resizable("disable");
                     //$(this).parent().parent().parent().parent().addClass('flip');
                     e.preventDefault();
                 })
@@ -390,11 +516,12 @@
                         
                         if ($.fn.postitall.globals.features.resizable && options.features.resizable) {
                             //resizable
-                            obj.resizable("disable");
+                            if ($.ui) obj.resizable("disable");
+                            //$(this).resizable("disable");
                         }
                         if (options.features.draggable) {
                             //draggable
-                            obj.draggable({ axis: "x" });
+                            if ($.ui) obj.draggable({ axis: "x" });
                             //obj.draggable("disable");
                             $('#pia_toolbar_'+index.toString()).css('cursor', 'inherit');
                         }
@@ -423,30 +550,16 @@
                         };
                         options.postit.oldPosition = propCss;
 
-
-/*if(options.postit.position == "fixed") {
-                    $('#pia_fixed_'+index.toString()).removeClass('PIAfixed2').addClass('PIAfixed');
-                    options.postit.position = "absolute";
-                    options.postit.posX = $('#idPostIt_' + id).parent().offset().top;
-                    obj.removeClass("fixed");
-                } else {
-                    $('#pia_fixed_'+index.toString()).removeClass('PIAfixed').addClass('PIAfixed2');
-                    options.postit.position = "fixed";
-                    options.postit.posX = $('#idPostIt_' + id).parent().offset().top - $(document).scrollTop();
-                    obj.addClass("fixed");
-                }*/
-
                         $('#idPostIt_'+id).parent()
-                        .css({
+                        .css({top:'auto'})
+                        .animate({
+                            'width': (options.postit.minWidth + 20),
+                            'height': '20px',
                             'position': 'fixed',
-                            'top': 'auto',
-                        }).animate({
-                            'top': 'auto',
                             'bottom': '0',
                             'left': options.postit.oldPosition.leftMinimized,
-                            'width': (options.postit.minWidth + 20),
-                            'height': '20px'
                         }, 500);
+
                     } else {
                         //$('#pia_blocked_'+id).click();
                         $('#pia_editable_'+id).show();
@@ -454,10 +567,10 @@
                         options.features.minimized = false;
 
                         if ($.fn.postitall.globals.features.resizable && options.features.resizable) {
-                            obj.resizable("enable");
+                            if ($.ui) obj.resizable("enable");
                         }
                         if (options.features.draggable) {
-                            obj.draggable({ axis: "none" });
+                            if ($.ui) obj.draggable({ axis: "none" });
                             //obj.draggable("enable");
                             $('#pia_toolbar_'+index.toString()).css('cursor', 'move');
                         }
@@ -469,18 +582,19 @@
                         $('#pia_minimized_text_'+index.toString()).remove();
 
                         //animate resize
+                        //Maximitza
                         $('#idPostIt_'+id).parent()
-                        .css({
-                            'position': options.postit.oldPosition.position,
-                            'bottom': 'auto',
-                            'top': options.postit.oldPosition.top,
-                        })
                         .animate({
-                            'bottom': 'auto',
                             'left': options.postit.oldPosition.left,
                             'width': options.postit.oldPosition.width,
                             'height': options.postit.oldPosition.height,
-                        }, 500);
+                            'position': options.postit.oldPosition.position,
+                        }, 500, function() {
+                            $('#idPostIt_'+id).parent().css({
+                                'top': options.postit.oldPosition.top,
+                                bottom:'auto',
+                            });
+                        });
                     }
                     
                     obj.data('PIA-options', options);
@@ -524,11 +638,11 @@
                     $('#pia_editable_'+index.toString()).attr('contenteditable', false);
                     if ($.fn.postitall.globals.features.resizable && options.features.resizable) {
                         //resizable
-                        obj.resizable("disable");
+                        if ($.ui) obj.resizable("disable");
                     }
                     if (options.features.draggable) {
                         //draggable
-                        obj.draggable("disable");
+                        if ($.ui) obj.draggable("disable");
                         $('#pia_toolbar_'+index.toString()).css('cursor', 'inherit');
                     }
                     //toolbar
@@ -542,10 +656,10 @@
                     $('#pia_blocked_'+index.toString()).removeClass('PIAblocked2').addClass('PIAblocked');
                     $('#pia_editable_'+index.toString()).attr('contenteditable', true);
                     if ($.fn.postitall.globals.features.resizable && options.features.resizable) {
-                        obj.resizable("enable");
+                        if ($.ui) obj.resizable("enable");
                     }
                     if (options.features.draggable) {
-                        obj.draggable("enable");
+                        if ($.ui) obj.draggable("enable");
                         $('#pia_toolbar_'+index.toString()).css('cursor', 'move');
                     }
                     //toolbar
@@ -594,6 +708,7 @@
                 $('#idPostIt_' + id).parent().removeClass('flip', function () {
                     $('#idPostIt_' + id + ' > .back').css('visibility', 'hidden');
                 });
+                if($.ui) $('#idPostIt_' + id).parent().resizable("enable");
                 e.preventDefault();
             })
         )
@@ -634,6 +749,7 @@
         if (options.style.textshadow) {
             checked = 'checked';
         }
+        
         var tsString = $('<input />', {
             'id': 'textshadow_' + index,
             'type': 'checkbox',
@@ -645,15 +761,15 @@
             'style': 'display:block;'
         }).append(tsString).append(' Text shadow');
         //General style
-        checked = '';
+        var checked2 = '';
         if (options.style.tresd) {
-            checked = 'checked';
+            checked2 = 'checked';
         }
         var gsString = $('<input />', {
             'id': 'generalstyle_' + index,
             'type': 'checkbox',
             'style': 'margin-top: -2px;',
-            'checked': checked
+            'checked': checked2
         });
         var gsLabel = $('<label />', {
             'for': 'generalstyle_' + index,
@@ -773,6 +889,9 @@
         if(!options.style.tresd) {
             $('#generalstyle_' + options.postit.id).click();
         }
+        if(!options.style.textshadow) {
+            $('#textshadow_' + options.postit.id).click();
+        }
         //Postit minimized?
         if(options.features.minimized) {
             options.features.minimized = false;
@@ -856,35 +975,18 @@
     function init(obj, opt) {
         //Default options
         options = $.extend({}, $.fn.postitall.defaults);
-        //opt = $.extend($.fn.postitall.defaults, opt);
         //Set options
         if (typeof opt !== 'object') {
             opt = {};
         }
         setOptions(opt);
-        //Check if we shold create a new postit
-        //if (options.features.newPostit) {
-        //    return $.newPostItAllOptions(obj, options);
-            //$.newPostItAllOptions(obj, opt);
-        //}
         // Do nothing if already initialized
         if (obj.data('PIA-initialized')) {
             return;
         }
         //Modify page content
         opt = $.extend(options, opt);
-        if(opt.postit.id > 0) {
-            return create(obj, opt.postit.id, opt);
-        } else {
-            //Increase index
-            //getIndex(function(index) {
-                //opt.id = index;
-                //console.log('create2', obj, index, opt);
-                //options.postit.id = index;
-                //return create(obj, index, options);
-                return create(obj, opt.postit.id, opt);
-            //});
-        }
+        return create(obj, opt.postit.id, opt);
     }
 
     function getRandomColor() {
@@ -968,42 +1070,48 @@
                 console.log = function () { return undefined; };
             }
             switch (method) {
-            // Destroy the control
-            case 'destroy':
-                $(this).each(function () {
-                    destroy($(this));
-                });
-                return $(this);
-            // Get/set options on the fly
-            case 'options':
-                if (data === undefined) {
-                    return $(this).data('PIA-options');
-                }
-                // Setter
-                $(this).each(function () {
-                    options = $(this).data('PIA-options') || {};
-                    destroy($(this));
-                    $(this).postitall($.extend(true, options, data));
-                });
-                return $(this);
-            // Save object
-            case 'save':
-                $(this).each(function () {
-                    save($(this));
-                });
-                return $(this);
-            // Initializes the control
-            default:
-            //case 'create' :
-                if (method !== 'create') {
-                    data = method;
-                }
-                var datacp = {};
-                $(this).each(function () {
-                    datacp = data;
-                    $.newPostItAll(datacp, $(this));
-                });
-                return $(this);
+                // Destroy the control
+                case 'destroy':
+                    $(this).each(function () {
+                        destroy($(this));
+                    });
+                    return $(this);
+                // Get/set options on the fly
+                case 'options':
+                    if (data === undefined) {
+                        return $(this).data('PIA-options');
+                    }
+                    // Setter
+                    $(this).each(function () {
+                        options = $(this).data('PIA-options') || {};
+                        destroy($(this));
+                        $(this).postitall($.extend(true, options, data));
+                    });
+                    return $(this);
+                // hide
+                case 'hide':
+                    $(this).each(function () {
+                        hide($(this));
+                    });
+                    return $(this);
+                // Save object
+                case 'save':
+                    $(this).each(function () {
+                        save($(this));
+                    });
+                    return $(this);
+                // Initializes the control
+                default:
+                //case 'create' :
+                    if (method !== 'create') {
+                        data = method;
+                    }
+                    var datacp = {};
+                    $(this).each(function () {
+                        datacp = data;
+                        $.newPostItAll(datacp, $(this));
+                    });
+                    return $(this);
             }
         }
     });
@@ -1011,14 +1119,15 @@
     //Global vars
     $.fn.postitall.globals = {
         storage : {
-            manager  : 'plugin/jquery.postitall.localManager.js',
+            type            : 'local',
+            manager         : 'plugin/jquery.postitall.localManager.js',
         },        
         style : {
             tresd           : true,         //General style in 3d format
             randomColor     : true,         //Random color in new postits
             backgroundcolor : '#FFFC7F',    //Background color in new postits when randomColor = false
             textcolor       : '#333333',    //Text color
-            textshadow      : false,        //Shadow in the text
+            textshadow      : true,         //Shadow in the text
         },
         features : {
             autoheight      : true,         //Set autoheight feature on or off
@@ -1032,19 +1141,19 @@
             addNew          : false,        //Create a new postit
         },
         postit : {
-            id              : 0, //Id
-            created         : Date.now(),
-            domain          : window.location.origin, //Domain in the url
-            page            : window.location.pathname, //Page in the url
-            content         : '', //content
-            position        : 'absolute',   //Position absolute or relative
-            posX            : '10px',       //top position
-            posY            : '10px',       //left position
-            minHeight       : 160,          //resizable min-width
-            minWidth        : 125,          //resizable min-height
-            height          : 160, //height
-            width           : 125, //width
-            oldPosition     : {},
+            id              : 0,                            //Id
+            created         : Date.now(),                   //Creation date
+            domain          : window.location.origin,       //Domain in the url
+            page            : window.location.pathname,     //Page in the url
+            content         : '',                           //Content
+            position        : 'absolute',                   //Position absolute or relative
+            posX            : '10px',                       //top position
+            posY            : '10px',                       //left position
+            minHeight       : 160,                          //resizable min-width
+            minWidth        : 125,                          //resizable min-height
+            height          : 160,                          //height
+            width           : 125,                          //width
+            oldPosition     : {},                           //Position when maximized
         },
         // Callbacks / Event Handlers
         onChange: function () { return undefined; },
@@ -1055,7 +1164,8 @@
 
     // Default Plugin Vars
     $.fn.postitall.defaults = $.extend({}, $.fn.postitall.globals);
-    
+    $.fn.postitall.defaults.storage = undefined;
+
     //Create a new postit
     $.newPostItAll = function(content, opt, obj, callback) {
         if(content === undefined) {
@@ -1077,12 +1187,9 @@
         } else {
             opt = $.extend(true, {}, $.fn.postitall.defaults, opt);
         }
-        $.newPostItAllOptions(obj, opt, callback);
-    };
-
-    //Create a new postit (aux function)
-    $.newPostItAllOptions = function(obj, options, callback) {
+        
         //Check if we have the id
+        var options = opt;
         if(options.postit.id > 0) {
             //Random bg & textcolor
             if($.fn.postitall.defaults.style.randomColor && options.style.randomColor) {
@@ -1122,6 +1229,7 @@
 
     //Load Local Storage Postits
     $.loadPostItAll = function (scrollToElement) {
+        
         if (scrollToElement === undefined) {
             scrollToElement = false;
         }
@@ -1131,6 +1239,7 @@
             var testlen = 0;
             for (var i = 0; i < len; i++) {
                 storageManager.key(i, function(key) {
+                    //console.log('key', key);    
                     if (key.slice(0,7) === "PostIt_") {
                         key = key.slice(7,key.length)
                         storageManager.get(key, function(o) {
@@ -1144,7 +1253,7 @@
     };
     //Save Local Storage Postits
     $.savePostItAll = function () {
-        console.log("Save Postits to Local Storage");
+        //console.log("Save Postits to Local Storage");
         $('.PIApostit').each(function () {
             options = $(this).data('PIA-options');
             if(options.features.savable) {
@@ -1152,29 +1261,83 @@
             }
         });
     };
-    //Remove all postits
-    $.removePostItAll = function () {
-        //Remove all postits
-        console.log("Remove loaded Postits");
+    //Hide
+    $.hidePostItAll = function () {
+        //console.log("Hide Postits");
         $('.PIApostit').each(function () {
-            $(this).postitall('destroy');
+            $(this).postitall('hide');
         });
-        //Remove all storage
+    }
+    //Get number of postits
+    $.lengthPostItAll = function(callback) {
+        var total = 0;
+        var len = -1;
+        /*storageManager.getlength(function(len) {
+            if (len >= 0) {
+                var i, o;
+                for (i = 0; i < len; i += 1) {
+                    (function(i) {
+                        storageManager.get(i, function(o) {
+                            console.log('o',i,o);
+                            if (o && o.postit.id !== undefined) {
+                                if (o.postit.domain === window.location.origin) {
+                                    total++;
+                                    console.log('trobat',o);
+                                }
+                            }
+                            if(i == (len - 1) && callback != null) callback(total);
+                        });
+                    })(i);
+                }
+            }
+        });*/
         storageManager.getlength(function(len) {
             var key = "";
             var testlen = 0;
             for (var i = 0; i < len; i++) {
                 storageManager.key(i, function(key) {
+                    //console.log('key', key);    
                     if (key.slice(0,7) === "PostIt_") {
                         key = key.slice(7,key.length)
-                        storageManager.remove(key, function(o) {
-                            ;
-                        })
-                        
+                        storageManager.get(key, function(o) {
+                            console.log('o',o.postit.domain, window.location.origin);
+                            if (o.postit.domain === window.location.origin) {
+                                total++;
+                            }
+                        });
                     }
+                    if(i == (len - 1) && callback != null) callback(total);
                 });
             }
         });
+    }
+    //Remove all postits
+    $.removePostItAll = function () {
+        //Remove all postits
+        $('.PIApostit').each(function () {
+            $(this).postitall('destroy');
+        });
+        
+        storageManager.clear(function() {
+            console.log("Remove loaded Postits");
+        });
+
+        //Remove all storage
+        /*storageManager.getlength(function(len) {
+            var key = "";
+            var testlen = 0;
+            for (var i = 0; i < len; i++) {
+                storageManager.key(i, function(key) {
+                    console.log(i,key);
+                    if (key.slice(0,7) === "PostIt_") {
+                        //key = key.slice(7,key.length);
+                        storageManager.remove(key, function(o) {
+                            console.log(key + ' removed');
+                        });
+                    }
+                });
+            }
+        });*/
     };
 
     //Drag postits

@@ -169,6 +169,18 @@
 }
 
 .ui-resizable-helper { border: 1px dotted gray; }
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled {
+	opacity: 1;
+	filter:Alpha(Opacity=1);
+	background-image: none;
+}
+.ui-state-disabled .ui-icon {
+	filter:Alpha(Opacity=1); /* For IE8 - See #6059 */
+}
+
+
 
 /* FLIP-CARD */
 .panel {
@@ -185,6 +197,9 @@
 	-webkit-border-radius: 3px;
 	border-radius: 3px; 
 	
+	opacity: 1;
+	filter:Alpha(Opacity=1);
+	background-image: none;
 }
 
 .plainpanel {
@@ -192,7 +207,11 @@
 	-webkit-perspective: 600px;
 	-moz-perspective: 600px;
 	-webkit-border-radius: 3px;
-	border-radius: 3px; 	
+	border-radius: 3px;
+	
+	opacity: 1;
+	filter:Alpha(Opacity=1);
+	background-image: none;
 }
 
 /* -- make sure to declare a default for every property that you want animated -- */
