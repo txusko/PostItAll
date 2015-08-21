@@ -5,15 +5,12 @@
         <title>Post It All! jQuery plugin</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        
         <link rel="stylesheet" href="libs/jquery-ui-1.10.0.custom.css">
-        <link rel="stylesheet" href="libs/bootstrap.min.css">
-		<link rel="stylesheet" href="libs/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="libs/ui/trumbowyg.css">
+        <link rel="stylesheet" href="libs/ui/trumbowyg.smallicons.css">
         <link rel="stylesheet" href="libs/jquery.minicolors.css">
 		<link rel="stylesheet" href="plugin/jquery.postitall.css">
-		
 		<link rel="stylesheet" href="libs/main.css">
-
   </head>
 
   <body>
@@ -66,11 +63,12 @@
 		<div class="row-fluid">
 			<div class="span8">
 				
+			</div>
 		</div>
-		
-		
 	  
-<hr class="featurette-divider">
+		<hr class="featurette-divider">
+
+		<div id="modalTerms">Modal terms</div>
 
       <!-- /END THE FEATURETTES -->
 
@@ -83,57 +81,15 @@
 
     </div><!-- /.container -->
     
-    <!-- Modals -->
-    <div id="modalTerms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	    <div class="modal-header">
-	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    	<h3 id="myModalLabel">Terms of service</h3>
-	    </div>
-	    <div class="modal-body">
-<pre>
-jquery.postitall.js v0.1
-jQuery Post It All Plugin - released under MIT License
-Author: Javi Filella
-http://github.com/txusko/PostItAll
-Copyright (c) 2013 Javi Filella
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-</pre>
-		</div>
-	    <div class="modal-footer">
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	    </div>
-    </div>
-
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="libs/jquery-1.9.1.min.js"><\/script>')</script>
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
 	<script>window.jQuery || document.write('<script src="libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
 	
-	<script src="libs/bootstrap.min.js"></script>
-	
 	<script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css" defer="defer"></script>
 
+	<script src="libs/trumbowyg.js"></script>
 	<script src="libs/jquery.minicolors.js"></script>
 	<script src="plugin/jquery.postitall.js"></script>
 	
@@ -163,11 +119,56 @@ OTHER DEALINGS IN THE SOFTWARE.
 	$(document).ready(function() {
 		
 		//Global defaults
+		//console.log($.fn.postitall);
 		$.fn.postitall.defaults.style.randomColor = true;
 
 		//Postit defaults
 		$.fn.postitall.defaults.style.tresd = false;
 		$.fn.postitall.defaults.features.savable = false;
+
+		/*$('#modalTerms').postitall({
+			postit: {
+				//posX: '200px',
+				//posY: '100px',
+				width: 480,
+			},
+			style:{
+				backgroundcolor: '#ff0000',
+				tresd: true,
+				textshadow: false,
+				fontsize: 'Impact'
+			},
+			features: {
+				//fixed: true,
+				//blocked: true,
+				//savable: true,
+				//draggable: false,
+				randomColor: false,
+				//htmlEditor: false
+			},
+		});*/
+
+		//$('a').postitall();
+		//$.PostItAll.new('','', $('div'));
+		//$('div').postitall();
+		//$('p').postitall();
+		//$('#modalTerms').postitall();
+		/*$('#modalTerms').postitall({
+			features: {
+				savable: true
+			}
+		});*/
+		//$('input').postitall();
+		setTimeout(function() {
+			console.log('settimeout destroy');
+			//$('a').postitall('destroy');
+			//$('#modalTerms').postitall('destroy');
+			//$('a').postitall('hide');
+			setTimeout(function() { $('a').postitall('save'); },2000);
+			//$('p').postitall('destroy');
+			//$('div').postitall('destroy');
+		},2000);
+
 		//$.fn.postitall.globals.features.resizable = true;
 		//$.fn.postitall.defaults.resizable = false;
 		/*$('.lead').postitall({
@@ -175,15 +176,16 @@ OTHER DEALINGS IN THE SOFTWARE.
 				'position': 'relative'
 			}
 		});*/
-		//$.newPostItAll('Hola que ase!');
-		//$.newPostItAll('Hola que ase2!');
+		//$.PostItAll.new('Hola que ase!');
+		//$.PostItAll.new('Hola que ase2!');
 
 		$('#idAddPostIt').click(function() {
-			$.newPostItAll('Aquest postit es salvara!', {
+			$.PostItAll.new('Aquest postit es salvara!', {
 				features : {
 					savable: true,	
 				},
 				postit : {
+					position: "fixed",
 					posX: "10px",
 					posY: "10px",
 				}
@@ -191,11 +193,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 		});
 
 		$('#idAddPostIt2').click(function() {
-			$.newPostItAll();
+			$.PostItAll.new();
 		});
 
 		$('#idAddPostIt3').click(function(e) {
-			$.newPostItAll('Mierdon2', {
+			$.PostItAll.new('Mierdon2', {
 				style : {
 					tresd: true,	
 				},
@@ -206,7 +208,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 			});
 		});
 
-		$.loadPostItAll();
+		$.PostItAll.load();
 
 	});
 	</script>
