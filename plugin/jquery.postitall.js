@@ -298,6 +298,7 @@
             //console.log('init 2opt', opt);
             //Check if we have the id
             var options = opt;
+            console.log(options.style.backgroundcolor);
             if(options.postit.id !== "") {
                 //Random bg & textcolor
                 if($.fn.postitall.globals.enabledFeatures.randomColor && options.features.randomColor) {
@@ -406,14 +407,14 @@
 
         //Save all (to storage)
         save : function() {
+            if(!$.fn.postitall.globals.enabledFeatures.savable)
+                return;
             var options;
             var id;
-            $('.PIApostit').each(function () {
-                options = $(this).data('PIA-options');
-                id = $(this).data('PIA-id');
-                options = $('#PIApostit_' + id).data('PIA-options');
-                //console.log('id', id, 'options', options);
-                if($.fn.postitall.globals.enabledFeatures.savable && options.features.savable) {
+            $('.PIApostit').each(function(i,e) { 
+                id = $(e).data('PIA-id');
+                options = $(e).data('PIA-options');
+                if(id !== undefined && options !== undefined && options.features.savable) {
                     $(this).postitall('save');
                 }
             });
@@ -526,6 +527,8 @@
 
         //Save object
         save : function(obj, callback) {
+            if(!$.fn.postitall.globals.enabledFeatures.savable)
+                return;
             var options = obj.data('PIA-options');
             //console.log('save', options);
             options.features.savable = true;
@@ -540,7 +543,12 @@
             if ($.fn.postitall.globals.enabledFeatures.savable && options.features.savable) {
                 //console.log(options);
                 storageManager.add(options, function(error) {
-                    if(error != "") alert('Error saving options: ' + error);
+                    if(error != "") {
+                        if(callback != null) callback(error);
+                        else alert('Error saving options: ' + error);
+                    } else {
+                        if(callback != null) callback();
+                    }
                 });
                 options.onChange();
             }
@@ -552,6 +560,7 @@
                 obj = $('#PIApostit_' + this.options.postit.id);
             var options = obj.data('PIA-options');
             var id = options.postit.id;
+            //console.log('destroy', id);
             //Remove from localstorage
             if ($.fn.postitall.globals.enabledFeatures.savable) {
                 if(options.features.savable) {
@@ -576,12 +585,20 @@
         remove : function(options) {
             //hide object
             var id = options.postit.id;
+            //console.log('remove', id);
             $('#PIApostit_' + id).removeData('PIA-id')
                 .removeData('PIA-initialized')
                 .removeData('PIA-settings')
-                .hide("slow", function () {
+                .animate({
+                          opacity: 0,
+                          height: 0
+                        }, 'slow', function() {
+                            console.log('ueee');
+                            $(this).remove();                
+                        });
+                /*.hide("slow", function () {
                     $(this).remove();
-                });
+                });*/
             $(window).off('resize');
         },
 
@@ -745,6 +762,7 @@
             });
             /*jslint unparam: false*/
             if (save) {
+                console.log('setOptions save', t.options);
                 this.saveOptions(t.options);
             }
         },
@@ -871,7 +889,7 @@
             var id = $("#the_lights").data('highlightedId');
             var options = $('#PIApostit_' + id).data('PIA-options');
             var t = this;
-            if(id !== "" && options !== null) {
+            if(id !== "" && options !== null && options !== undefined) {
                 $("#the_lights").data('highlightedId', '');
                 $('#PIApostit_'+id).css({'z-index': 999995,
                     'border': '1px solid ' + $('#PIApostit_'+id).css('background-color'),
@@ -926,7 +944,7 @@
             var keycode = event.keyCode;
             var key     = String.fromCharCode(keycode).toLowerCase();
             //On keypress ESC
-            if (keycode === KEYCODE_ESC || key.match(/x|o|c/)) {
+            if (keycode === KEYCODE_ESC) { // || key.match(/x|o|c/)) {
                 console.log('key press ESC');
                 if(this.callback != undefined) this.callback();
                 this.switchOnLights();
@@ -1266,7 +1284,7 @@
         hoverOptions : function(index, enabled) {
 
             if(!$.fn.postitall.globals.enabledFeatures.autoHideToolBar)
-                return;
+                enabled = false;
 
             var fadeInTime = 200;
             var fadeOuTime = 600;
@@ -1277,7 +1295,7 @@
                     //Options
                     $( "#PIApostit_" + index ).hover(function() {
                         $('#PIApostit_' + index).find('.PIAfront').find(".PIAicon, .PIAiconFixed").fadeTo(fadeInTime, 1);
-                        if(t.options.style.arrow == "none")
+                        if(t.options.style.arrow === undefined || t.options.style.arrow == "none")
                             $( "#PIApostit_" + index).find(".icon_box").fadeTo(fadeOuTime, 1);
                         $('#PIApostit_' + index + ' > .ui-resizable-handle').fadeTo(fadeInTime, 1);
                         t.hoverState = true;
@@ -1297,31 +1315,35 @@
                         $('#PIApostit_' + index + ' > .ui-resizable-handle').fadeTo(fadeOuTime, 0);
                     }
                 },100);
-            } else {
-                t.hoverState = false;
-                //Options
-                $( "#PIApostit_" + index ).unbind('mouseenter mouseleave');
-                if(t.options.style.arrow == "none")
-                    $( "#PIApostit_" + index).find(".icon_box").fadeTo(fadeOuTime, 1);
-                $( "#PIApostit_" + index).find('.PIAfront').find(".PIAicon, .PIAiconFixed").fadeTo(fadeInTime, 1);
-
+                return;
             }
+            t.hoverState = false;
+            //Options
+            $( "#PIApostit_" + index ).unbind('mouseenter mouseleave');
+            console.log('t.options.style.arrow',t.options.style.arrow);
+            if(t.options.style.arrow === undefined || t.options.style.arrow == "none")
+                $( "#PIApostit_" + index).find(".icon_box").fadeTo(fadeOuTime, 1);
+            $( "#PIApostit_" + index).find('.PIAfront').find(".PIAicon, .PIAiconFixed").fadeTo(fadeInTime, 1);
         },
 
         //Get a random color (if the feature is enabled, otherwhise will return default background color)
         getRandomColor : function() {
+            var randomColor = "";
             if($.fn.postitall.globals.enabledFeatures.randomColor && $.fn.postitall.defaults.features.randomColor) {
                 //Random color
                 //var colors = ["red", "blue", "yellow", "black", "green"];
                 //return colors[Math.floor(Math.random() * colors.length)];
-                var randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-                if(randomColor.length < 7) randomColor = randomColor + "0";
-                //console.log('randomColor', randomColor, randomColor.length);
-                return randomColor;
+                randomColor = "#"+(Math.random()*0xFFFFFF<<0).toString(16);
             } else {
                 //Default postit color
-                return $.fn.postitall.defaults.style.backgroundcolor;
+                randomColor = $.fn.postitall.defaults.style.backgroundcolor;
             }
+            if(randomColor.length < 7) {
+                var num = 7 - randomColor.length;
+                var ret = new Array( num + 1 ).join("0");
+                randomColor = randomColor + ret.toString();
+            }
+            return randomColor;
         },
 
         //Get text color relative tot hexcolor (if the featured is enabled, otherwise will return default text color)
@@ -1547,39 +1569,43 @@
                 'id': 'pia_editable_' + index,
                 'class': 'PIAeditable PIAcontent',
                 //Reset herisated contenteditable styles
-                'style': 'width: auto;height: auto;padding: auto;border-color: auto;box-shadow:none;color:'+options.style.textcolor+';min-height:' + (options.postit.minHeight - 100) + 'px'
+                'style': 'width: auto;height: auto;padding: auto;border-color: transparent;box-shadow:none;color:'+options.style.textcolor+';min-width:99%;min-height:' + (options.postit.minHeight - 100) + 'px;'
             }).change(function () {
                 var oldContent = options.postit.content;
 
                 //Html format
-                var text = $(this).html();
-                //Default sanitize
-                text = text.replace(/<script[^>]*?>.*?<\/script>/gi, '').
-                             //replace(/<[\/\!]*?[^<>]*?>/gi, '').
-                             replace(/<style[^>]*?>.*?<\/style>/gi, '').
-                             replace(/<![\s\S]*?--[ \t\n\r]*>/gi, '');
-                //htmlClean sanitize plugin
-                if($.htmlClean !== undefined) { 
-                    //htmlClean plugin
-                    text = $.htmlClean(text, { format: true });
+                var text = $(this).text();
+                if ($.fn.postitall.globals.enabledFeatures.pasteHtml) {
+                    text = $(this).html();
+                    //Default sanitize
+                    text = text.replace(/<script[^>]*?>.*?<\/script>/gi, '').
+                                 //replace(/<[\/\!]*?[^<>]*?>/gi, '').
+                                 replace(/<style[^>]*?>.*?<\/style>/gi, '').
+                                 replace(/<![\s\S]*?--[ \t\n\r]*>/gi, '');
+                    //htmlClean sanitize plugin
+                    if($.htmlClean !== undefined) { 
+                        //htmlClean plugin
+                        text = $.htmlClean(text, { format: true });
+                    }
                 }
                 //console.log('text', text);
                 
                 //$(this).html(text);
-                $(this).trumbowyg('html', text);
-                options.postit.content = text;
+                //$(this).trumbowyg('html', text);
+                t.options.postit.content = text;
 
                 //options.postit.content = $(this).html();
                 t.autoresize($('#PIApostit_'+index));
                 t.save(obj, function(error) {
                     if(error !== undefined && error !== "") {
-                        console.log('Error saving content!', error);
-                        options.postit.content = oldContent;
-                        $(this).html(oldContent);
-                        $(this).trigger('change');
+                        alert('Error saving content! \n\n'+error+'\n\nReverting to last known content.');
+                        t.options.postit.content = oldContent;
+                        $('#pia_editable_' + t.options.postit.id).html(oldContent);
+                        $('#pia_editable_' + t.options.postit.id).trigger('change');
+                        t.autoresize();
                     }
                 });
-            }).attr('contenteditable', true).html(options.postit.content);
+            }).attr('contenteditable', true).html(t.options.postit.content);
 
             //Info icon
             if($.fn.postitall.globals.enabledFeatures.showInfo || $.fn.postitall.globals.enabledFeatures.addNew) {
@@ -1647,7 +1673,8 @@
 
             //Front page
             var front = $('<div />', {
-                'class': 'PIAfront'
+                'class': 'PIAfront',
+                'dir': 'ltr',
             }).append(toolbar).append(content);
 
             //Creation date
@@ -1992,7 +2019,10 @@
                 var objeto = $(this);
                 if (objeto.data('before') !== objeto.html()) {
                     //console.log('change!');
-                    objeto.data('before', objeto.html());
+                    var content = objeto.text();
+                    if ($.fn.postitall.globals.enabledFeatures.pasteHtml)
+                        content = objeto.html();
+                    objeto.data('before', content);
                     objeto.trigger('change');
                 }
                 return objeto;
@@ -2034,7 +2064,7 @@
                             if(!options.features.minimized) {
                                 t.switchTrasparentNoteOff();
                             }
-                            delay(function() {
+                            delay(function() {
                                 if (obj.hasClass('PIAdragged')) {
                                     obj.removeClass('PIAdragged');
                                 }
