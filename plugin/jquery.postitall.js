@@ -298,7 +298,7 @@
             //console.log('init 2opt', opt);
             //Check if we have the id
             var options = opt;
-            console.log(options.style.backgroundcolor);
+            //console.log(options.style.backgroundcolor);
             if(options.postit.id !== "") {
                 //Random bg & textcolor
                 if($.fn.postitall.globals.enabledFeatures.randomColor && options.features.randomColor) {
@@ -592,8 +592,7 @@
                 .animate({
                           opacity: 0,
                           height: 0
-                        }, 'slow', function() {
-                            console.log('ueee');
+                        }, function() {
                             $(this).remove();                
                         });
                 /*.hide("slow", function () {
@@ -620,23 +619,21 @@
         arrowChangeOption : function(value) {
             if($.fn.postitall.globals.enabledFeatures.addArrow == "none")
                 return;
-
             var index = this.options.postit.id;
             var options = this.options;
-
             //console.log('arrowChangeOption', options.style.arrow, value);
             //Get new position
             if(options.style.arrow == value || value == 'none') {
                 //If this position is the same as before, remove arrow and show selectors
                 options.style.arrow = 'none';
                 $('.selectedArrow_'+index).show();
+                $('.selectedArrow_'+index).find('span').show();
             } else {
                 //Set arrow and hide selectors
                 options.style.arrow = value;
                 $('.selectedArrow_'+index).hide();
             }
-            //Show current arrow selector, another click will remove arrow
-            $('*[data-value="'+options.style.arrow+'"]').show();
+            
             //Change options arrow select
             $('#idAddArrow_'+index).val(options.style.arrow);
             
@@ -676,7 +673,9 @@
             //console.log('options.style.arrow',options.style.arrow);
             if(options.style.arrow == 'none')
                 $('#PIApostit_' + index).find('.icon_box').show();
-            $('*[data-value="'+options.style.arrow+'"]').show();
+            var icon = $('#PIApostit_'+index).find('div[data-value="'+options.style.arrow+'"]');
+            icon.show();
+            icon.find('span').hide();
         },
 
         //Autoresize note
@@ -1320,7 +1319,7 @@
             t.hoverState = false;
             //Options
             $( "#PIApostit_" + index ).unbind('mouseenter mouseleave');
-            console.log('t.options.style.arrow',t.options.style.arrow);
+            //console.log('t.options.style.arrow',t.options.style.arrow);
             if(t.options.style.arrow === undefined || t.options.style.arrow == "none")
                 $( "#PIApostit_" + index).find(".icon_box").fadeTo(fadeOuTime, 1);
             $( "#PIApostit_" + index).find('.PIAfront').find(".PIAicon, .PIAiconFixed").fadeTo(fadeInTime, 1);
@@ -1691,7 +1690,7 @@
                     //var id = $(this).closest('.PIApostit').children().attr('data-id');
                     t.switchBackNoteOff('PIAflip2');
                     t.switchOnLights();
-                    t.showArrow();
+                    //t.showArrow();
                     e.preventDefault();
                 })
             )
@@ -1888,8 +1887,8 @@
             postit.append(front);
 
             //Add back
-            if($.fn.postitall.globals.enabledFeatures.changeoptions && options.features.changeoptions)
-                postit.append(back);
+            //if($.fn.postitall.globals.enabledFeatures.changeoptions && options.features.changeoptions)
+            postit.append(back);
 
             //Convert relative position to prevent height and width      in html layout
             if (options.postit.position === "relative") {
@@ -1903,20 +1902,25 @@
 
             //Arrow
             var arrowClases = " ";
+            var arrowPaso = false;
             if($.fn.postitall.globals.enabledFeatures.addArrow != "none") {
                 arrowClases += "arrow_box";
                 switch(options.style.arrow) {
                     case 'top':
                         arrowClases += ' arrow_box_top';
+                        arrowPaso = true;
                     break;
                     case 'right':
                         arrowClases += ' arrow_box_right';
+                        arrowPaso = true;
                     break;
                     case 'bottom':
                         arrowClases += ' arrow_box_bottom';
+                        arrowPaso = true;
                     break;
                     case 'left':
                         arrowClases += ' arrow_box_left';
+                        arrowPaso = true;
                     break;
                 }
             }
@@ -2134,17 +2138,28 @@
 
             //Select arrow in front
             if($.fn.postitall.globals.enabledFeatures.addArrow == "front" || $.fn.postitall.globals.enabledFeatures.addArrow == "all") { 
-                var checks = "<div class='PIAicon icon_box icon_box_top'><a href='#' class='selectedArrow_"+index+"' data-index='"+index+"' data-value='top'><span class='ui-icon ui-icon-triangle-1-n'></span></a></div>";
-                checks += "<div class='PIAicon icon_box icon_box_right'><a href='#' class='selectedArrow_"+index+"' data-index='"+index+"' data-value='right'><span class='ui-icon ui-icon-triangle-1-e'></span></a></div>";
-                checks += "<div class='PIAicon icon_box icon_box_bottom'><a href='#' class='selectedArrow_"+index+"' data-index='"+index+"' data-value='bottom'><span class='ui-icon ui-icon-triangle-1-s'></span></a></div>";
-                checks += "<div class='PIAicon icon_box icon_box_left'><a href='#' class='selectedArrow_"+index+"' data-index='"+index+"' data-value='left'><span class='ui-icon ui-icon-triangle-1-w'></span></a></div>";
+                var checks = "<div class='PIAicon icon_box icon_box_top selectedArrow_"+index+"' data-index='"+index+"' data-value='top'><span class='ui-icon ui-icon-triangle-1-n'></span></div>";
+                checks += "<div class='PIAicon icon_box icon_box_right selectedArrow_"+index+"' data-index='"+index+"' data-value='right'><span class='ui-icon ui-icon-triangle-1-e'></span></div>";
+                checks += "<div class='PIAicon icon_box icon_box_bottom selectedArrow_"+index+"' data-index='"+index+"' data-value='bottom'><span class='ui-icon ui-icon-triangle-1-s'></span></div>";
+                checks += "<div class='PIAicon icon_box icon_box_left selectedArrow_"+index+"' data-index='"+index+"' data-value='left'><span class='ui-icon ui-icon-triangle-1-w'></span></div>";
                 obj.append(checks);
 
                 $('.selectedArrow_'+index).click(function(e) {
                     //console.log('click al link', $(this).attr('data-index'), $(this).attr('data-value'));
-                    options = t.arrowChangeOption($(this).attr('data-value'));
+                    console.log('arrowChangeOption');
+                    if (obj.hasClass('PIAdragged')) {
+                        obj.removeClass('PIAdragged');
+                    } else {
+                        options = t.arrowChangeOption($(this).attr('data-value'));
+                    }
                     e.preventDefault();
                 });
+            }
+            if(arrowPaso) {
+                var icon = $('#PIApostit_'+index).find('div[data-value="'+options.style.arrow+'"]');
+                icon.show();
+                icon.find('span').hide();
+                //console.log('aki?', arrowPaso, index, options.style.arrow);
             }
 
             //Show postit
