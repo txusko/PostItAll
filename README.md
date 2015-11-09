@@ -1,14 +1,19 @@
 ##Post It All!
 
-###jQuery Plugin
-A jQuery plugin to add post it's to your site.
+Customizable sticky notes for the web.
+http://postitall.txusko.com/
 
-###Bookmarklet
-Add a post it to any webpage you visit, and recover it later.
+###jQuery Plugin
+
+jQuery plugin for adding sticky notes in your webpage.
+http://postitall.txusko.com/plugin.html
+
+###Chrome extension
+
+Extension for add sticky notes to the pages you visit
+http://postitall.txusko.com/extension.html
 
 ## About
-
-Just another sticky note plugin for the web.
 
 _Copyright Javi Filella (http://www.txusko.com/)_
 
@@ -16,16 +21,14 @@ _Dual-licensed under the MIT and GPL Version 2 licenses_
 
 ## External libraries & plugins
 
-jQuery (https://github.com/jquery/jquery)
+jQuery JavaScript Library (https://github.com/jquery/jquery)
 
-jQuery UI (https://github.com/jquery/jquery-ui)
+The official jQuery user interface library (https://github.com/jquery/jquery-ui)
 
-jQuery MiniColors (https://github.com/claviska/jquery-miniColors)
+Trumbowyg - A lightweight and amazing WYSIWYG JavaScript editor (https://github.com/Alex-D/Trumbowyg)
+
+jQuery MiniColors Plugin (https://github.com/claviska/jquery-miniColors)
 
 For the demo layout:
 
-Bootstrap (http://twitter.github.com/bootstrap/index.html)
-
-## Demo & Documentation
-
-https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs
+Bootstrap - The most popular HTML, CSS, and JavaScript framework for developing responsive, mobile first projects on the web (https://github.com/twbs/bootstrap)

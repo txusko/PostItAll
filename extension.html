@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Post It All! - Customizable sticky notes for the web.">
+    <meta name="author" content="Javi Filella">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Post It All - Another sticky note chrome extension for the web</title>
+
+    <!-- Font awesome -->
+    <link href="libs/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="libs/landing-page.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Post It All! -->
+    <link rel="stylesheet" href="libs/jquery-ui-1.10.0.custom.css">
+    <link rel="stylesheet" href="libs/ui/trumbowyg.css">
+    <link rel="stylesheet" href="libs/ui/trumbowyg.smallicons.css">
+    <link rel="stylesheet" href="libs/jquery.minicolors.css">
+    <link rel="stylesheet" href="libs/jquery.postitall.css">
+    <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark bg-inverse navbar-light navbar-fixed-top">
+        <div class="container">
+          <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2">
+            &#9776;
+          </button>
+          <div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+            <ul class="nav navbar-nav pull-left">
+                <li class="nav-item"><a class="navbar-brand" href="index.html" id="idTitle">Post It All!</a></li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#home">Chrome Extension <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="plugin.html">Jquery plugin</a>
+                  </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="idAddNote"><i class="fa fa-sticky-note-o fa-fw"></i> Add a new note!</a>
+                </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="intro-header">
+
+        <div class="container">
+
+            <div class="row" id="home">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1><i class="fa fa-sticky-note fa-fw"></i>Post It All!</h1>
+                        <hr class="intro-divider">
+                        <h4>The chrome extension for add sticky notes to the pages you visit</h4>
+
+                        <br><a href="https://chrome.google.com/webstore/detail/autobookmarks/lcchihcbfbaedlagdpaemgbpjapiihpo" class="btn btn-success"><i class="fa fa-chrome fa-fw"></i> Get the extension</a><br><br>
+                        <!--hr class="intro-divider"-->
+                        <p>
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a>
+                            <!-- Place this tag where you want the button to render. -->
+                            <a class="github-button" href="https://github.com/txusko/PostItAll" data-style="mega" data-count-href="/txusko/autobookmarks/stargazers" data-count-api="/repos/txusko/PostItAll#stargazers_count">Star</a>&nbsp;
+                            <a class="github-button" href="https://github.com/txusko/PostItAll" data-style="mega" data-count-href="/txusko/autobookmarks/network" data-count-api="/repos/txusko/PostItAll#forks_count">Fork</a>&nbsp;
+
+<script id='fb8mxa3'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=txusko&button=compact&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=28;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fb8mxa3');</script>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.intro-header -->
+
+    <!-- Page Content -->
+
+    <div class="content-section-a" id="features">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <h2 class="section-heading">I see sticky notes<br><span class="text-muted">everywhere</span></h2>
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p>
+                        With this Chrome Extension you will be able to add sticky notes to any site you visit. After that, whenever you visit this site again, you will see your previous entries again.<br>
+                    </p>
+                </div>
+            </div>
+            <div class="row" id="modes">
+                <div class="col-lg-5 col-sm-6">
+                    Among others, these are the main configurable features and options of this extension:
+                    <ul>
+                        <li>Autoload notes</li>
+                        <li>Notes filtered by domain, page or without filter</li>
+                        <li>Posibility to change tray icon action</li>
+                        <li>
+                            Note features:
+                            <ul>
+                                <li>Draggable, resizable, html editor, can paste html, arrows, expand or collapse, fix or block position, copy note, ...</li>
+                            </ul>
+                            Note design:
+                            <ul>
+                                <li>Background color, tect color, font type and size, ...</li>
+                            </ul>
+                        </li>
+                        <li>
+                            List of notes:
+                            <ul>
+                                <li>View all your previous saved notes.</li>
+                                <li>You will be able to see a screenshot of the last momement that you've edited a note.</li>
+                                <li>You can visit the site or the page where the note was taken.</li>
+                                <li>You can "higlight" a note in a page amongs others notes by clicking the link in the domain note list above the screenshot</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <div id="idNote1">
+                        <p>The extension can be configured to work in one of this three modes:</p>
+                        <div class="list-group">
+                            <a class="list-group-item">
+                                <h4 class="list-group-item-heading">Filter notes by Domain</h4>
+                                <p class="list-group-item-text text-muted">You will see all the notes created in the visited domain. However you will see it in all the pages you've visit indifferently if it was created on not in the current visited page.<br> * Example of domain : postitall.txusko.com</p>
+                            </a>
+                            <a class="list-group-item bg-secondary">
+                                <h4 class="list-group-item-heading">Filter notes by Page</h4>
+                                <p class="list-group-item-text text-muted">You will see only the notes created in the same visited page.<br> * Example of page: http://postitall.txusko.com/extension.html</p>
+                            </a>
+                            <a class="list-group-item">
+                                <h4 class="list-group-item-heading">See notes everywhere</h4>
+                                <p class="list-group-item-text text-muted">You will see all the notes in all the sites and pages.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <br>
+                    <p>You can add remembers, to do lists, and every thing you can annotate in a sticky note. :)</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row" id="configurable">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6" id="idNote2">
+                    <h2 class="section-heading">Fully<br><span class="text-muted">configurable</span></h2>
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p class="lead">Improve your experience by customizing the features, the options and the design of your notes. You'll be abble to enable or disable features like expand or collapse the note, set a random background color, the font size and text color, a plain or 3d style, and so on.</p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" style="margin-top:10%;" src="img/features.png" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+
+    <div class="content-section-a" id="features">
+
+        <div class="container">
+
+            <div class="row" id="notelist">
+                <div class="col-lg-5 col-sm-6">
+                    <h2 class="section-heading">Saved<br>note-list</h2>
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p class="lead">Whenever you need, you can acces to the complet list of your notes grouped by domain. Also, you'll see a screenshot of each domain and the list of notes that pending for a quick access.</p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" style="margin-top:10%;" src="img/notelist.png" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row" id="chromestorage">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <h2 class="section-heading">Chrome<br>storage sync</h2>
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p class="lead">Chrome browser have the ability to synchronize extensions and data through your Google account. For that reason you can synchronize all your configuration and notes across all the Chrome browsers you've been using.</p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" style="margin-top:10%;" src="img/chromehelp.png" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row" id="source">
+                <div class="col-lg-5 col-sm-6">
+                    <h2 class="section-heading">Source code<br>& Contact</h2>
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p class="lead">You can check the <a href="https://github.com/txusko/PostItAll" target="_blank">Source Code on <span class="fa fa-github fa-fw"></span> Github</a>.<br>Any kind of help or comment will be apreciated.</p>
+                    <p>Bug report and issues:  <a href="https://github.com/txusko/PostItAll/issues">https://github.com/txusko/PostItAll/issues</a></p>
+                    <p>Contact by email at: <a href="mailto:postitall@txusko.com">postitall@txusko.com</a></p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="img/source.png" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="banner" id="about">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <h3>Developed by Javi Filella</h3>
+                    <p><a href="mailto:postitall@txusko.com">postitall@txusko.com</a></p>
+                </div>
+                <div class="col-lg-8">
+                    <ul class="list-inline banner-social-buttons">
+                        <li>
+                            <a href="https://twitter.com/txusko" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/javifilella" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/txusko" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/+JaviFilella" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-google fa-fw"></i> <span class="network-name">Google +</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.banner -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="index.html">Post It All!</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#home">Chrome extension</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="plugin.html">Jquery plugin</a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted small">&copy; 2015 by Javi Filella . <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
+                </div>
+                <div class="col-lg-2" id="idPayPal"><small class="pull-right">:)</small>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                            <input type="hidden" name="cmd" value="_s-xclick">
+                            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+                            ">
+                            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                            <img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+                            </form>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+
+    <!-- Post It All! -->
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
+    <script src="libs/trumbowyg.js"></script>
+    <script src="libs/jquery.minicolors.js"></script>
+    <script src="libs/jquery.postitall.js"></script>
+
+    <!-- Custom js for this template -->
+    <script src="libs/app.js"></script>
+    <script src="libs/extension.js"></script>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+    <script>
+      /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-58458973-1', 'auto');
+      ga('send', 'pageview');*/
+
+    </script>
+
+    <!-- Modals -->
+    <div class="modal fade" id="modalTerms">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Terms of service</h4>
+          </div>
+          <div class="modal-body">
+<pre>
+Post It All! - Chrome Extension v1.0
+Post It All! - Chrome Extension - released under MIT License
+Author: Javi Filella
+http://github.com/txusko/PostItAll
+Copyright (c) 2013-2015 Javi Filella
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+</pre>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+</body>
+
+</html>

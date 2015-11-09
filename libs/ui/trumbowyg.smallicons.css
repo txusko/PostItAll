@@ -21,11 +21,11 @@
   /*border-style: none;*/
   border: 1px solid #ccc;
   resize: none;
-  outline: none; 
+  outline: none;
 }
 
 .trumbowyg-button-pane {
-    
+
   /*margin: -15px auto;*/
   /*height: 25px;*/
   padding: 0px;
@@ -220,7 +220,7 @@
       background-position: 0px -100px; }
   .trumbowyg-fullscreen .trumbowyg-button-pane li a.trumbowyg-fullscreen-button {
     background-position: 0px -150px; }
-  
+
     .trumbowyg-black .trumbowyg-button-pane li button {
       -webkit-background-size: 25px 600px !important;
               background-size: 25px 600px !important;

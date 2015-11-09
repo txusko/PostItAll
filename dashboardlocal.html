@@ -10,9 +10,8 @@
     <meta name="author" content="Javi Filella">
     <link rel="icon" href="favicon.ico">
 
-    <title>Post It All! Sticky notes for the web</title>
+    <title>Post It All! Sticky notes for the web | Dashboard</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -25,7 +24,6 @@
 
     <!-- Custom styles for this template -->
     <link href="libs/cover.css" rel="stylesheet">
-    <link href="libs/landing-page.css" rel="stylesheet">
 
   </head>
 
@@ -37,33 +35,22 @@
 
         <div class="cover-container">
 
-          <!-- Navigation -->
-          <nav class="navbar navbar-dark navbar-light navbar-fixed-top">
-              <div class="container">
-                  <ul class="nav navbar-nav pull-left">
-                      <li class="nav-item"><a class="navbar-brand masthead-brand" href="index.html" id="idTitle">Post It All!</a></li>
-                  </ul>
-                  <ul class="nav navbar-nav pull-right">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#" id="idAddNote"><i class="fa fa-sticky-note-o fa-fw"></i> Add a new note!</a>
-                    </li>
-                  </ul>
-              </div>
-          </nav>
-
-          <div class="inner cover">
-            <h1 class="cover-heading"><i class="fa fa-sticky-note fa-fw"></i> Post It All!</h1>
-            <p class="lead">Customizable sticky notes for the web.</p>
-            <p class="lead">
-              <a id="idLinkPlugin" href="plugin.html" class="btn btn-lg btn-primary"><i class="fa fa-code fa-fw"></i> Jquery plugin</a>
-              &nbsp;
-              <a id="idLinkExtension" href="extension.html" class="btn btn-lg btn-success"><i class="fa fa-chrome fa-fw"></i> Chrome extension</a>
-            </p>
-          </div>
+            <nav class="navbar navbar-dark navbar-light navbar-fixed-top">
+                <div class="container">
+                    <ul class="nav navbar-nav pull-left">
+                        <li class="nav-item"><a class="navbar-brand masthead-brand" href="index.html" id="idTitle">Post It All!</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                      <li class="nav-item active">
+                        <a class="nav-link" href="#" id="idAddNote"><i class="fa fa-sticky-note-o fa-fw"></i> Add a new note!</a>
+                      </li>
+                    </ul>
+                </div>
+            </nav>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>&copy; <a href="https://postitall.txusko.com/">Post It All</a> by <a href="https://about.me/txusko">Javi Filella</a> - 2015.</p>
+              <p>&copy; 2015 <a href="http://postitall.txusko.com">Post It All!</a> by <a href="http://twitter.com/txusko">Javi Filella</a>.</p>
             </div>
           </div>
 
@@ -79,6 +66,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="dist/js/bootstrap.min.js"></script>
 
+
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
     <script>window.jQuery || document.write('<script src="libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
     <script src="libs/trumbowyg.js"></script>
@@ -88,29 +76,13 @@
 
     <script>
     //Globals
+    $.fn.postitall.globals.savable = true;
+    $.fn.postitall.globals.askOnDelete = false;
+    $.fn.postitall.globals.fixed = false;
     $.fn.postitall.defaults.style.fontfamily = "'Shadows Into Light', sans-serif";
     $.fn.postitall.defaults.style.fontsize = "larger";
     $(document).ready(function() {
-      $.PostItAll.new({
-          content: "<p style='text-align:center;font-size:large;'>Hi and welcome to Post It All!<br><br>If you are interested in a jQuery sticky note plugin or in the Chrome extension, you're in the right place!! :)</p>",
-          width: 300,
-          style: {
-            fontfamily: "'Shadows Into Light', sans-serif",
-            tresd: false
-          },
-          features: {
-              toolbar: false,
-              randomColor: false,
-          },
-          flags: {
-              fixed: true,
-              blocked: true
-          },
-          attachedTo : {
-              element: '#idTitle',
-              position: 'bottom'
-          }
-      });
+        $.PostItAll.load();
     });
     </script>
 
