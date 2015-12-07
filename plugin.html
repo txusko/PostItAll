@@ -1,606 +1,1394 @@
 <!DOCTYPE html>
-  <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Post It All! jQuery plugin</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-        
-        <link rel="stylesheet" href="libs/jquery-ui-1.10.0.custom.css">
-        <link rel="stylesheet" href="libs/bootstrap.min.css">
-		<link rel="stylesheet" href="libs/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="libs/jquery.minicolors.css">
-		<link rel="stylesheet" href="plugin/jquery.postitall.css">
-		
-		<link rel="stylesheet" href="libs/main.css">
+<html lang="en">
 
-  </head>
+<head>
 
-  <body>
-	<!--[if lt IE 7]>
-		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-	<![endif]-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Post It All! - Customizable sticky notes for the web.">
+    <meta name="author" content="Javi Filella">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Post It All - Another sticky note jquery plugin for the web</title>
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Post It All! -->
+    <link rel="stylesheet" href="libs/jquery-ui/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="libs/trumbowyg/dist/ui/trumbowyg.css">
+    <link rel="stylesheet" href="libs/minicolors/jquery.minicolors.css">
+    <link rel="stylesheet" href="dist/jquery.postitall.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans|Oswald|Roboto|Lato|Indie+Flower|Shadows+Into+Light|Bangers' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//google-code-prettify.googlecode.com/svn/loader/skins/sunburst.css">
+
+    <!-- Custom CSS -->
+    <link href="css/landing-page.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark bg-inverse navbar-light navbar-fixed-top">
+        <div class="container">
+          <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2">
+            &#9776;
+          </button>
+          <div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+            <ul class="nav navbar-nav pull-left">
+                <li class="nav-item"><a class="navbar-brand" href="index.html" id="idTitle">Post It All!</a></li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#home">Jquery plugin <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="extension.html">Chrome Extension</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="idAddNote"><i class="fa fa-sticky-note-o fa-fw"></i> Add a new note!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="idDeleteAll2"><i class="fa fa-trash-o fa-fw"></i> Delete all notes</a>
+                </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="intro-header">
+
+        <div class="container">
+
+            <div class="row" id="home">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1><i class="fa fa-sticky-note fa-fw"></i>Post It All!</h1>
+                        <hr class="intro-divider">
+                        <h4>The jquery plugin for adding sticky notes in your webpage.</h4>
+
+                        <br><a href="#" class="btn btn-primary"><i class="fa fa-download fa-fw"></i> Download</a><br><br>
+                        <!--hr class="intro-divider"-->
+                        <p>
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a>
+                            <!-- Place this tag where you want the button to render. -->
+                            <a class="github-button" href="https://github.com/txusko/PostItAll" data-style="mega" data-count-href="/txusko/postitall/stargazers" data-count-api="/repos/txusko/PostItAll#stargazers_count">Star</a>&nbsp;
+                            <a class="github-button" href="https://github.com/txusko/PostItAll" data-style="mega" data-count-href="/txusko/postitall/network" data-count-api="/repos/txusko/PostItAll#forks_count">Fork</a>&nbsp;
+
+<script id='fb8mxa3'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=txusko&button=compact&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=28;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fb8mxa3');</script>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.intro-header -->
+
+    <!-- Page Content -->
+
+    <div class="container-fluid">
+        <div class="row">
 
 
-    <div class="container wrapper" id="top">
+            <div class="col-lg-3 fixit">
+                <ul class="nav nav-pills nav-stacked hidden-md-down">
+                    <li class="nav-item"><a href="#doc_gettingstarted" class="nav-link">Getting started</a></li>
+                    <li class="nav-item"><a href="#doc_usage" class="nav-link">Usage</a></li>
+                    <li class="nav-item"><a href="#doc_globalconfig" class="nav-link">Global configuration</a></li>
+                    <li class="nav-item"><a href="#doc_noteconfiguration" class="nav-link">Note configuration</a></li>
+                    <li class="nav-item"><a href="#doc_globalfunctions" class="nav-link">Functions / Methods</a></li>
+                    <li class="nav-item">
+                        <a href="#doc_noteexamples" class="nav-link">Examples</a>
+                        <ul>
+                            <li class="nav-item"><a href="#doc_changeglobalconfig" class="nav-link">Change global configuration</a></li>
+                            <li class="nav-item"><a href="#doc_newnote" class="nav-link">Create a customized note</a></li>
+                            <li class="nav-item"><a href="#doc_attachnote" class="nav-link">Attach note to an element</a></li>
+                            <li class="nav-item"><a href="#doc_noteevents" class="nav-link">Note events</a></li>
+                            <li class="nav-item"><a href="#doc_changeoptions" class="nav-link">Change note options</a></li>
+                            <li class="nav-item"><a href="#doc_showhide1" class="nav-link">Show hide and remove notes</a></li>
+                            <li class="nav-item"><a href="#doc_showhide2" class="nav-link">Show hide and remove specific note</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a href="examples/basic.html" class="nav-link">More examples</a></li>
+                    <li class="nav-item"><a href="#doc_save" class="nav-link">Save notes</a></li>
+                    <hr>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i class="fa fa-download fa-fw"></i> Download plugin</a>
+                    </li>
+                </ul>
+            </div>
 
-		<div class="navbar navbar-fixed-top">
-		  <div class="navbar-inner">
-			<div class="container" id="navigation">
-			  <ul class="nav">
-				<li><a href="index.html">Post It All</a></li>
-				<li><a href="bookmarklet.html">Bookmarklet</a></li>
-				<li class="active"><a href="plugin.html">jQuery Plugin</a></li>
-				<li><a class="navegable" href="index.html#about">About Post It All!</a></li>
-				<li><a class="navegable" href="index.html#licenses">Credits &amp; License</a></li>
-				<li><a class="navegable" href="index.html#contact">Contact</a></li>
-			  </ul>
-			</div>
-		  </div>
-		</div><!-- /.navbar -->
-	</div>
-	
-	<div class="container">
-		<!-- Jumbotron -->
-		<div class="jumbotron wrapper" id="home">
-			<h1>Post It All! <small>jQuery plugin</small></h1>
-			<p class="lead">A jQuery plugin to add postits to your webpage</p>
-			<a href="https://github.com/txusko/PostItAll/archive/master.zip" class="btn btn-large btn-primary button_tooltip" data-placement="bottom" title="Download the plugin">Download plugin</a>
-		</div>
-		
-		<h2>Examples</h2>
-	
-		<div class="row-fluid">
-			<div class="span12">
-				<h3>Basic example</h3>
-				<p class="lead">
-				This is a basic example, where you can convert the content of an HTML object into an editable, draggable and resizable postit.
-				</p>
-			</div>
-		</div>
-		<div class="row-fluid">
-			<div class="span8">
-				<h4>Code</h4>
+
+            <div class="col-lg-9 scrollit">
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <a id="doc_gettingstarted" class="anchor">&nbsp;</a>
+                        <h2>Getting started</h2><hr />
+                        <h4>Download</h4>
+                        <p><a href="">Download the plugin</a> from the GitHub page and include the css and the js files as usual.</p>
 <pre class="prettyprint lang-html">
-// HTML
-&lt;div id="idAddDemoPostit"&gt;Content of the postit 1&lt;/div&gt;
-&lt;div class="classAddDemoPostit"&gt;Content of the postit 2&lt;/div&gt;
-&lt;div class="classAddDemoPostit"&gt;Content of the postit 3&lt;/div&gt;
-&lt;div class="classAddDemoPostit"&gt;Content of the postit 4&lt;/div&gt;
+&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="libs/jquery.postitall.css"&gt;
 
-//JAVASCRIPT
+&lt;!-- JS --&gt;
+&lt;script src="libs/jquery/dist/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="dist/jquery.postitall.js"&gt;&lt;/script&gt;
+</pre>
+                        <h4>Plugins</h4>
+                        <p>Postitall can work alone but you can add some plugins and gain extra features and usability.</p>
+                        <p>These are the list of supported plugins:</p>
+                        <ul>
+                            <li><a href="https://jqueryui.com/" target=_blank>Jquery UI</a> : The jQuery User Inteface. With this plugin you will improve the usage in the drag and resize note feature.</li>
+                            <li><a href="http://alex-d.github.io/Trumbowyg/" target=_blank>Trumbowyg</a> : A lightweight WYSIWYG editor. Whit this plugin you will be able to edit the notes content with an integrated html5 editor.</li>
+                            <li><a href="http://labs.abeautifulsite.net/jquery-minicolors/" target=_blank>Minicolors</a> : A Tiny Color Picker. Whit this plugin you will be able to change background and text note color with a color picker.</li>
+                        </ul>
+<pre class="prettyprint lang-html">
+&lt;!-- CSS --&gt;
+&lt;link rel="stylesheet" href="libs/jquery-ui/themes/base/jquery-ui.css"&gt;
+&lt;link rel="stylesheet" href="libs/trumbowyg/dist/ui/trumbowyg.css"&gt;
+&lt;link rel="stylesheet" href="libs/minicolors/jquery.minicolors.css"&gt;
+&lt;link rel="stylesheet" href="dist/jquery.postitall.css"&gt;
+
+&lt;!-- JS --&gt;
+&lt;script src="libs/jquery/dist/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="libs/jquery-ui/jquery-ui.min.js"&gt;&lt;/script&gt;
+&lt;script src="libs/trumbowyg/dist/trumbowyg.min.js"&gt;&lt;/script&gt;
+&lt;script src="libs/minicolors/jquery.minicolors.min.js"&gt;&lt;/script&gt;
+&lt;script src="dist/jquery.postitall.js"&gt;&lt;/script&gt;
+</pre>
+<p class="text-muted">* Note that the css file <span class="label label-default">jquery.postitall.css</span> override some css elements of the plugins for a correct integration with postitall.</p>
+
+                        <h4>Install with bower</h4>
+                        <p>Also, you can install PostItAll using <a href="http://bower.io/">Bower</a></p>
+<pre class="prettyprint lang-bsh">
+$ bower install jquery postitall
+</pre>
+                        <p>And the plugins too:</p>
+<pre class="prettyprint lang-sh">
+$ bower install jquery-ui trumbowyg minicolors
+</pre>
+
+                        <a id="doc_usage" class="anchor">&nbsp;</a>
+                        <h3>Usage</h3>
+                        <hr>
+                        <div>
+                            <p>Fundamentally, you have two possibilities to use this plugin:</p>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-pills nav-stacked" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#option1" role="tab" data-toggle="tab">Call global methods<br><span class="label label-default">$.PostItAll</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#option2" role="tab" data-toggle="tab">Call plugin with a jquery selector<br><span class="label label-default">$(selector).postitall()</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-md-10">
+                                    <div class="card card-block">
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="option1">
+                                            <p>In this first example we will create a note from scratch with a global call to the <span class="label label-info">new</span> method.<br>
+                                            With global functions you will be abble to create a note from scratch and can be filled with any content, either text or html.</p>
+                                            <div class="row">
+                                                <div class="col-md-9">
+<pre class="prettyprint lang-js">
+//It will create a sticky note in the top left corner of the page
+$.PostItAll.new("&lt;p style='text-align:center'>Hello &lt;b&gt;world&lt;/b&gt;&lt;/p&gt;");
+</pre>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <a href="#" id="idRunTheCode"><i class="fa fa-play fa-fw"></i> Run the code</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div role="tabpanel" class="tab-pane" id="option2">
+                                            <p>In the second example, we will convert a DOM element into a sticky note with a plugin call.<br>
+                                            Use jquery selectors and call the <span class="label label-info">postitall</span> function to convert any element in a sticky note.</p>
+                                            <div class="row">
+                                                <div class="col-md-9">
+<pre class="prettyprint lang-html">
+&lt;!-- HTML --&gt;
+&lt;p class="notes"&gt;This paragraph have the "notes" class.&lt;/p&gt;
+&lt;a href="#" id="idRunTheCode"&gt;&lt;i class="fa fa-play fa-fw"&gt;&lt;/i&gt; Run the code&lt;/a&gt;
+
+&lt;!-- JS : All elements with the class "notes" will be converted into a sticky note --&gt;
 &lt;script&gt;
 $(document).ready(function() {
-  $('#idAddDemoPostit').postitall();
-  $('.classAddDemoPostit').postitall();
+    $('#idRunTheCode').click(function(e) {
+        $('.notes').postitall();
+        e.preventDefault();
+    });
 });
 &lt;/script&gt;
 </pre>
-			</div>
-			<div class="span4">
-				<h4>Result</h4>
-				<div id="idAddDemoPostit">Content of the postit 1</div>
-				<div class="classAddDemoPostit">Content of the postit 2</div>
-				<div class="classAddDemoPostit">Content of the postit 3</div>
-				<div class="classAddDemoPostit">Content of the postit 4</div>
-			</div>
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span12">
-				<h3>Form example</h3>
-				<p class="lead">
-				In this example, we take the parameters from form inputs to create a new postit. With the 'newPostit' parameter set to true, you can create as many post it's as you want.
-				</p>
-			</div>
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span8">
-				<h4>Code</h4>
-<pre class="prettyprint lang-html">
-// HTML
-&lt;form&gt;
-&lt;div&gt;
-  &lt;label for="idBgTextColor"&gt;Background-Color:&lt;/label&gt;
-  &lt;input id="idBgTextColor" type="text" name="bgColor" value="#0000ff" class="minicolors"&gt;
-&lt;/div&gt;
-&lt;br&gt;
-&lt;div&gt;
-  &lt;label for="idTextColor"&gt;Color:&lt;/label&gt;
-  &lt;input id="idTextColor" type="text" name="textColor" value="#333333" class="minicolors"&gt;
-&lt;/div&gt;
-&lt;br&gt;
-&lt;div&gt;
-  &lt;label for="idContent"&gt;Content:&lt;/label&gt;
-  &lt;textarea id="idContent" name="textColor"&gt;This is another demo&lt;/textarea&gt;
-&lt;/div&gt;
-&lt;div&gt;
-  &lt;input type="button" class="btn btn-primary" value="Add this as a postit" id="idAddDemoPostit2"&gt;
-&lt;/div&gt;
-&lt;div id="idAddDemoPostit2_result"&gt;&lt;/div&gt;
-&lt;/form&gt;
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <a href="#" id="idRunTheCode2"><i class="fa fa-play fa-fw"></i> Run the code</a>
+                                                    <p class="notes">This paragraph have the "notes" class.</p>
+                                                </div>
+                                            </div>
+                                      </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-// JAVASCRIPT
-&lt;script&gt;
-$(document).ready(function() {
-  $('#idAddDemoPostit2').click(function() {
-      $('#idRight').postitall({
-        'textcolor'       : $('#idTextColor').val(),
-        'backgroundcolor' : $('#idBgTextColor').val(),
-        'description'     : $('#idContent').val(),
-        'newPostit'       : true
-      });
-  });
-});
-&lt;/script&gt;
+                        <br>
+
+                        <a id="doc_globalconfig" class="anchor">&nbsp;</a>
+                        <h2>Global configuration</h2>
+                        <hr>
+                        <div>
+                            <p>The notes have some features that can be changed to satisfy your needs. By default all of them are enable, but you can change any of these "flags" in the beggining of your scripts and all the new notes will be affected by these changes.</p>
+                            <p>These are the variables with default values:</p>
+<pre class="prettyprint lang-js">
+//Global vars : enable and disable features and change the notes behaviour
+$.fn.postitall.globals = {
+    prefix          : '#PIApostit_',//Id note prefixe
+    filter          : 'domain',     //Options: domain, page, all
+    savable         : false,        //Save postit in storage
+    randomColor     : true,         //Random color in new postits
+    toolbar         : true,         //Show or hide toolbar
+    autoHideToolBar : true,         //Animation efect on hover over postit shoing/hiding toolbar options
+    removable       : true,         //Set removable feature on or off
+    askOnDelete     : true,         //Confirmation before note remove
+    draggable       : true,         //Set draggable feature on or off
+    resizable       : true,         //Set resizable feature on or off
+    editable        : true,         //Set contenteditable and enable changing note content
+    changeoptions   : true,         //Set options feature on or off
+    blocked         : true,         //Postit can not be modified
+    minimized       : true,         //true = minimized, false = maximixed
+    expand          : true,         //Expand note
+    fixed           : true,         //Allow to fix the note in page
+    addNew          : true,         //Create a new postit
+    showInfo        : true,         //Show info icon
+    pasteHtml       : true,         //Allow paste html in contenteditor
+    htmlEditor      : true,         //Html editor (trumbowyg)
+    autoPosition    : true,         //Automatic reposition of the notes when user resize screen
+    addArrow        : 'back'        //Add arrow to notes : none, front, back, all
+};
 </pre>
-			</div>
-			<div class="span4">
-				<h4>Result</h4>
-				<form>
-					<div>
-						<label for="idBgTextColor">Background-Color:</label>
-						<input id="idBgTextColor" type="text" name="bgColor" value="#0000ff" class="minicolors">
-					</div>
-					<br>
-					<div>
-						<label for="idTextColor">Color:</label>
-						<input id="idTextColor" type="text" name="textColor" value="#333333" class="minicolors">
-					</div>
-					<br>
-					<div>
-						<label for="idContent">Content:</label>
-						<textarea id="idContent" name="textColor">This is another demo</textarea>
-					</div>
-					<div>
-						<input type="button" class="btn btn-primary" value="Add this as a postit" id="idAddDemoPostit2">
-					</div>
-					<div id="idAddDemoPostit2_result"></div>
-				</form>						
-			</div>
-	
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span12">
-				<h3>Load data</h3>
-				<p class="lead">
-				You can save the postit options and load later
-				</p>
-			</div>
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span8">
-				<h4>Code</h4>
-<pre class="prettyprint lang-html">
-// HTML
-&lt;textarea id="idLoadOptions" style="width:100%;height:200px;"&gt;{"id":10,"created":1362924534460,"domain":"https://googledrive.com","page":"/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"relative","posX":"0px","posY":"0px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"&gt;&lt;h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"&gt;&lt;a href=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html\"&gt;jQuery Plugin&lt;/a&gt;&lt;/h2&gt;&lt;img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"&gt;&lt;/span&gt;&lt;p class=\"lead\"&gt;A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the&lt;a href=\"https://github.com/txusko/PostItAll\"&gt;\"Post It All\" GitHub repository&lt;/a&gt;&lt;/p&gt;&lt;/h2&gt;","newPostit":true}&lt;/textarea&gt;
-&lt;p&gt;&lt;input id="idLoadButton" type="button" class="btn" value="Load content"&gt;&lt;/p&gt;
-&lt;div id="idLoadContent"&gt;&lt;/div&gt;
-				
-// JAVASCRIPT
-&lt;script&gt;
-$('#idLoadButton').click(function() {
-  var lines = $('#idLoadOptions').val().split('\n');
-  for(var i = 0;i < lines.length;i++) {
-    if(lines[i]) {
-      var o = JSON.parse(lines[i]+'\n');
-      $('#idLoadContent').postitall(o);
+                        </div>
+
+                        <a id="doc_noteconfiguration" class="anchor">&nbsp;</a>
+                        <h2>Note configuration</h2>
+                        <hr>
+                        <div>
+                            <p>These are the properties and event callbacks for each new note:</p>
+<pre class="prettyprint lang-js">
+//Note global vars : Properties, style, features and events of the note
+$.fn.postitall.defaults = {
+    //Note properties
+    id              : "",                       //Note id
+    created         : Date.now(),               //Creation date
+    domain          : window.location.origin,   //Domain in the url
+    page            : window.location.pathname, //Page in the url
+    osname          : navigator.appVersion,     //Browser informtion &amp; OS name,
+    content         : '',                       //Content of the note (text or html)
+    position        : 'absolute',               //Position absolute or fixed
+    posX            : '10px',                   //x coordinate (from left)
+    posY            : '10px',                   //y coordinate (from top)
+    right           : '',                       //x coordinate (from right). This property invalidate posX
+    height          : 200,                      //Note total height
+    width           : 160,                      //Note total width
+    minHeight       : 210,                      //Note resizable min-width
+    minWidth        : 170,                      //Note resizable min-height
+    oldPosition     : {},                       //Position when minimized/collapsed (internal use)
+    //Config note style
+    style : {
+        tresd           : true,                 //General style in 3d format
+        backgroundcolor : '#FFFA3C',            //Background color in new postits when randomColor = false
+        textcolor       : '#333333',            //Text color
+        textshadow      : true,                 //Shadow in the text
+        fontfamily      : 'verdana',            //Default font
+        fontsize        : 'small',              //Default font size
+        arrow           : 'none',               //Default arrow : none, top, right, bottom, left
+    },
+    //Enable / Disable features
+    features : $.fn.postitall.globals,          //By default, copy of global defaults
+    //Note flags
+    flags : {
+        blocked         : false,                //If true, the note cannot be edited
+        minimized       : false,                //true = Collapsed note / false = maximixed
+        expand          : false,                //true = Expanded note / false = normal
+        fixed           : false,                //Set position fixed
+        highlight       : false,                //Higlight note
+    },
+    //Attach the note to al html element
+    attachedTo : {
+        element         : '',                   //Where to attach
+        position        : 'right',              //Position relative to elemente : top, right, bottom or left
+        fixed           : true,                 //Fix note to element when resize screen
+        arrow           : true,                 //Show an arrow in the inverse position
+    },
+    // Callbacks / Event Handlers
+    onCreated: function(id, options, obj) { return undefined; },    //Triggered after note creation
+    onChange: function (id) { return undefined; },                  //Triggered on each change
+    onSelect: function (id) { return undefined; },                  //Triggered when note is clicked, dragged or resized
+    onDblClick: function (id) { return undefined; },                //Triggered on double click
+    onRelease: function (id) { return undefined; },                 //Triggered on the end of dragging and resizing of a note
+    onDelete: function (id) { return undefined; }                   //Triggered when a note is deleted
+};
+</pre>
+                        </div>
+
+                        <a id="doc_globalfunctions" class="anchor">&nbsp;</a>
+                        <h2>Functions / Methods</h2>
+                        <hr>
+                        <p>As we said before, you have two ways to call note actions: by calling global or plugin methods.</p>
+                        <p>This is the relation af all the actions with his calls and a brief description of each one:</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped">
+                                    <thead class="thead-default">
+                                        <tr>
+                                            <th colspan="4">Note actions</th>
+                                        </tr>
+                                    </thead>
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>Global call</th>
+                                            <th>Plugin call</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">New note</th>
+                                            <td>
+                                                $.PostItAll.new();<br>
+                                                ...<br>
+                                                $.PostItAll.new(content, options, object, callback);
+                                            </td>
+                                            <td>$(id).postitall();<br>
+                                                ...<br>
+                                                $(id).postitall('new', options, callback);</td>
+                                            <td>Create a new note.
+                                                <br><span class="label label-info">Global call</span> <b>content</b> is the note content and <b>object</b> is the element in the DOM.
+                                                <br>For the two possibilities: <b>options</b> is an object with the new <a href="#doc_noteconfiguration">note options</a> and <b>callback</b> is the user function called when the new note is created.
+                                                <br><a href="#doc_newnote">View an example</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Change note options</th>
+                                            <td>
+                                                $.PostItAll.options(options);<br>
+                                                $.PostItAll.options(id,options);
+                                            </td>
+                                            <td>
+                                                $(id).postitall('options');<br>
+                                                $(id).postitall('options',options);
+                                            </td>
+                                            <td>Get or set the options of the created notes.
+                                                <br><span class="label label-info">Global call</span> In the case you don't specify the note <b>id</b> the options changed affects to all the created notes.
+                                                <br><b>options</b> is an object with the <a href="#doc_noteconfiguration">note options</a> to be changed.
+                                                <br><a href="#doc_changeoptions">View an example</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Hide note</th>
+                                            <td>
+                                                $.PostItAll.hide();<br>
+                                                $.PostItAll.hide(id);
+                                            </td>
+                                            <td>$(id).postitall('hide');</td>
+                                            <td>Hide note.
+                                                <br><span class="label label-info">Global call</span> If you don't specify the note <b>id</b>, all the notes of the page will be hidden.
+                                                <br><a href="#doc_showhide1">View an example</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Show note</th>
+                                            <td>
+                                                $.PostItAll.show();<br>
+                                                $.PostItAll.show(id);
+                                            </td>
+                                            <td>$(id).postitall('show');</td>
+                                            <td>Show note.
+                                                <br><span class="label label-info">Global call</span> If you don't specify the note <b>id</b>, all the notes of the page will be shown.
+                                                <br><a href="#doc_showhide1">View an example</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Destroy note</th>
+                                            <td>$.PostItAll.destroy(inline, storage, domain);</td>
+                                            <td>$(id).postitall('destroy');</td>
+                                            <td>Destroy a specific note or all the notes of your page.
+                                                <br><span class="label label-info">Global call</span> If you don't specify the note <b>id</b>, all the notes of the page will be destroyed.
+                                                <br>If <b>inline</b> is set to true, only visible notes will be removed (by default true).
+                                                <br>If <b>storage</b> is set to true all stored notes will be deleted (by default true).
+                                                <br>If <b>domain</b> is set to a valid domain name, only the notes created in this domain will be deleted. By default storage is local, so this options is useless in this conditions because you only see the notes in the current domain.
+                                                <br><span class="label label-info">Plugin call</span> Only the note with the specified <b>id</b> will be removed.
+                                                <br><a href="#doc_showhide1">View an example</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <thead class="thead-default">
+                                        <tr>
+                                            <th colspan="4">Configuration actions</th>
+                                        </tr>
+                                    </thead>
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Action</th>
+                                            <th colspan="2">Global call</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Change global/note configuration</th>
+                                            <td colspan="2">$.PostItAll.changeConfig(type, opt);</td>
+                                            <td>Change the global or note configuration.
+                                                <br><b>type</b> is a string that can be set to "global" or "note". Use "global" to change <a href="#doc_globalconfig">$.fn.postitall.globals</a> that affects to global features.
+                                                Use "note" to change <a href="#doc_noteconfiguration">$.fn.postitall.defaults</a> that affects to note properties and features.
+                                                <br><b>opt</b> is an object with the configuration you need to change.
+                                                <br><a href="#doc_changeglobalconfig">View an example</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Restores configuration</th>
+                                            <td colspan="2">$.PostItAll.restoreConfig(type);</td>
+                                            <td>Restore global and/or note configuration to factory defaults.
+                                                <br><b>type</b> is a string that can be set to "global", "note" or "all". If you don't specify "all" is the default value.
+                                                Use "global" to restore <a href="#doc_globalconfig">$.fn.postitall.globals</a>
+                                                and "note" to retore <a href="#doc_noteconfiguration">$.fn.postitall.defaults</a> to factory defaults.
+                                                Use "all" to restore "global" and "note" configuration at once.
+                                                <br><a href="#doc_changeglobalconfig">View an example</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <thead class="thead-default">
+                                        <tr>
+                                            <th colspan="4">Storage actions</th>
+                                        </tr>
+                                    </thead>
+                                    <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Action</th>
+                                            <th colspan="2">Global call</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Load notes</th>
+                                            <td colspan="2">$.PostItAll.load(callback, callbacks, highlight);</td>
+                                            <td>In the case you have stored notes, this method will load and show all notes from the current domain/page.
+                                                <br><b>callback</b> is the user function called when load is done.
+                                                <br><b>callbacks</b> is an object with the possible 'Event Handlers' of the <a href="#doc_noteconfiguration">note options</a>
+                                                <br><b>highlight</b> is the id of the note to be highlighted.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Save notes</th>
+                                            <td colspan="2">$.PostItAll.save();</td>
+                                            <td>In the case you have savable feature enabled (in global configuration and note features), this method will save all the notes in the storage.</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Number of notes</th>
+                                            <td colspan="2">$.PostItAll.length(callback);</td>
+                                            <td>In the case you have stored notes, this method will return in the callback function the number of stored notes of the current domain.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <a id="doc_noteexamples" class="anchor">&nbsp;</a>
+                        <h2>Examples</h2>
+                        <hr>
+
+                        <a id="doc_changeglobalconfig" class="anchor">&nbsp;</a>
+                        <h3>Change global configuration</h3>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card card-block">
+                                    <p class="card-text">You can change the global configuration of the plugin overwriting the default values in your script. The changes in the global configuration affects to the created new notes. Below you can change the global configuration.</p>
+                                    <div class="row">
+            							<div class="col-md-6">
+                                            <div class="checkbox">
+                                                <label><input id="idRandomColor" type="checkbox" name="randomColor" class="feature" checked> <span class="label label-pill label-info">randomColor</span> Random color for the new note</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idToolbar" type="checkbox" name="toolbar" class="feature" checked> <span class="label label-pill label-info">toolbar</span> Show toolbar (if not hide all icons)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idHideToolbar" type="checkbox" name="hideToolbar" class="feature" checked> <span class="label label-pill label-info">autoHideToolBar</span> Automatic hide of the notes toolbar (if not icons will be always visible)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idRemovable" type="checkbox" name="removable" class="feature" checked> <span class="label label-pill label-info">removable</span> Allow to delete (if not hide trash icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAskOnDelete" type="checkbox" name="askOnDelete" class="feature" checked> <span class="label label-pill label-info">askOnDelete</span> Ask for confirmation before delete a note</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idPasteHtml" type="checkbox" name="pasteHtml" class="feature" checked> <span class="label label-pill label-info">pasteHtml</span> Allow paste html content (if not, paste text content)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idHtmlEditor" type="checkbox" name="htmlEditor" class="feature" checked> <span class="label label-pill label-info">htmlEditor</span> Html editor (trumbowyg html5 editor)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAutoPosition" type="checkbox" name="autoPosition" class="feature" checked> <span class="label label-pill label-info">autoPosition</span> Relative note position on browser resize</label>
+                                            </div>
+            							</div>
+            							<div class="col-md-6">
+                                            <div class="checkbox">
+                                                <label><input id="idChangeOptions" type="checkbox" name="changeOptions" class="feature" checked> <span class="label label-pill label-info">changeoptions</span> Allow change note options (if not hide config icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAllowBlock" type="checkbox" name="allowBlock" class="feature" checked> <span class="label label-pill label-info">blocked</span> Allow blocking  (if not hide block icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAllowMinimize" type="checkbox" name="allowMinimize" class="feature" checked> <span class="label label-pill label-info">minimized</span> Allow minimize  (if not hide minimize icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAllowExpand" type="checkbox" name="allowExpand" class="feature" checked> <span class="label label-pill label-info">expand</span> Allow expand (if not hide expand icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAllowFix" type="checkbox" name="allowFix" class="feature" checked> <span class="label label-pill label-info">fixed</span> Allow fixing (if not hide fix icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAddNew" type="checkbox" name="addNew" class="feature" checked> <span class="label label-pill label-info">addNew</span> Allow copying note (if not hide copy icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idShowInfo" type="checkbox" name="showInfo" class="feature" checked> <span class="label label-pill label-info">showInfo</span> Show info icon (if not hide info icon)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idResizable" type="checkbox" name="resizable" class="feature" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 text-right">
+                                            <label for="idPosArrow" class="control-label" i18n="arrowOptions">Show arrow options on</label>
+                                        </div>
+            						    <div class="col-md-6 form-grup">
+            						    	<select class="form-control" id="idPosArrow">
+                                                <option value="none" i18n="posArrow_front">None</option>
+            						    		<option value="front" i18n="posArrow_front">Front (Arrows in the cardinal points of the note)</option>
+            						    		<option value="back" i18n="posArrow_back">Back (Select option in the back. Change note options must be enabled)</option>
+            						    		<option value="all" selected i18n="posArrow_both">Both (Front and Back)</option>
+            						    	</select>
+            						    </div>
+            						</div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="text-left"><label><input id="idCheckAll" type="checkbox" name="checkAll" checked> Check/Uncheck all</label></div>
+                                            <hr>
+                                            <button class="btn btn-warning" id="idRestoreFeatures">Restore features</button>
+                                            <div class="checkbox pull-right text-right">
+                                                <button class="btn btn-info" id="idNewNoteFeatures">Change configuration</button>
+                                                <br><label><input id="idCreateNewNote" type="checkbox" name="createNewNote" checked> Create a new note</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-danger text-right">* This changes will affect to all the new notes created.</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Change global configuration / features</h5>
+<pre class="prettyprint lang-js" id="idGlobalExample"></pre>
+                                <p class="text-muted">Change global features by calling <span class="label label-default">changeConfig</span> method.</p>
+                                <h5>Restore global configuration / features</h5>
+<pre class="prettyprint lang-js">
+$.PostItAll.restoreConfig('global');
+</pre>
+                                <p class="text-muted">Restore global features by calling <span class="label label-default">restoreConfig</span> method.</p>
+                            </div>
+                        </div>
+
+                        <a id="doc_newnote" class="anchor">&nbsp;</a>
+                        <h3>Create and customize notes</h3>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card card-block">
+                                    <p class="card-text">Each note can be configured individually, however global configuration will be applied if it's not overwritten in the note creation.</p>
+                                    <div class="row">
+            							<div class="col-md-12">
+                                            <div class="card card-block">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <fieldset class="form-group">
+                                                            <label for="idContent">Content of the note <span class="label label-pill label-info">content</span></label>
+                                                            <textarea class="form-control" id="idContent" rows="4" placeholder="Type something ...">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</textarea>
+                                                        </fieldset>
+                                                    </div>
+                        							<div class="col-md-4">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                            <fieldset class="form-group">
+                                                                <label for="idPosition" i18n="note_size">Position <span class="label label-pill label-info">position</span></label>
+                                                                <select id="idPosition" name="position" class="form-control">
+                                                                    <option value="" i18n="default">Default</option>
+                                                                    <option value="relative" i18n="relative">Relative</option>
+                                                                    <option value="fixed" i18n="fixed">Fixed</option>
+                                                                    <option value="absolute" i18n="absolute">Absolute</option>
+                                                                </select>
+                                                            </fieldset>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <label>&nbsp;</label>
+                                                                <button class="btn btn-secondary btn-sm form-control" id="idGetCoord" disabled><i class="fa fa-crosshairs fa-fw"></i> Coord</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="idOptPos">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group" id="idOptPosX">
+                                        							<label for="idPosX" i18n="posX">PosX <span class="label label-pill label-info">posX</span></label>
+                                                                    <input type="text" name="posX" class="form-control" id="idPosX" placeholder="X coord.">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group" id="idOptPosY">
+                                        							<label for="idPosY" i18n="posY">PosY <span class="label label-pill label-info">posY</span></label>
+                                                                    <input type="text" name="posY" class="form-control" id="idPosY" placeholder="Y coord.">
+                                        						</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                							<label for="idNoteSize" i18n="note_size">Note size</label>
+                            								<select id="idNoteSize" name="noteSize" class="form-control">
+                                                                <option value="" i18n="default">Default</option>
+                            									<option value="small" i18n="small">Small</option>
+                                                                <option value="small_square" i18n="small_square">Small square</option>
+                            									<option value="medium" i18n="medium">Medium</option>
+                                                                <option value="medium_square" i18n="medium_square">Medium square</option>
+                            									<option value="large" i18n="large">Large</option>
+                                                                <option value="large_square" i18n="large_square">Large square</option>
+                                                                <option value="big" i18n="big">Big</option>
+                                                                <option value="big_square" i18n="big_square">Big Square</option>
+                                                                <option value="custom" i18n="custom">Custom</option>
+                            								</select>
+                                                        </div>
+                                                        <div class="row" id="idOptCus">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group" id="idOptCusW">
+                                        							<label for="idNoteWidth" i18n="custom_width">Width <span class="label label-pill label-info">width</span></label>
+                                                                    <input type="text" name="noteWidth" class="form-control" id="idNoteWidth" value="" placeholder="Width in pixels">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group" id="idOptCusH">
+                                        							<label for="idNoteHeight" i18n="custom_height">Height <span class="label label-pill label-info">height</span></label>
+                                                                    <input type="text" name="noteHeight" class="form-control" id="idNoteHeight" value="" placeholder="Height in pixels">
+                                        						</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card card-block">
+                                                <div class="checkbox">
+                                                    <h5 class="card-title">&nbsp;&nbsp;<input id="idAddCodeStyle" type="checkbox" class="feature2"> Style <span class="label label-pill label-info">style</span></h5>
+                                                </div>
+
+                                                <p class="card-text">The basic design parameters like colors or fonts can be adjusted to your needs too.</p>
+
+                                                <div class="addCodeStyle">
+
+                                                    <div class="row" id="idOptBg">
+                                                        <div class="col-md-12">
+                                                            <div class="checkbox">
+                                                                <label><input id="idGeneralStyle" type="checkbox" name="generalStyle" class="feature2" checked> Note in 3d style <span class="label label-pill label-info">tresd</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row" id="idOptBg">
+                                                        <div class="col-md-12">
+                                                            <div class="checkbox">
+                                                                <label><input id="idRandomColor2" type="checkbox" name="randomColor2" class="feature2" checked> Random note color <span class="label label-pill label-info">randomColor</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="idOptBg">
+                                                        <div class="col-md-5 col-md-offset-1">
+                                                            <fieldset class="form-group">
+                                                                <label for="idBgTextColor">Background</label>
+                                                                <input class="form-control minicolors-input" id="idBgTextColor" type="text" name="bgColor" disabled>
+                                                                <span class="label label-pill label-info">backgroundColor</span>
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <div id="idOptTxCol" class="form-group">
+                                    							<label for="idTextColor" i18n="text_color">Text</label>
+                                                                <input id="idTextColor" type="text" name="textColor" class="form-control minicolors-input" disabled>
+                                                                <span class="label label-pill label-info">textColor</span>
+                                    						</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                    							<label for="idFontSize" i18n="font_size">Font size <span class="label label-pill label-info">fontsize</span></label>
+                                								<select id="idFontSize" name="fontSize" class="form-control">
+                                                                    <option value="smaller" i18n="smaller">Smaller</option>
+                                									<option value="small" i18n="small" selected>Small</option>
+                                                                    <option value="larger" i18n="larger">Larger</option>
+                                									<option value="medium" i18n="medium">Medium</option>
+                                									<option value="large" i18n="large">Large</option>
+                                                                    <option value="x-large" i18n="x_large">X-Large</option>
+                                								</select>
+                                    						</div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                    						<div class="form-group">
+                                    							<label for="idFontFamily" i18n="font_family">* Font type <span class="label label-pill label-info">fontfamily</span></label>
+                                								<select class="form-control" id="idFontFamily" name="fontFamily">
+                                									<option value="verdana" selected>Verdana</option>
+                                									<option value="'Open Sans', sans-serif">Open Sans</option>
+                                									<option value="'Oswald', sans-serif">Oswald</option>
+                                									<option value="'Roboto', sans-serif">Roboto</option>
+                                									<option value="'Lato', sans-serif">Lato</option>
+                                									<option value="'Indie Flower', sans-serif">Indie Flower</option>
+                                									<option value="'Shadows Into Light', sans-serif">Shadows Into Light</option>
+                                									<option value="'Bangers', sans-serif">Bangers</option>
+                                								</select>
+                                    						</div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                    							<label for="idArrow">Arrow <span class="label label-pill label-info">arrow</span></label>
+                                								<select id="idArrow" name="arrow" class="form-control">
+                                                                    <option value="none" i18n="smaller">None</option>
+                                                                    <option value="top" i18n="smaller">Top</option>
+                                                                    <option value="right" i18n="smaller">Right</option>
+                                                                    <option value="bottom" i18n="smaller">Bottom</option>
+                                                                    <option value="left" i18n="smaller">Left</option>
+                                								</select>
+                                    						</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="checkbox">
+                                                                <label><input id="idTextShadow" type="checkbox" name="textShadow" class="feature2" checked> Text shadow <span class="label label-pill label-info">textshadow</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <p class="card-text text-muted">* Note that you should include the used font types in your web page. You can include it by using <a href="https://www.google.com/fonts">Google fonts</a>.</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card card-block">
+                                                <div class="checkbox">
+                                                    <h5 class="card-title">&nbsp;&nbsp;<input id="idAddCodeFlags" type="checkbox" class="feature2"> Flags <span class="label label-pill label-info">flags</span></h5>
+                                                </div>
+
+                                                <p class="card-text">When you fix, block, minimize, expand or highlight a note, a "flag" property in the note change his state to true. You can force a note to start in an especific environment by enabling these flags.</p>
+
+                                                <div class="addCodeFlags">
+                                                    <div class="checkbox-inline">
+                                                        <label><input id="idFixedPosition" type="checkbox" name="FixedPosition" class="feature2" > <span class="label label-pill label-info">fixed</span> Fixed position</label>
+                                                    </div>
+                                                    <div class="checkbox-inline">
+                                                        <label><input id="idBlocked" type="checkbox" name="Blocked" class="feature2" > <span class="label label-pill label-info">blocked</span> Blocked</label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="checkbox-inline">
+                                                        <label><input id="idMinimized" type="checkbox" name="Minimized" class="feature2" > <span class="label label-pill label-info">minimized</span> Minimized</label>
+                                                    </div>
+                                                    <div class="checkbox-inline">
+                                                        <label><input id="idExpanded" type="checkbox" name="Expanded" class="feature2" > <span class="label label-pill label-info">expand</span> Expanded</label>
+                                                    </div>
+                                                    <div class="checkbox-inline">
+                                                        <label><input id="idHighlited" type="checkbox" name="Highlited" class="feature2" > <span class="label label-pill label-info">highlight</span> Highlited</label>
+                                                    </div>
+                                                    <p class="card-text text-muted">* While fixed and blocked flags can be enabled in any condition and live toghether, the minimized, expanded and highlighted can not, and you can only choose one between these three.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card card-block">
+
+                                                <div class="checkbox">
+                                                    <h5 class="card-title">&nbsp;&nbsp;<input id="idAddCodeFeatures" type="checkbox" class="feature2"> Features <span class="label label-pill label-info">features</span></h5>
+                                                </div>
+
+                                                <p class="card-text">All the features you want to control individually in each note must be enabled in global configuration to take effect. Global configuration prevails.</p>
+
+                                                <div class="row addCodeFeatures">
+                                                    <div class="col-md-6">
+                                                        <div class="checkbox">
+                                                            <label><input id="idToolbar2" type="checkbox" name="toolbar" class="feature2" checked> <span class="label label-pill label-info">toolbar</span> Show toolbar (if not hide all icons)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idHideToolbar2" type="checkbox" name="hideToolbar" class="feature2" checked> <span class="label label-pill label-info">autoHideToolBar</span> Automatic hide of the notes toolbar (if not icons will be always visible)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idRemovable2" type="checkbox" name="removable" class="feature2" checked> <span class="label label-pill label-info">removable</span> Allow to delete (if not hide trash icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAskOnDelete2" type="checkbox" name="askOnDelete" class="feature2" checked> <span class="label label-pill label-info">askOnDelete</span> Ask for confirmation before delete a note</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idPasteHtml2" type="checkbox" name="pasteHtml" class="feature2" checked> <span class="label label-pill label-info">pasteHtml</span> Allow paste html content (if not, paste text content)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idHtmlEditor2" type="checkbox" name="htmlEditor" class="feature2" checked> <span class="label label-pill label-info">htmlEditor</span> Html editor (trumbowyg html5 editor)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAutoPosition2" type="checkbox" name="autoPosition" class="feature2" checked> <span class="label label-pill label-info">autoPosition</span> Relative note position on browser resize</label>
+                                                        </div>
+                                                        <label for="idPosArrow2" class="control-label" i18n="arrowOptions2">Show arrow options on :</label>
+                                                        <select class="form-control" id="idPosArrow2">
+                                                            <option value="none" i18n="posArrow_front">None</option>
+                                                            <option value="front" i18n="posArrow_front">Front (Arrows in the cardinal points of the note)</option>
+                                                            <option value="back" i18n="posArrow_back">Back (Select option in the back. Change note options must be enabled)</option>
+                                                            <option value="all" selected i18n="posArrow_both">Both (Front and Back)</option>
+                                                        </select>
+                        							</div>
+                        							<div class="col-md-6">
+                                                        <div class="checkbox">
+                                                            <label><input id="idChangeOptions2" type="checkbox" name="changeOptions" class="feature2" checked> <span class="label label-pill label-info">changeoptions</span> Allow change note options (if not hide config icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAllowBlock2" type="checkbox" name="allowBlock" class="feature2" checked> <span class="label label-pill label-info">blocked</span> Allow blocking  (if not hide block icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAllowMinimize2" type="checkbox" name="allowMinimize" class="feature2" checked> <span class="label label-pill label-info">minimized</span> Allow minimize  (if not hide minimize icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAllowExpand2" type="checkbox" name="allowExpand" class="feature2" checked> <span class="label label-pill label-info">expand</span> Allow expand (if not hide expand icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAllowFix2" type="checkbox" name="allowFix" class="feature2" checked> <span class="label label-pill label-info">fixed</span> Allow fixing (if not hide fix icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAddNew2" type="checkbox" name="addNew" class="feature2" checked> <span class="label label-pill label-info">addNew</span> Allow copying note (if not hide copy icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idShowInfo2" type="checkbox" name="showInfo" class="feature2" checked> <span class="label label-pill label-info">showInfo</span> Show info icon (if not hide info icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idResizable2" type="checkbox" name="resizable" class="feature2" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Create a new note</h5>
+                                <p>Create a note with a specific configuration and content.</p>
+<pre class="prettyprint lang-js" id="idNoteExample"></pre>
+                                <p class="text-muted">* This changes will affect only to the notes created with the button "Create a note with this configuration".</p>
+                                <p class="text-center"><button class="btn btn-success" id="idNewNoteFeatures2">Create a note with this configuration</button></p>
+                                <br>
+
+                                <h5>Change note configuration / features</h5>
+                                <p>All new notes without params will be created with the configuration saved.</p>
+<pre class="prettyprint lang-js" id="idConfigNoteExample"></pre>
+                                <p class="text-muted">Change note configuration and features by calling <span class="label label-default">changeConfig</span> method.</p>
+                                <p class="text-center"><button class="btn btn-info" id="idSaveNoteConfig">Save note configuration</button></p>
+                                <br>
+
+                                <h5>Restore note configuration / features</h5>
+                                <p>Restore note configuration to factory defaults.</p>
+<pre class="prettyprint lang-js">
+$.PostItAll.restoreConfig('note');
+</pre>
+                                <p class="text-muted">Restore note configuration and features by calling <span class="label label-default">restoreConfig</span> method.</p>
+                                <p class="text-center"><button class="btn btn-warning" id="idRestoreNoteConfig">Restore note configuration</button></p>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <a id="doc_attachnote" class="anchor">&nbsp;</a>
+                <h3>Attach note to an element</h3>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-block" id="divToAttach">
+                            <p class="card-text">
+                                You can create or attach notes to an existing element of your page. The note can be positioned in the top, right, buttom or left of the existing element, and also you can add an arrow pointing out to it.
+                                <br>Even if you resize the browser, the note will be moved to the same relative position of the attached element.
+                            </p>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="idSelectPosition" class="control-label">Select the position :</label>
+                                    <select class="form-control" id="idSelectPosition">
+                                        <option value="top left">top left</option>
+                                        <option value="top">top</option>
+                                        <option value="top right">top right</option>
+                                        <option value="right top">right top</option>
+                                        <option value="right">right</option>
+                                        <option value="right bottom">right bottom</option>
+                                        <option value="bottom left">bottom left</option>
+                                        <option value="bottom">bottom</option>
+                                        <option value="bottom right">bottom right</option>
+                                        <option value="left top">left top</option>
+                                        <option value="left" selected>left</option>
+                                        <option value="left bottom">left bottom</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="checkbox">
+                                        <label><input id="idFixedTo" type="checkbox" checked> Fixed to element<br>(on browser resize, the note follows the element)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="checkbox">
+                                        <label><input id="idWithArrow" type="checkbox" checked> With arrow</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="button" class="btn btn-success form-control" id="idButtonToAttach" value="Attach note">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <div class="text-muted">* The note will be attached to the above red box</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <pre class="prettyprint lang-js" id="idAttachToExample"></pre>
+                    </div>
+                </div>
+
+                <hr>
+                <a id="doc_noteevents" class="anchor">&nbsp;</a>
+                <h3>Note events</h3>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-block">
+                            <p class="card-text">
+                                You can work with these 5 events:
+                                <div class="list-group">
+                                  <a class="list-group-item"><b>onCreated</b> - Triggered after note creation</a>
+                                  <a class="list-group-item"><b>onChange</b> - Triggered on each change</a>
+                                  <a class="list-group-item"><b>onSelect</b> - Triggered in the begining of the note edition, when it's dragged or resized</a>
+                                  <a class="list-group-item"><b>onDblClick</b> - Triggered on double click</a>
+                                  <a class="list-group-item"><b>onRelease</b> - Triggered on the end of dragging and resizing of a note</a>
+                                  <a class="list-group-item"><b>onDelete</b> - Triggered when a note is deleted</a>
+                                </div>
+                            </p>
+                            <div class="text-right">
+                                <input type="button" class="btn btn-success form-control" id="idButtonEvents" value="Create a new note with events">
+                            </div>
+                            <div id="idDivEvents" class="divEvents jumbotron">Event notes will be displayed here...</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <pre class="prettyprint lang-js">
+$.PostItAll.new({
+    onCreated: function(id, options, obj) {
+        console.log("onCreated");
+    },
+    onChange: function(id) {
+        console.log("onChange");
+    },
+    onSelect: function(id) {
+        console.log("onSelect");
+    },
+    onDblClick: function(id) {
+        console.log("onDblClick");
+    },
+    onRelease: function(id) {
+        console.log("onRelease");
+    },
+    onDelete: function(id) {
+        console.log("onDelete");
     }
-  }
 });
-&lt;/script&gt;
-</pre>
-			</div>
-			<div class="span4">
-				<h4>Result</h4>
-				<textarea id="idLoadOptions" style="width:100%;height:200px;">{"id":10,"created":1362924534460,"domain":"https://googledrive.com","page":"/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html","backgroundcolor":"#FFFC7F","textcolor":"#333333","textshadow":true,"position":"relative","posX":"0px","posY":"0px","height":460,"width":306,"minHeight":152,"minWidth":131,"description":"<h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90); text-align: center; \"></h2><h2 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(90, 90, 90);\"><a href=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/plugin.html\">jQuery Plugin</a></h2><img class=\"img-circle\" data-src=\"holder.js/140x140\" src=\"https://googledrive.com/host/0B2vKerMpRnudUGJlWC1yN3VUZWs/img/jquery_plugin.png\" style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"><span style=\"font-size: 14px; font-weight: normal; line-height: 20px;\"></span><p class=\"lead\">A jQuery plugin to add postits to your webpage.<br>See it in action, Download the plugin now or Fork the<a href=\"https://github.com/txusko/PostItAll\">\"Post It All\" GitHub repository</a></p>","newPostit":true,"autoheight":true}</textarea>
-				<br><input id="idLoadButton" type="button" class="btn" value="Load content">
-				<div id="idLoadContent"></div>
-			</div>
-		</div>
-		
-		
-		<div class="row-fluid">
-			<div class="span12">
-				<h3>Recover options</h3>
-				<p class="lead">
-				You can recover the options (position, dimensions, content, ...) of a postit by calling the 'options' method
-				</p>
-			</div>
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span8">
-				<h4>Code</h4>
-<pre class="prettyprint lang-html">
-// HTML
-&lt;p&gt;&lt;input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"&gt;&lt;/p&gt;
-&lt;textarea id="idRecoverOptions" style="width:100%;height:350px;"&gt;
-&lt;/textarea&gt;
+                        </pre>
+                    </div>
+                </div>
 
-// JAVASCRIPT
+                <a id="doc_changeoptions" class="anchor">&nbsp;</a>
+                <h3>Change note options</h3>
+                <hr>
+                <p class="lead">You can get or set options of the notes on the fly.</p>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h5>Code</h5>
+<pre class="prettyprint lang-html">
+&lt;!-- HTML --&gt;
+&lt;a href="#" id="newNote1"&gt;Create a new note&lt;/a&gt;
+&lt;a href="#" id="idGetCreated"&gt;Get note options&lt;/a&gt;
+&lt;a href="#" id="idSetCreated"&gt;Change note options&lt;/a&gt;
+&lt;div id="idDivOptions"&gt;&lt;/div&gt;
+
+&lt;!-- JS --&gt;
 &lt;script&gt;
-$('#idRecoverButton').click(function() {
-  $('.PIApostit').each(function() {
-    var val = $('#idRecoverOptions').val();
-    $('#idRecoverOptions').val(val+'\n'
-      +JSON.stringify($(this).postitall('options'))
-      +'\n');
-  });
+$(document).ready(function() {
+    var idNewNote = null;
+    $('#newNote1').click(function(e) {
+        if(idNewNote == null) {
+            $.PostItAll.new({
+                content: 'This is a &lt;b&gt;new&lt;/b&gt; note!',
+                onCreated: function(id, options, obj) {
+                    idNewNote = id;
+                },
+                onDelete: function() {
+                    idNewNote = null;
+                }
+            });
+        }
+        e.preventDefault();
+    });
+    $('#idGetCreated').click(function(e) {
+        if(idNewNote != null) {
+            $('#idDivOptions').text($(idNewNote).postitall('options'));
+            //$('#idDivOptions').text($.PostItAll.options(idNewNote));
+        }
+        e.preventDefault();
+    });
+    $('#idSetCreated').click(function(e) {
+        if(idNewNote != null) {
+            var options = {
+                content: "Modified content by set options",
+                style: {
+                    textcolor : "#fcf800",
+                    backgroundcolor : "#ff0000",
+                },
+            };
+            $('#idDivOptions').text('');
+            $(idNewNote).postitall('options', options);
+            //$.PostItAll.options(idNewNote, options);
+        }
+        e.preventDefault();
+    });
 });
 &lt;/script&gt;
 </pre>
-			</div>
-			<div class="span4">
-				<h4>Result</h4>
-				<p><input id="idRecoverButton" type="button" class="btn" value="Recover all postit options"></p>
-				<textarea id="idRecoverOptions" style="width:100%;height:350px;">
-				</textarea>
-			</div>
-		</div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Example</h5>
+                        <ul>
+                            <li><a href="#" id="newNote1">Create a new note</a></li>
+                            <li><a href="#" id="idSetCreated">Change note options</a></li>
+                        </ul>
+                        <div class="pull-right">(<a href="#" id="idGetCreated">refresh</a>)</div>
+                        <h5>Note options</h5>
 
-		<!--div class="row-fluid">
-			<div class="span12">
-				<h3>Global / Local Storage</h3>
-				<p class="lead"></p>
-			</div>
-		</div>
-		<div class="row-fluid">
-			<div class="span12">
-				<input type="button" class="btn btn-primary" value="Remove all postits" id="idRemoveAll">
-				<input type="button" class="btn btn-primary" value="Load all postits from Local Storage" id="idLoadAll">
-			</div>
-		</div-->
-		
-		<hr class="featurette-divider">
-			
-		<h2>Documentation</h2>
-		
-		<div class="row-fluid">
-			<div class="span12">
-			
-				<h3>Installation</h3>
-				<p>Add the css and the js as allways:</p>
-<pre class="prettyprint lang-html">
-&lt;link rel="stylesheet" href="plugin/jquery.postitall.css"&gt;
-&lt;script src="plugin/jquery.postitall.js"&gt;&lt;/script&gt;
-</pre>
-<b>Recomendations:</b><br>
-If you want the resize feature for the note, you should add the <a href="http://jqueryui.com/">jQuery UI library</a>:
-<pre class="prettyprint lang-html">
-&lt;link rel="stylesheet" href="plugin/jquery-ui.css"&gt;
-&lt;script src="plugin/jquery-ui-1.10.1.min.js"&gt;&lt;/script&gt;
-</pre>
-If you want the friendly color-plugin choser, you should add the <a href="http://labs.abeautifulsite.net/jquery-miniColors/">Minicolors jQuery Plugin</a>:
-<pre class="prettyprint lang-html">
-&lt;link rel="stylesheet" href="plugin/jquery.minicolors.css"&gt;
-&lt;script src="plugin/jquery.minicolors.js"&gt;&lt;/script&gt;
-</pre>
+                        <div id="idDivOptions" class="divEvents jumbotron">Here you will see the options for the new note created...</div>
 
-			</div>
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span12">
-			
-			<h3>Properties</h3>
-			
-			<table class="table table-striped table-bordered">
-			<thead>
-			<tr>
-				<th>Property</th>
-				<th>Explain</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td>id</td>
-				<td>Id of the note. Each note will have an unique identifier.
-				<br><span class="label">Default</span> number of notes + 1
-				</td>
-			</tr>
-			<tr>
-				<td>created</td>
-				<td>Creation date of the note (not used)
-				<br><span class="label">Default</span> Date.now()</td>
-			</tr>
-			<tr>
-				<td>domain</td>
-				<td>Domain where the note was created (not used)
-				<br><span class="label">Default</span> window.location.origin</td>
-			</tr>
-			<tr>
-				<td>page</td>
-				<td>Page where the note was created (not used)
-				<br><span class="label">Default</span> window.location.pathname</td>
-			</tr>
-			<tr>
-				<td>backgroundcolor</td>
-				<td>Background color of the note
-				<br><span class="label">Default</span> #FFFC7F</td>
-			</tr>
-			<tr>
-				<td>textcolor</td>
-				<td>Color of the text
-				<br><span class="label">Default</span> #333333</td>
-			</tr>
-			<tr>
-				<td>textshadow</td>
-				<td>Specify if the text have a white shadow or not
-				<br><span class="label">Default</span> true</td>
-			</tr>
-			<tr>
-				<td>position</td>
-				<td>Type of position for the note.<br>
-				<ul>
-					<li>absolute: set the position in the page where the top left corner of your page is 0 for posX and posY.</li>
-					<li>relative: set the position relative to the container element where the top left corner of the container is 0 for posX ans posY.
-					<br>Note that the plugin convert the relative to absolute position for preventing the "preservation of height" of the note in the page layout making them float.</li>
-				</ul>	
-				<span class="label">Default</span> relative</td>
-			</tr>
-			<tr>
-				<td>posX</td>
-				<td>Number of pixels in the horizontal axis, starting from the top of the container (see position), where the postit will be drawn.
-				<br><span class="label">Default</span> 5px</td>
-			</tr>
-			<tr>
-				<td>posY</td>
-				<td>Number of pixels in the vertical axis, starting from the left of the container (see position), where the postit will be drawn.
-				<br><span class="label">Default</span> 5px</td>
-			</tr>
-			<tr>
-				<td>height</td>
-				<td>Height of the note.
-				<br>Remember that this height will be increased in 30 pixels for the toolbar space of the note.
-				<br><span class="label">Default</span> 180</td>
-			</tr>
-			<tr>
-				<td>width</td>
-				<td>Width of the note
-				<br><span class="label">Default</span> 200</td>
-			</tr>
-			<tr>
-				<td>minHeight</td>
-				<td>Resizable min-height
-				<br><span class="label">Default</span> 152</td>
-			</tr>
-			<tr>
-				<td>minWidth</td>
-				<td>Resizable min-width
-				<br><span class="label">Default</span> 131</td>
-			</tr>
-			<tr>
-				<td>description</td>
-				<td>Content of the note. You can add html too.
-				<br><span class="label">Default</span> blank</td>
-			</tr>
-			<tr>
-				<td>newPostit</td>
-				<td>It will create a new note inside the selector given.
-				<br>This note will have the <span class="label label-info">newPostIt_{id}</span> as identifier
-				<br><span class="label">Default</span> false</td>
-			</tr>
-			<tr>
-				<td>autoheight</td>
-				<td>Set autoheight feature on or off
-				<br><span class="label">Default</span> true</td>
-			</tr>
-			<tr>
-				<td>draggable</td>
-				<td>Set draggable feature on or off
-				<br><span class="label">Default</span> true</td>
-			</tr>
-			<tr>
-				<td>resizable</td>
-				<td>Set resizable feature on or off
-				<br><span class="label">Default</span> true</td>
-			</tr>
-			<tr>
-				<td>removable</td>
-				<td>Show or hide the "trash" icon
-				<br><span class="label">Default</span> true</td>
-			</tr>
-			<tr>
-				<td>changeoptions</td>
-				<td>Show or hide the "options" icon
-				<br><span class="label">Default</span> true</td>
-			</tr>
-			<tr>
-				<td>savable</td>
-				<td>Saves post it in Local Storage
-				<br><span class="label">Default</span> false</td>
-			</tr>
-			</tbody>
-			</table>
-			
-			<span class="label label-info">Note that You can recover all the notes with the .PIApostit selector</span>
-			
-			<hr class="featurette-divider">
-			
-		<h2>Full example with all properties set to the defaults.</h2>
+                    </div>
+                </div>
+
+                <a id="doc_showhide1" class="anchor">&nbsp;</a>
+                <h3>Show hide and remove notes</h3>
+                <hr>
+                <p class="lead">You can show or hide notes globally or by note id.</p>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h5>Code</h5>
 <pre class="prettyprint lang-html">
+&lt;!-- HTML --&gt;
+&lt;a href="#" id="idHideAll"&gt;Hide all notes&lt;/a&gt;
+&lt;a href="#" id="idShowAll"&gt;Show all notes&lt;/a&gt;
+&lt;a href="#" id="idDeleteAll"&gt;Delete all notes&lt;/a&gt;
+
+&lt;!-- JS --&gt;
 &lt;script&gt;
-$('#some_id').postitall({
-	id              : 0,                        //Id
-	created         : Date.now(),               //Creation date
-	domain          : window.location.origin,   //Domain in the url
-	page            : window.location.pathname, //Page in the url
-	backgroundcolor : '#FFFC7F',                //Background color
-	textcolor       : '#333333',                //Text color
-	textshadow      : true,                     //Shadow in the text
-	position        : 'relative',               //Position absolute or relative
-	posX            : '5px',                    //top position
-	posY            : '5px',                    //left position
-	height          : 180,                      //height
-	width           : 200,                      //width
-	minHeight       : 152,                      //resizable min-width
-	minWidth        : 131,                      //resizable min-height
-	description     : '',                       //content
-	newPostit       : false,                    //create a new postit
-	autoheight      : true,                     //Set autoheight feature on or off
-	draggable       : true,                     //Set draggable feature on or off
-	resizable       : true,                     //Set resizable feature on or off
-	removable       : true,                     //Set removable feature on or off
-	changeoptions   : true,                     //Set options feature on or off
-	savable         : false,                    //Save postit in local storage
+$(document).ready(function() {
+    $('#idHideAll').click(function(e) {
+        $.PostItAll.hide();
+        e.preventDefault();
+    });
+    $('#idShowAll').click(function(e) {
+        $.PostItAll.show();
+        e.preventDefault();
+    });
+    $('#idDeleteAll').click(function(e) {
+        $.PostItAll.delete();
+        e.preventDefault();
+    });
 });
 &lt;/script&gt;
 </pre>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Result</h5>
+                        <ul>
+                            <li>
+                                <a href="#" id="idCreateBunch">Create a bunch of notes</a>
+                                <ul>
+                                    <li><a href="#" id="idHideAll">Hide all notes</a></li>
+                                    <li><a href="#" id="idShowAll">Show all notes</a></li>
+                                    <li><a href="#" id="idDeleteAll">Delete all notes</a></li>
+                                </ul>
+                            </li>
+                        </li>
+                    </div>
+                </div>
 
-			</div>
-		</div>
-	
-	
-	  
-<hr class="featurette-divider">
+                <a id="doc_showhide2" class="anchor">&nbsp;</a>
+                <h3>Show hide and remove specific note</h3>
+                <hr>
+                <p class="lead">Show hide and remove a specific note.</p>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h5>Code</h5>
+<pre class="prettyprint lang-html">
+&lt;!-- HTML --&gt;
+&lt;a href="#" id="newNote2"&gt;Create a new note and get id&lt;/a&gt;
+&lt;a href="#" id="idHideCreated"&gt;Hide created note&lt;/a&gt;
+&lt;a href="#" id="idShowCreated"&gt;Show created note&lt;/a&gt;
+&lt;a href="#" id="idDeleteCreated"&gt;Delete created note&lt;/a&gt;
 
-      <!-- /END THE FEATURETTES -->
-
-
-      <!-- FOOTER -->
-      <footer>
-        <p class="pull-right"><a class="navegable" href="#top"><i class="icon-circle-arrow-up"></i> Back to top</a></p>
-        <p>&copy; 2013 <b>Post It All!</b> by <a href="http://www.txusko.com">Javi Filella</a> &middot; <a href="#modalTerms" role="button" data-toggle="modal">Terms</a></p>
-      </footer>
-
-    </div><!-- /.container -->
-    
-    <!-- Modals -->
-    <div id="modalTerms" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	    <div class="modal-header">
-	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    	<h3 id="myModalLabel">Terms of service</h3>
-	    </div>
-	    <div class="modal-body">
-<pre>
-jquery.postitall.js v0.1
-jQuery Post It All Plugin - released under MIT License
-Author: Javi Filella
-http://github.com/txusko/PostItAll
-Copyright (c) 2013 Javi Filella
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+&lt;!-- JS --&gt;
+&lt;script&gt;
+$(document).ready(function() {
+    var idNewNote = null;
+    $('#newNote1, #newNote2').click(function(e) {
+        if(idNewNote == null) {
+            $.PostItAll.new({
+                content: 'This is a &lt;b&gt;new&lt;/b&gt; note!',
+                onCreated: function(id, options, obj) {
+                    idNewNote = id;
+                },
+                onDelete: function() {
+                    idNewNote = null;
+                }
+            });
+        }
+        e.preventDefault();
+    });
+    $('#idShowCreated').click(function(e) {
+        $.PostItAll.show(idNewNote);
+        e.preventDefault();
+    });
+    $('#idHideCreated').click(function(e) {
+        $.PostItAll.hide(idNewNote);
+        e.preventDefault();
+    });
+    $('#idDeleteCreated').click(function(e) {
+        $.PostItAll.remove(idNewNote);
+        e.preventDefault();
+    });
+});
+&lt;/script&gt;
 </pre>
-		</div>
-	    <div class="modal-footer">
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	    </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Example</h5>
+                        <ul>
+                            <li>
+                                <a href="#" id="newNote2">Create a new note</a>
+                                <ul>
+                                    <li><a href="#" id="idHideCreated">Hide created note</a></li>
+                                    <li><a href="#" id="idShowCreated">Show created note</a></li>
+                                    <li><a href="#" id="idDeleteCreated">Delete created note</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <a id="doc_save" class="anchor">&nbsp;</a>
+                <h2>Save notes</h2>
+                <hr>
+                <h3>Local storage</h3>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <p>If you enable the <span class="label label-default">savable</span> global feature, all your new notes since that moment will be stored in browser local storage.</p>
+<pre class="prettyprint lang-js">
+//Enable savable feature for all new notes
+$.fn.postitall.globals.savable = true;
+</pre>
+                        <p>Also, you can save notes individually be enabling this feature on new notes.</p>
+<pre class="prettyprint lang-js">
+//Enable savable feature for a specific note
+$.PostItAll.new({
+    features: {
+        savable : true
+    }
+});
+</pre>
+
+                        <p>If you want to load the saved notes, you can call the global method <span class="label label-default">load</span></p>
+<pre class="prettyprint lang-js">
+//Load storage notes
+$.PostItAll.load();
+</pre>
+                        <p>If you want to know how many saved notes you have you can call the global method <span class="label label-default">length</span></p>
+<pre class="prettyprint lang-js">
+//Load storage notes
+$.PostItAll.length(function(total) {
+    console.log('Number of notes: ' + total);
+});
+</pre>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Example</h5>
+                        <ul>
+                            <li>
+                                <a href="#" id="newNote3">Create a new savable note</a>
+                            </li>
+                            <li>
+                                <a href="#" id="loadNotes">Load saved notes</a>
+                            </li>
+                            <li>
+                                Number of notes : <span id="idNumNotes"></span> (<a href="#" id="lenghtNotes">refresh</a>)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <br>
+                <h3>External storage</h3>
+                <p class="text-danger"><b>Comming soon</b></p>
+
+                <!-- End Getting Started -->
+
+                <br><hr><br>
+
+            </div>
+        </div>
     </div>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="libs/jquery-1.9.1.min.js"><\/script>')</script>
-	
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
-	<script>window.jQuery || document.write('<script src="libs/jquery-ui-1.10.1.min.js"><\/script>')</script>
-	
-	<script src="libs/bootstrap.min.js"></script>
-	
-	<script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css" defer="defer"></script>
+    <br><br>
 
-	<script src="libs/jquery.minicolors.js"></script>
-	<script src="plugin/jquery.postitall.js"></script>
-	
-	<script src="libs/main.js"></script>
+    <div class="content-section-a">
 
-	<script>
-		var _gaq=[['_setAccount','UA-39562111-1'],['_trackPageview']];
-		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-		s.parentNode.insertBefore(g,s)}(document,'script'));
-	</script>
-	
-	<script>
-	$(document).ready(function() {
-		$('.button_tooltip').tooltip();
-	});
-	</script>
-	
-	<script>
-	// Prettify
-	!function ($) {
-		$(function(){
-		  window.prettyPrint && prettyPrint()   
-		})
-	}(window.jQuery)
-	
-	$(document).ready(function() {
-		
-		//Minicolors for the form
-		$('.minicolors').minicolors();
-		
-		//Default postit
-		$('#idAddDemoPostit').postitall({'savable': false});
-		$('.classAddDemoPostit').postitall({'savable': false});
-		
-		//Recovering data from a form
-		$('#idAddDemoPostit2').click(function() {
-			$('#idAddDemoPostit2_result').postitall({
-				'textcolor' 		: $('#idTextColor').val(),
-				'backgroundcolor' 	: $('#idBgTextColor').val(),
-				'description' 		: $('#idContent').val(),
-				'newPostit' 		: true
-			});
-		});
-		
-		//Postit options
-		$('#idRecoverButton').click(function() {
-			$('#idRecoverOptions').val('Options:\n');
-			$('.PIApostit').each(function() {
-				var val = $('#idRecoverOptions').val();
-				$('#idRecoverOptions').val(val+'\n'
-					+JSON.stringify($(this).postitall('options'))
-					+'\n');
-			});
-		});
-		
-		//Load content
-		$('#idLoadButton').click(function() {
-			var lines = $('#idLoadOptions').val().split('\n');
-			for(var i = 0;i < lines.length;i++) {
-			    if(lines[i]) {
-			    	var o = JSON.parse(lines[i]+'\n');
-					$('#idLoadContent').postitall(o);
-			    }
-			}
-		});
+        <div class="container">
 
-		// Load / Save / Remove
-		$('#idSaveAll').click(function() {
-			$.savePostItAll();
-		});
-		$('#idRemoveAll').click(function() {
-			$.removePostItAll();
-		});
-		$('#idLoadAll').click(function() {
-			$.loadPostItAll(true);
-		});
+            <div class="row" id="source">
+                <div class="col-lg-5 col-sm-6">
+                    <h2 class="section-heading">Source code<br>& Contact</h2>
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <p class="lead">You can check the <a href="https://github.com/txusko/PostItAll" target="_blank">Source Code on <span class="fa fa-github fa-fw"></span> Github</a>.<br>Any kind of help or comment will be apreciated.</p>
+                    <p>Bug report and issues:  <a href="https://github.com/txusko/PostItAll/issues">https://github.com/txusko/PostItAll/issues</a></p>
+                    <p>Contact by email at: <a href="mailto:postitall@txusko.com">postitall@txusko.com</a></p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="img/source.png" alt="">
+                </div>
+            </div>
 
-	});
-	</script>
-  </body>
+        </div>
+        <!-- /.container -->
+
+    </div>
+
+
+    <div class="banner" id="about">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <h3>Developed by Javi Filella</h3>
+                    <p><a href="mailto:postitall@txusko.com">postitall@txusko.com</a></p>
+                </div>
+                <div class="col-lg-8">
+                    <ul class="list-inline banner-social-buttons">
+                        <li>
+                            <a href="https://twitter.com/txusko" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/javifilella" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/txusko" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/+JaviFilella" class="btn btn-secondary btn-lg" role="button"><i class="fa fa-google fa-fw"></i> <span class="network-name">Google +</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.banner -->
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="index.html">Post It All!</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#home">Jquery plugin</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="extension.html">Chrome extension</a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted small">&copy; 2015 by Javi Filella.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="libs/jquery/dist/jquery.min.js"></script>
+    <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="libs/trumbowyg/dist/trumbowyg.min.js"></script>
+    <script src="libs/minicolors/jquery.minicolors.min.js"></script>
+    <script src="dist/jquery.postitall.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/plugin.js"></script>
+
+    <script src="//google-code-prettify.googlecode.com/svn/loader/prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css" defer="defer"></script>
+
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+
 </html>
-
-
