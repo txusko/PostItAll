@@ -8,6 +8,9 @@ http://postitall.txusko.com/
 jQuery plugin for adding sticky notes in your webpage.
 http://postitall.txusko.com/plugin.html
 
+####Install with bower
+$ bower install postitall
+
 ###Chrome extension
 
 Extension for add sticky notes to the pages you visit
