@@ -21,14 +21,19 @@ _Dual-licensed under the MIT and GPL Version 2 licenses_
 
 ## External libraries & plugins
 
-jQuery JavaScript Library (https://github.com/jquery/jquery)
+###Dependencies
+jQuery JavaScript Library
+https://github.com/jquery/jquery
 
-The official jQuery user interface library (https://github.com/jquery/jquery-ui)
+###Aditional features
+Jquery UI : The jQuery User Inteface. With this plugin you will improve the usage in the drag and resize note feature.
+https://github.com/jquery/jquery-ui
 
-Trumbowyg - A lightweight and amazing WYSIWYG JavaScript editor (https://github.com/Alex-D/Trumbowyg)
+Trumbowyg : A lightweight WYSIWYG editor. Whit this plugin you will be able to edit the notes content with an integrated html5 editor.
+https://github.com/Alex-D/Trumbowyg
 
-jQuery MiniColors Plugin (https://github.com/claviska/jquery-miniColors)
+Minicolors : A Tiny Color Picker. Whit this plugin you will be able to change background and text note color with a color picker.
+https://github.com/claviska/jquery-miniColors
 
-For the demo layout:
-
+###For the examples layout:
 Bootstrap - The most popular HTML, CSS, and JavaScript framework for developing responsive, mobile first projects on the web (https://github.com/twbs/bootstrap)

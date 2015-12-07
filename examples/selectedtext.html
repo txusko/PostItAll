@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Post It All! - Customizable sticky notes for the web.">
+    <meta name="author" content="Javi Filella">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Post It All! Sticky notes for the web | Dashboard</title>
+
+    <link href="../libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../libs/jquery-ui/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="../libs/trumbowyg/dist/ui/trumbowyg.css">
+    <link rel="stylesheet" href="../libs/minicolors/jquery.minicolors.css">
+    <link rel="stylesheet" href="../dist/jquery.postitall.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/cover.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+
+                <nav class="navbar navbar-dark navbar-light navbar-fixed-top">
+                    <div class="container">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item navbar-brand"><a href="#" id="idTitle">Post It All - Examples</a></li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="basic.html">Basic</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="selectedtext.html">Selected text</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="tutorial.html">Tutorial</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="localStorage.html">Local storage</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="externalStorage.html">External storage</a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav pull-right">
+                            <li class="nav-item active">
+                              <a class="nav-link" href="../plugin.html#home"><i class="fa fa-arrow-left"></i> Back to jquery plugin</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <div class="container">
+
+                    <div class="starter-template">
+                        <h1>Create note from selected text</h1>
+                        <p class="lead">Select the text in this page and create a new note.<br>You can use the selected text as a string or embeed the html content.</p>
+                        <button class="btn btn-primary" id="idStart">New note with selected text</button>
+                        <button class="btn btn-info" id="idStart2">New note with selected html</button>
+                    </div>
+
+                </div><!-- /.container -->
+
+                <div class="mastfoot">
+                    <div class="inner">
+                        <p>&copy; 2015 <a href="http://postitall.txusko.com">Post It All!</a> by <a href="http://twitter.com/txusko">Javi Filella</a>.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../libs/jquery/dist/jquery.min.js"></script>
+    <script src="../libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../libs/trumbowyg/dist/trumbowyg.min.js"></script>
+    <script src="../libs/minicolors/jquery.minicolors.min.js"></script>
+    <script src="../dist/jquery.postitall.js"></script>
+    <script src="../js/app.js"></script>
+
+
+    <script>
+    //http://stackoverflow.com/questions/5379120/get-the-highlighted-selected-text
+    function getSelectionText() {
+        var text = "";
+        if (window.getSelection) {
+            text = window.getSelection().toString();
+        } else if (document.selection && document.selection.type != "Control") {
+            text = document.selection.createRange().text;
+        }
+        return text;
+    }
+
+    //http://stackoverflow.com/questions/5083682/get-selected-html-in-browser-via-javascript
+    function getHTMLOfSelection () {
+      var range;
+      if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange();
+        return range.htmlText;
+      }
+      else if (window.getSelection) {
+        var selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+          range = selection.getRangeAt(0);
+          var clonedSelection = range.cloneContents();
+          var div = document.createElement('div');
+          div.appendChild(clonedSelection);
+          return div.innerHTML;
+        }
+        else {
+          return '';
+        }
+      }
+      else {
+        return '';
+      }
+    }
+
+    //http://stackoverflow.com/questions/12603397/calculate-width-height-of-the-selected-text-javascript
+    function getSelectionDimensions() {
+        var sel = document.selection, range;
+        var width = 0, height = 0;
+        if (sel) {
+            if (sel.type != "Control") {
+                range = sel.createRange();
+                width = range.boundingWidth;
+                height = range.boundingHeight;
+            }
+        } else if (window.getSelection) {
+            sel = window.getSelection();
+            if (sel.rangeCount) {
+                range = sel.getRangeAt(0).cloneRange();
+                if (range.getBoundingClientRect) {
+                    var rect = range.getBoundingClientRect();
+                    width = rect.right - rect.left;
+                    height = rect.bottom - rect.top;
+                }
+            }
+        }
+        return { width: width , height: height };
+    }
+
+    $(document).ready(function() {
+        $('#idStart').click(function(e) {
+            var text = getSelectionText();
+            if(text != "") {
+                $.PostItAll.new({
+                    content: text,
+                    posX: e.pageX,
+                    posY: e.pageY + 20
+                });
+            } else {
+                alert('Select some text in page!');
+            }
+        });
+        $('#idStart2').click(function(e) {
+            var text = getHTMLOfSelection();
+            var dim = getSelectionDimensions();
+            if(text != "") {
+                $.PostItAll.new({
+                    width: dim.width,
+                    content: text,
+                    posX: e.pageX,
+                    posY: e.pageY + 20
+                });
+            } else {
+                alert('Select some text in page!');
+            }
+        });
+    });
+    </script>
+
+  </body>
+</html>
