@@ -26,7 +26,7 @@ $(document).ready(function() {
 
 var idNoteBottom, objNoteBottom;
 var doNotPress = function() {
-    $.PostItAll.new({
+    /*$.PostItAll.new({
         height: 170,
         content: "<h3 style='text-align:center'>Do not press the button!!!</h3>",
         style: {
@@ -53,5 +53,5 @@ var doNotPress = function() {
         //console.log(id, options, obj);
         idNoteBottom = id;
         objNoteBottom = obj;
-    });
+    });*/
 };

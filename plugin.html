@@ -147,7 +147,7 @@
                         <p><a href="">Download the plugin</a> from the GitHub page and include the css and the js files as usual.</p>
 <pre class="prettyprint lang-html">
 &lt;!-- CSS --&gt;
-&lt;link rel="stylesheet" href="libs/jquery.postitall.css"&gt;
+&lt;link rel="stylesheet" href="dist/jquery.postitall.css"&gt;
 
 &lt;!-- JS --&gt;
 &lt;script src="libs/jquery/dist/jquery.min.js"&gt;&lt;/script&gt;
@@ -180,12 +180,14 @@
                         <h4>Install with bower</h4>
                         <p>Also, you can install PostItAll using <a href="http://bower.io/">Bower</a></p>
 <pre class="prettyprint lang-bsh">
-$ bower install jquery postitall
+$ bower install postitall
 </pre>
                         <p>And the plugins too:</p>
 <pre class="prettyprint lang-sh">
 $ bower install jquery-ui trumbowyg minicolors
 </pre>
+
+                        <p class="text-muted">* Remember to change references to your bower destination directory</p>
 
                         <a id="doc_usage" class="anchor">&nbsp;</a>
                         <h3>Usage</h3>
@@ -361,7 +363,7 @@ $.fn.postitall.defaults = {
                         <h2>Functions / Methods</h2>
                         <hr>
                         <p>As we said before, you have two ways to call note actions: by calling global or plugin methods.</p>
-                        <p>This is the relation af all the actions with his calls and a brief description of each one:</p>
+                        <p>This is the relation of all the actions with his calls and a brief description of each one:</p>
                         <div class="row">
                             <div class="col-md-12">
                                 <table class="table table-striped">
@@ -1049,42 +1051,49 @@ $.PostItAll.new({
                 <a id="doc_changeoptions" class="anchor">&nbsp;</a>
                 <h3>Change note options</h3>
                 <hr>
-                <p class="lead">You can get or set options of the notes on the fly.</p>
+                <p class="lead">You can get or set the options of your notes on the fly.</p>
                 <div class="row">
                     <div class="col-lg-8">
                         <h5>Code</h5>
 <pre class="prettyprint lang-html">
 &lt;!-- HTML --&gt;
 &lt;a href="#" id="newNote1"&gt;Create a new note&lt;/a&gt;
-&lt;a href="#" id="idGetCreated"&gt;Get note options&lt;/a&gt;
 &lt;a href="#" id="idSetCreated"&gt;Change note options&lt;/a&gt;
+&lt;a href="#" id="idGetCreated"&gt;Get note options&lt;/a&gt;
 &lt;div id="idDivOptions"&gt;&lt;/div&gt;
 
 &lt;!-- JS --&gt;
 &lt;script&gt;
 $(document).ready(function() {
     var idNewNote = null;
+    //Example : Create a new note and refresh note options
     $('#newNote1').click(function(e) {
-        if(idNewNote == null) {
-            $.PostItAll.new({
-                content: 'This is a &lt;b&gt;new&lt;/b&gt; note!',
-                onCreated: function(id, options, obj) {
-                    idNewNote = id;
-                },
-                onDelete: function() {
-                    idNewNote = null;
-                }
-            });
+        if(idNewNote != null) {
+            $.PostItAll.destroy(idNewNote);
+            idNewNote = null;
         }
+        $.PostItAll.new({
+            content: 'This is a &lt;b&gt;new&lt;/b&gt; note!',
+            onCreated: function(id, options, obj) {
+                idNewNote = id;
+                $('#idGetCreated').click();
+            },
+            onDelete: function() {
+                idNewNote = null;
+            }
+        });
         e.preventDefault();
     });
+    //Example : Get and View options
     $('#idGetCreated').click(function(e) {
         if(idNewNote != null) {
-            $('#idDivOptions').text($(idNewNote).postitall('options'));
+            var options = $(idNewNote).postitall('options');
+            $('#idDivOptions').text(JSON.stringify(options));
             //$('#idDivOptions').text($.PostItAll.options(idNewNote));
         }
         e.preventDefault();
     });
+    //Example : Change options
     $('#idSetCreated').click(function(e) {
         if(idNewNote != null) {
             var options = {
@@ -1121,7 +1130,7 @@ $(document).ready(function() {
                 <a id="doc_showhide1" class="anchor">&nbsp;</a>
                 <h3>Show hide and remove notes</h3>
                 <hr>
-                <p class="lead">You can show or hide notes globally or by note id.</p>
+                <p class="lead">You can show, hide or remove all the notes by calling the show(), hide() or remove() global methods without params.</p>
                 <div class="row">
                     <div class="col-lg-8">
                         <h5>Code</h5>
@@ -1143,7 +1152,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
     $('#idDeleteAll').click(function(e) {
-        $.PostItAll.delete();
+        $.PostItAll.remove();
         e.preventDefault();
     });
 });
@@ -1168,7 +1177,7 @@ $(document).ready(function() {
                 <a id="doc_showhide2" class="anchor">&nbsp;</a>
                 <h3>Show hide and remove specific note</h3>
                 <hr>
-                <p class="lead">Show hide and remove a specific note.</p>
+                <p class="lead">Show, hide and remove a specific note.</p>
                 <div class="row">
                     <div class="col-lg-8">
                         <h5>Code</h5>
@@ -1183,18 +1192,20 @@ $(document).ready(function() {
 &lt;script&gt;
 $(document).ready(function() {
     var idNewNote = null;
-    $('#newNote1, #newNote2').click(function(e) {
-        if(idNewNote == null) {
-            $.PostItAll.new({
-                content: 'This is a &lt;b&gt;new&lt;/b&gt; note!',
-                onCreated: function(id, options, obj) {
-                    idNewNote = id;
-                },
-                onDelete: function() {
-                    idNewNote = null;
-                }
-            });
+    $('#newNote2').click(function(e) {
+        if(idNewNote != null) {
+            $.PostItAll.destroy(idNewNote);
+            idNewNote = null;
         }
+        $.PostItAll.new({
+            content: 'This is a &lt;b&gt;new&lt;/b&gt; note!',
+            onCreated: function(id, options, obj) {
+                idNewNote = id;
+            },
+            onDelete: function() {
+                idNewNote = null;
+            }
+        });
         e.preventDefault();
     });
     $('#idShowCreated').click(function(e) {
@@ -1367,7 +1378,7 @@ $.PostItAll.length(function(total) {
                             <a href="extension.html">Chrome extension</a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted small">&copy; 2015 by Javi Filella.</p>
+                    <p class="copyright text-muted small">&copy; 2015 by <a href="https://about.me/txusko">Javi Filella</a>.</p>
                 </div>
             </div>
         </div>

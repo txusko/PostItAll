@@ -1,4 +1,4 @@
-const SERVER_URL = "http://localhost/~txusko/PostItAll/dist/noteController.php";
+const SERVER_URL = "../dist/noteController.php";
 
 var guid = function() {
   function s4() {

@@ -179,18 +179,16 @@ $(document).ready(function() {
             $.PostItAll.destroy(idNewNote);
             idNewNote = null;
         }
-        if(idNewNote == null) {
-            $.PostItAll.new({
-                content: 'This is a <b>new</b> note!',
-                onCreated: function(id, options, obj) {
-                    idNewNote = id;
-                    $('#idGetCreated').click();
-                },
-                onDelete: function() {
-                    idNewNote = null;
-                }
-            });
-        }
+        $.PostItAll.new({
+            content: 'This is a <b>new</b> note!',
+            onCreated: function(id, options, obj) {
+                idNewNote = id;
+                $('#idGetCreated').click();
+            },
+            onDelete: function() {
+                idNewNote = null;
+            }
+        });
         e.preventDefault();
     });
     //Show note
@@ -209,7 +207,7 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
-    //Example : Get options / Change options
+    //Example : Get and View options
     $('#idGetCreated').click(function(e) {
         if(idNewNote != null) {
             var options = $(idNewNote).postitall('options');
@@ -218,6 +216,7 @@ $(document).ready(function() {
         }
         e.preventDefault();
     });
+    //Example : Change options
     $('#idSetCreated').click(function(e) {
         if(idNewNote != null) {
             var options = {
@@ -228,8 +227,8 @@ $(document).ready(function() {
                 },
             };
             $('#idDivOptions').text('');
-            $(idNewNote).postitall('options', options);
-            //$.PostItAll.options(idNewNote, options);
+            //$(idNewNote).postitall('options', options);
+            $.PostItAll.options(idNewNote, options);
         }
         e.preventDefault();
     });
