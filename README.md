@@ -7,7 +7,9 @@ jQuery plugin for adding sticky notes in your webpage.
 http://postitall.txusko.com/plugin.html
 
 ###Install with bower
-**$** bower install postitall
+```shell
+$ bower install postitall
+```
 
 ##Chrome extension
 
