@@ -1,19 +1,16 @@
-##Post It All!
-
+#Post It All!
 Customizable sticky notes for the web. 
 
-http://postitall.txusko.com/
-
-###jQuery Plugin
+##jQuery Plugin
 
 jQuery plugin for adding sticky notes in your webpage.
 
 http://postitall.txusko.com/plugin.html
 
-####Install with bower
-**$ bower install postitall**
+###Install with bower
+**$** bower install postitall
 
-###Chrome extension
+##Chrome extension
 
 Extension for add sticky notes to the pages you visit
 
@@ -49,3 +46,5 @@ https://github.com/twbs/bootstrap
 _Copyright Javi Filella (http://www.txusko.com/)_
 
 _Dual-licensed under the MIT and GPL Version 2 licenses_
+
+http://postitall.txusko.com/
