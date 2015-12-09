@@ -1,0 +1,43 @@
+{
+  "name": "postitall",
+  "version": "1.0.0",
+  "description": "Customizable sticky notes for the web.",
+  "main": "dist/jquery.postitall.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/txusko/PostItAll.git"
+  },
+  "keywords": [
+    "sticky",
+    "notes",
+    "postitall",
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  },
+  "devDependencies": {
+    "jquery-ui": "~1.11.4",
+    "minicolors": "~2.1.12",
+    "trumbowyg": "~2.0.0-beta.5",
+    "bootstrap": "~4.0.0",
+    "fontawesome": "~4.4.0"
+  },
+  "files": [
+    "README.md",
+    "dist/"
+  ],
+  "author": "Javi Filella",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/txusko/PostItAll/issues"
+  },
+  "homepage": "https://github.com/txusko/PostItAll#readme"
+}
