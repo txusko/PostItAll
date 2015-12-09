@@ -1,54 +1,63 @@
 <?php
 
+/**
+* Class PostItAll
+*/
 class PostItAll
 {
 	//DB Configuration
-	private $db_host 		= "127.0.0.1";
-	private $db_user 		= "root";
-	private $db_password 	= "";
+	private $db_host		= "127.0.0.1";
+	private $db_user		= "root";
+	private $db_password	= "";
 	private $db_database	= "test";
 	private $db_port		= "3306";
-	private $mysqli 		= null;
+	private $mysqli			= null;
 
+	//public properties
 	public $iduser 	= -1;
 	public $option 	= "";
-    public $key     = "";
+	public $key     = "";
 	public $content = "";
 
+	//Constructor
 	function __construct() {
 		//Connection
 		$this->mysqli = mysqli_connect($this->db_host, $this->db_user, $this->db_password, $this->db_database, $this->db_port) or die("Error " . mysqli_error($link));
-
 		//Create table
 		$this->createTable() or die("Table creation error " . mysqli_error($link));
-    }
+	}
 
-
+	//Destructor
     function __destruct() {
         //Close connection
 		$this->mysqli->close();
     }
 
+	//Parse request
     private function getRequest() {
 		//Option
-		if(!isset($_REQUEST["option"]) || !$_REQUEST["option"])
+		if(!isset($_REQUEST["option"]) || !$_REQUEST["option"]) {
 			die("No option");
+		}
 		$this->option = mysqli_escape_string($this->mysqli, $_REQUEST["option"]);
-		//Id user
+		//Iduser
 		$this->iduser = -1;
-		if(isset($_REQUEST["iduser"]) && $_REQUEST["iduser"])
+		if(isset($_REQUEST["iduser"]) && $_REQUEST["iduser"]) {
 			$this->iduser = mysqli_escape_string($this->mysqli, $_REQUEST["iduser"]);
-        //Content
-        $this->key = "";
-        if(isset($_REQUEST["key"]) && $_REQUEST["key"])
-            $this->key = mysqli_escape_string($this->mysqli, $_REQUEST["key"]);
-        //Content
+		}
+		//Key
+		$this->key = "";
+		if(isset($_REQUEST["key"]) && $_REQUEST["key"]) {
+		    $this->key = mysqli_escape_string($this->mysqli, $_REQUEST["key"]);
+		}
+		//Content
 		$this->content = "";
 		if(isset($_REQUEST["content"]) && $_REQUEST["content"]) {
 			$this->content = mysqli_escape_string($this->mysqli, $_REQUEST["content"]);
-        }
+		}
     }
 
+	//Create table
 	private function createTable() {
 		$createdb = "CREATE TABLE IF NOT EXISTS `postitall` (
                       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -60,7 +69,8 @@ class PostItAll
 		return $this->mysqli->query($createdb);
 	}
 
-   	public function main() {
+	//Main method
+	public function main() {
         $error = false;
         $ret = "";
 
@@ -71,8 +81,13 @@ class PostItAll
 
         switch ($this->option) {
 
-			case 'remove':
-				$ret = $this->removeNote($this->iduser, $this->key);
+			case 'test':
+				if($this->mysqli != null) {
+					$ret = "test ok";
+				} else {
+					$error = true;
+					$ret = "test ko";
+				}
 				break;
 
             case 'getlength':
@@ -91,6 +106,10 @@ class PostItAll
             case 'key':
                 $ret = $this->key($this->iduser, $this->key);
                 break;
+
+			case 'remove':
+				$ret = $this->removeNote($this->iduser, $this->key);
+				break;
 
 			default:
                 $error = true;
