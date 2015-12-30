@@ -28,6 +28,15 @@
 *
 */
 
+//Delay repetitive actions
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 (function ($, $localStorage) {
     "use strict";
 
@@ -526,53 +535,54 @@
                     return;
                 }
                 for (var i = 1; i <= len; i++) {
-                  storageManager.key(i, function(key) {
-                    storageManager.getByKey(key, function(o) {
-                      if (o != null && $('#id' + key).length <= 0) {
-                        //console.log('o', key, o);
-                        if($.fn.postitall.globals.filter == "domain")
-                          finded = (o.domain === window.location.origin);
-                        else if($.fn.postitall.globals.filter == "page")
-                          finded = (o.domain === window.location.origin && o.page === window.location.pathname);
-                        else
-                          finded = true;
-                        if(finded) {
-                            if(typeof callbacks === 'object') {
-                                console.log(callbacks);
-                                if(callbacks.onCreated !== undefined) {
-                                    o.onCreated = callbacks.onCreated;
-                                }
-                                if(callbacks.onChange !== undefined) {
-                                    o.onChange = callbacks.onChange;
-                                }
-                                if(callbacks.onSelect !== undefined) {
-                                    o.onSelect = callbacks.onSelect;
-                                }
-                                if(callbacks.onDblClick !== undefined) {
-                                    o.onDblClick = callbacks.onDblClick;
-                                }
-                                if(callbacks.onRelease !== undefined) {
-                                    o.onRelease = callbacks.onRelease;
-                                }
-                                if(callbacks.onDelete !== undefined) {
-                                    o.onDelete = callbacks.onDelete;
+                    storageManager.key(i, function(key) {
+                        storageManager.getByKey(key, function(o) {
+                            if (o != null && $('#id' + key).length <= 0) {
+                                //console.log($.fn.postitall.globals.filter, o.domain, window.location.origin, window.location.pathname);
+                                //console.log('o', key, o);
+                                if($.fn.postitall.globals.filter == "domain")
+                                    finded = (o.domain === window.location.origin);
+                                else if($.fn.postitall.globals.filter == "page")
+                                    finded = (o.domain === window.location.origin && o.page === window.location.pathname);
+                                else
+                                    finded = true;
+                                if(finded) {
+                                    if(typeof callbacks === 'object') {
+                                        //console.log(callbacks);
+                                        if(callbacks.onCreated !== undefined) {
+                                            o.onCreated = callbacks.onCreated;
+                                        }
+                                        if(callbacks.onChange !== undefined) {
+                                            o.onChange = callbacks.onChange;
+                                        }
+                                        if(callbacks.onSelect !== undefined) {
+                                            o.onSelect = callbacks.onSelect;
+                                        }
+                                        if(callbacks.onDblClick !== undefined) {
+                                            o.onDblClick = callbacks.onDblClick;
+                                        }
+                                        if(callbacks.onRelease !== undefined) {
+                                            o.onRelease = callbacks.onRelease;
+                                        }
+                                        if(callbacks.onDelete !== undefined) {
+                                            o.onDelete = callbacks.onDelete;
+                                        }
+                                    }
+                                    o.flags.highlight = false;
+                                    if(highlight !== undefined && o.id == highlight) {
+                                        //console.log('highlight note', highlight);
+                                        o.flags.highlight = true;
+                                    }
+                                    $.PostItAll.new(o);
                                 }
                             }
-                            o.flags.highlight = false;
-                            if(highlight !== undefined && o.id == highlight) {
-                                //console.log('highlight note', highlight);
-                                o.flags.highlight = true;
+                            if(iteration == (len - 1) && callback != null) {
+                                if(typeof callback === 'function') callback();
+                                callback = null;
                             }
-                            $.PostItAll.new(o);
-                        }
-                      }
-                      if(iteration == (len - 1) && callback != null) {
-                          if(typeof callback === 'function') callback();
-                          callback = null;
-                      }
-                      iteration++;
+                            iteration++;
+                        });
                     });
-                  });
                 }
             });
         },
@@ -1025,7 +1035,7 @@
             var contentHeight = parseInt(obj.find('.PIAeditable').height(), 10) + toolBarHeight,
                 posX = obj.css('left'),
                 posY = obj.css('top'),
-                divWidth = parseInt(obj.width(), 10) + parseInt(obj.css('padding-left'),10) + parseInt(obj.css('padding-right'),10) + 2,
+                divWidth = parseInt(obj.css('width'), 10),//parseInt(obj.width(), 10) + parseInt(obj.css('padding-left'),10) + parseInt(obj.css('padding-right'),10) + 2,
                 divHeight = parseInt(obj.css('height'), 10),
                 minDivHeight = options.minHeight;
             var htmlEditorBarHeight = parseInt(obj.find('.trumbowyg-button-pane').height(), 10);
@@ -1068,9 +1078,9 @@
                 for(var i = 1; i <= items; i++) {
                     (function(i) {
                         storageManager.get(i, function(content) {
-                            console.log('getIndex.get', paso, i, content);
+                            //console.log('getIndex.get', paso, i, content);
                             if(!paso && content == "" && $( "#idPostIt_" + i ).length <= 0) {
-                                console.log('nou index', i);
+                                //console.log('nou index', i);
                                 paso = true;
                             }
                             if(callback != null && (paso || i >= items)) {
@@ -1899,6 +1909,7 @@
             }
 
             //Fixed
+            //console.log($.fn.postitall.globals.fixed, options.features.fixed);
             if($.fn.postitall.globals.fixed) {
                 if(options.features.fixed) {
                     toolbar.append(
@@ -1982,7 +1993,7 @@
                 'class': 'PIAeditable PIAcontent',
                 //Reset herisated contenteditable styles
                 //color:'+options.style.textcolor+';min-width:99%;
-                'style': 'width: auto;height: auto;padding: auto;border-color: transparent;min-width:' + (options.width) + 'px;box-shadow:none;min-height:' + (options.minHeight - 100) + 'px;'
+                'style': 'width: auto;height: auto;padding: 10px;border-color: transparent;min-width:' + (options.minWidth) + 'px;box-shadow:none;min-height:' + (options.minHeight - 100) + 'px;'
             }).change(function (e) {
                 if(!$.fn.postitall.globals.editable || !options.features.editable) {
                     return;
@@ -2613,8 +2624,8 @@
             }
 
             //Select arrow in front
-            if( ($.fn.postitall.globals.addArrow == "front" && (options.features.addArrow == "all" || options.features.addArrow == "front"))
-            || ($.fn.postitall.globals.addArrow == "all" && (options.features.addArrow == "all" || options.features.addArrow == "front")) ) {
+            if( ($.fn.postitall.globals.addArrow == "front" || $.fn.postitall.globals.addArrow == "all")
+            || (options.features.addArrow == "all" || options.features.addArrow == "front") ) {
                 var checks = "<div class='PIAicon icon_box icon_box_top selectedArrow_"+index+"' data-index='"+index+"' data-value='top'><span class='ui-icon ui-icon-triangle-1-n'></span></div>";
                 checks += "<div class='PIAicon icon_box icon_box_right selectedArrow_"+index+"' data-index='"+index+"' data-value='right'><span class='ui-icon ui-icon-triangle-1-e'></span></div>";
                 checks += "<div class='PIAicon icon_box icon_box_bottom selectedArrow_"+index+"' data-index='"+index+"' data-value='bottom'><span class='ui-icon ui-icon-triangle-1-s'></span></div>";
@@ -2723,7 +2734,7 @@
             $("#pia_editable_" + index).bind('paste', function (e){
                 var element = this;
                 $("#pia_editable_" + index).css("opacity", "0");
-                delay(function(){
+                setTimeout(function(){
                     var text = "";
                     if (!$.fn.postitall.globals.pasteHtml || !options.features.pasteHtml) {
                         //Text format
@@ -2843,15 +2854,6 @@
         }
         return $el.css('cursor', opt.cursor).on("mousedown", onMouseDown).on("mouseup", onMouseUp);
     };
-
-    //Delay repetitive actions
-    var delay = (function(){
-      var timer = 0;
-      return function(callback, ms){
-        clearTimeout (timer);
-        timer = setTimeout(callback, ms);
-      };
-    })();
 
     /********* STORAGE ************/
 

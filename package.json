@@ -1,6 +1,6 @@
 {
   "name": "postitall",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Customizable sticky notes for the web.",
   "main": "dist/jquery.postitall.js",
   "directories": {
@@ -31,10 +31,16 @@
     "fontawesome": "~4.4.0"
   },
   "files": [
-    "README.md",
-    "dist/"
+    "dist/",
+    "README.md"
   ],
-  "author": "Javi Filella",
+  "authors": [
+    {
+      "name": "Javi Filella (@txusko)",
+      "email": "postitall@txusko.com",
+      "homepage": "http://txusko.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/txusko/PostItAll/issues"

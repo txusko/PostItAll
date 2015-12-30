@@ -14,13 +14,17 @@ $(document).ready(function() {
             self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
             self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
         ];
-
-        var newPos = scrollPosition[1] - $('#home').height() + 30;
-        if((scrollPosition[1] + $(window).height()) > $('#source').offset().top) {
+        var magicNumber = 25;
+        var newPos = scrollPosition[1] - $('#home').height() + magicNumber;
+        var barHeight = $('.fixit').innerHeight();
+        var footerHeight = $('#idSource').innerHeight() + $('#idAbout').innerHeight() + $('#idFooter').innerHeight();
+        if((scrollPosition[1] + $(window).height()) > $('#idSource').offset().top) {
             //Raised bottom div
-            newPos = newPos - ((scrollPosition[1] + $(window).height()) - $('#source').offset().top);
+            //newPos = newPos - ((scrollPosition[1] + $(window).height()) - $('#idSource').offset().top);
+            newPos = $(document).height() - $(window).height() - footerHeight - barHeight + (magicNumber + $('idNavBar').innerHeight());
         }
-        if(scrollPosition[1] > ($('#home').height() - 30))
+        console.log('newPos', newPos);
+        if(scrollPosition[1] > ($('#home').height() - magicNumber))
             $('.fixit').css('top', newPos);
         else
             $('.fixit').css('top', '');
