@@ -41,7 +41,7 @@ var delay = (function(){
     "use strict";
 
     // Debug
-    var debugging = true; // or true
+    var debugging = false; // or true
     if (typeof console === "undefined") {
         console = {
             log: function () { return undefined; }
@@ -207,6 +207,7 @@ var delay = (function(){
         editable        : true,         //Set contenteditable and enable changing note content
         changeoptions   : true,         //Set options feature on or off
         blocked         : true,         //Postit can not be modified
+        hidden          : true,         //The note can be hidden
         minimized       : true,         //true = minimized, false = maximixed
         expand          : true,         //Expand note
         fixed           : true,         //Allow to fix the note in page
@@ -236,8 +237,8 @@ var delay = (function(){
         right           : '',                       //x coordinate (from right). This property invalidate posX
         height          : 200,                      //Note total height
         width           : 160,                      //Note total width
-        minHeight       : 210,                      //Note resizable min-width
-        minWidth        : 170,                      //Note resizable min-height
+        minHeight       : 200,                      //Note resizable min-width
+        minWidth        : 160,                      //Note resizable min-height
         oldPosition     : {},                       //Position when minimized/collapsed (internal use)
         //Config note style
         style : {
@@ -258,6 +259,7 @@ var delay = (function(){
             expand          : false,                //true = Expanded note / false = normal
             fixed           : false,                //Set position fixed
             highlight       : false,                //Higlight note
+            hidden          : false,                //Hidden note
         },
         //Attach the note to al html element
         attachedTo : {
@@ -568,10 +570,12 @@ var delay = (function(){
                                             o.onDelete = callbacks.onDelete;
                                         }
                                     }
-                                    o.flags.highlight = false;
-                                    if(highlight !== undefined && o.id == highlight) {
-                                        //console.log('highlight note', highlight);
-                                        o.flags.highlight = true;
+                                    if(o.flags !== undefined) {
+                                        o.flags.highlight = false;
+                                        if(highlight !== undefined && o.id == highlight) {
+                                            console.log('highlight note', highlight);
+                                            o.flags.highlight = true;
+                                        }
                                     }
                                     $.PostItAll.new(o);
                                 }
@@ -674,8 +678,9 @@ var delay = (function(){
                 }
             }
             //TODO : Revisar
-            if(delStorage && $.fn.postitall.globals.savable) {
+            if(delStorage && delDomain !== "" && delDomain !== undefined) { //&& $.fn.postitall.globals.savable
                 //Storage notes
+                console.log('clearStorage',delDomain);
                 $.PostItAll.clearStorage(delDomain);
             }
         },
@@ -868,7 +873,7 @@ var delay = (function(){
         saveOptions : function(options, callback) {
             if(options === undefined)
                 options = this.options;
-            //console.log('saveOptions', options.posX, options.posY);
+            console.log('saveOptions', options.posX, options.posY, options.width, options.height);
             if ($.fn.postitall.globals.savable || options.features.savable) {
                 //console.log(options);
                 storageManager.add(options, function(error) {
@@ -946,14 +951,20 @@ var delay = (function(){
         hide : function(id) {
             //hide object
             if($($.fn.postitall.globals.prefix + id).length) {
+                var options = $($.fn.postitall.globals.prefix + id).data('PIA-options');
+                options.flags.hidden = true;
                 $($.fn.postitall.globals.prefix + id).slideUp();
+                this.saveOptions(options);
             }
         },
 
         show : function(id) {
             //show object
             if($($.fn.postitall.globals.prefix + id).length) {
+                var options = $($.fn.postitall.globals.prefix + id).data('PIA-options');
+                options.flags.hidden = false;
                 $($.fn.postitall.globals.prefix + id).slideDown();
+                this.saveOptions(options);
             }
         },
 
@@ -1215,23 +1226,25 @@ var delay = (function(){
                     'border': '1px solid rgb(236, 236, 0)',
                     'box-shadow': 'rgb(192, 195, 155) 1px 1px 10px 3px',
                 });
-                //t.hideArrow();
             }
-            $("#the_lights").fadeTo("fast", 0.6, function() {
-                $("#the_lights").css('display','block');
-                $("#the_lights").css({'height':($(document).height())+'px'});
-                $("#the_lights").data('highlightedId', id);
-                // lock scroll position, but retain settings for later
-                var scrollPosition = [
-                    self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-                    self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
-                ];
-                $('html').data('scroll-position', scrollPosition);
-                $('html').data('previous-overflow', $('html').css('overflow'));
-                $('html').css('overflow', 'hidden');
-                window.scrollTo(scrollPosition[0], scrollPosition[1]);
-                $(window).on('resize', $.proxy(t.resizeAction, t));
-            });
+            setTimeout(function() {
+              $("#the_lights").fadeTo("fast", 0.6, function() {
+                  $("#the_lights").css('display','block');
+                  $("#the_lights").css({'height':($(document).height())+'px'});
+                  $("#the_lights").css({'width':($(document).width())+'px'});
+                  $("#the_lights").data('highlightedId', id);
+                  // lock scroll position, but retain settings for later
+                  var scrollPosition = [
+                      self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+                      self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
+                  ];
+                  $('html').data('scroll-position', scrollPosition);
+                  $('html').data('previous-overflow', $('html').css('overflow'));
+                  $('html').css('overflow', 'hidden');
+                  $(window).on('resize', $.proxy(t.resizeAction, t));
+                  window.scrollTo(scrollPosition[0], scrollPosition[1]);
+              });
+            }, 500);
         },
 
         //Switch lights on & remove highlighted note
@@ -1241,8 +1254,10 @@ var delay = (function(){
             var t = this;
             if(id !== "" && options !== null && options !== undefined) {
                 $("#the_lights").data('highlightedId', '');
-                $($.fn.postitall.globals.prefix + id).css({'z-index': 999995,
+                $($.fn.postitall.globals.prefix + id).css({
+                    'z-index': 999995,
                     'border': '1px solid ' + $($.fn.postitall.globals.prefix + id).css('background-color'),
+                    'box-shadow': '',
                 });
                 if(options.flags.expand) {
                     $('#pia_expand_'+id).click();
@@ -1394,6 +1409,29 @@ var delay = (function(){
             this.setOptions(this.options, true);
         },
 
+        //Scroll to note position
+        scrollToNotePosition : function(tmpTop, tmpHeight, tmpLeft, tmpWidth, callback) {
+            var scrollTop1 = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
+            var scrollBottom1 = scrollTop1 + $(window).height();
+            var scrollTop2 = parseInt(tmpTop, 10);
+            var scrollBottom2 = scrollTop2 + parseInt(tmpHeight,10);
+            var scrollLeft1 = self.pageXOffset || document.documentElement.scrollLeft  || document.body.scrollLeft;
+            var scrollRight1 = scrollLeft1 + $(window).width();
+            var scrollLeft2 = parseInt(tmpLeft, 10);
+            var scrollRight2 = scrollLeft2 + parseInt(tmpWidth,10);
+            //console.log(scrollTop2,scrollTop1,scrollBottom2,scrollBottom1);
+            if(scrollTop2 > scrollTop1 && scrollBottom2 < scrollBottom1 && scrollLeft2 > scrollLeft1 && scrollRight2 < scrollRight1) {
+                if(callback !== undefined) callback();
+            } else {
+                $('html, body').animate({
+                    scrollTop: scrollTop2 - parseInt(tmpHeight,10),
+                    scrollLeft: scrollLeft2 - parseInt(tmpWidth,10)
+                }, 800, function() {
+                    if(callback !== undefined) callback();
+                });
+            }
+        },
+
         //Restore note with options.oldPosition
         restoreOldPosition : function(scrollToNote) {
             if(scrollToNote === undefined)
@@ -1411,17 +1449,7 @@ var delay = (function(){
             }, 500, function() {
                 if(scrollToNote) {
                     if(options.position != "fixed") {
-                        var scrollTop1 = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
-                        var scrollBottom1 = scrollTop1 + $(window).height();
-                        var scrollTop2 = parseInt(options.oldPosition.top, 10);
-                        var scrollBottom2 = scrollTop2 + parseInt(options.height,10);
-                        if(scrollTop2 > scrollTop1 && scrollBottom2 < scrollBottom1) {
-                            ;
-                        } else {
-                            $('html, body').animate({
-                                scrollTop: scrollTop2 - parseInt(options.height,10)
-                            }, 1000);
-                        }
+                        t.scrollToNotePosition(options.oldPosition.top, options.height, options.oldPosition.left, options.width);
                     }
                 }
                 t.showArrow();
@@ -1499,7 +1527,7 @@ var delay = (function(){
             $('#pia_expand_' + index).removeClass('PIAexpand').addClass('PIAmaximize');
             t.hoverOptions(index, false);
             t.saveOldPosition();
-            t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_']);
+            t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_', 'pia_hidden_']);
             t.hideArrow();
             t.switchTrasparentNoteOn();
             t.switchOffLights();
@@ -1533,7 +1561,7 @@ var delay = (function(){
             $('#pia_expand_' + index).removeClass('PIAmaximize').addClass('PIAexpand');
             $($.fn.postitall.globals.prefix + index).css('position', options.position);
             // show toolbar
-            t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_']);
+            t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_', 'pia_hidden_']);
             //restore oldposition
             t.restoreOldPosition();
             //newstate
@@ -1564,7 +1592,7 @@ var delay = (function(){
                 var smallText = $('<div id="pia_minimized_text_'+index+'" class="PIAminimizedText" />').text(txtContent);
                 $('#pia_toolbar_'+index).append(smallText);
                 //hide toolbar
-                t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_']);
+                t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
 
                 //Enable draggable x axis
                 if ($.fn.postitall.globals.draggable && options.features.draggable) {
@@ -1593,7 +1621,7 @@ var delay = (function(){
                 $('#pia_minimize_'+index).removeClass('PIAmaximize').addClass('PIAminimize');
                 options.flags.minimized = false;
                 // show toolbar
-                t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_']);
+                t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
                 $('#pia_minimized_text_'+index).remove();
                 //Remove draggable axis
                 if ($.fn.postitall.globals.draggable && options.features.draggable) {
@@ -1673,7 +1701,7 @@ var delay = (function(){
                 options.flags.fixed = true;
             }
             obj.css('position', options.position);
-            obj.css('left', parseInt(options.posX, 10) + "px");
+            //obj.css('left', parseInt(options.posX, 10) + "px");
             obj.css('top', parseInt(options.posY, 10) + "px");
             //Save features
             t.setOptions(options);
@@ -1817,12 +1845,7 @@ var delay = (function(){
             var options = t.options;
             var index = options.id.toString();
 
-            //Highlight note
-            if(options.flags.highlight) {
-                t.switchOffLights();
-                t.enableKeyboardNav();
-            }
-
+            //Add data to object
             obj.data('PIA-id', index)
                 .data('PIA-initialized', true)
                 .data('PIA-options', options);
@@ -1926,6 +1949,25 @@ var delay = (function(){
                         })
                     );
                 }
+            }
+
+            //Hide
+            if($.fn.postitall.globals.hidden && options.features.hidden) {
+                toolbar.append(
+                    $('<div />', {
+                        'id': 'pia_hidden_' + index,
+                        'class': 'PIAhide PIAicon'
+                    }).click(function(e) {
+                        if(obj.hasClass('PIAdragged')) {
+                            obj.removeClass('PIAdragged');
+                        } else {
+                            t.hide(index);
+                        }
+                        e.preventDefault();
+                    })
+                );
+            } else {
+                options.flags.hidden = false;
             }
 
             //MINIMIZE
@@ -2128,7 +2170,6 @@ var delay = (function(){
                 })
                 .click(function (e) {
                     //var id = $(this).closest('.PIApostit').children().attr('data-id');
-                    console.log('aki');
                     t.switchBackNoteOff('PIAflip2');
                     t.switchOnLights();
                     //t.showArrow();
@@ -2477,7 +2518,7 @@ var delay = (function(){
                 var objeto = $(this);
                 return objeto;
             })*/
-            .on('blur keyup paste input', '[contenteditable]', function () {
+            .on('blur keyup paste input', '[contenteditable]', function (e) {
                 var objeto = $(this);
                 if (objeto.data('before') !== objeto.html()) {
                     delay(function() {
@@ -2488,6 +2529,8 @@ var delay = (function(){
                         objeto.data('before', content);
                         objeto.trigger('change');
                         options.onChange($.fn.postitall.globals.prefix + index);
+                        //TODO : Validar que no es propaguen les tecles a l'aplicacio nativa
+                        e.preventDefault();
                     }, 100);
                 }
                 return objeto;
@@ -2610,7 +2653,7 @@ var delay = (function(){
                 $('#pia_expand_' + options.id).click();
                 delay(function() {
                     $('#pia_editable_' + options.id).focus();
-                },500);
+                }, 500);
             }
             //Postit bloqued?
             if(($.fn.postitall.globals.blocked || options.features.blocked) && options.flags.blocked) {
@@ -2650,69 +2693,75 @@ var delay = (function(){
                 //console.log('aki?', arrowPaso, index, options.style.arrow);
             }
 
+            //Change hidden state if note is higlighted
+            if(options.flags.highlight)
+                options.flags.hidden = false;
+
             //Show postit
-            obj.slideDown(function () {
-                //Rest of actions
-                //Config: text shadow
-                $('#textshadow_' + index).click(function () {
+            if(!options.flags.hidden) {
+                obj.slideDown(function () {
+                    //Rest of actions
+                    //Config: text shadow
+                    $('#textshadow_' + index).click(function () {
 
-                    if ($(this).is(':checked')) {
-                        $(this).closest('.PIApostit').find('.PIAcontent').addClass(t.getTextShadowStyle($('#minicolors_text_' + index).val())).removeClass('dosd');
-                        options.style.textshadow = true;
-                    } else {
-                        $(this).closest('.PIApostit').find('.PIAcontent').addClass('dosd').removeClass('tresd').removeClass('tresdblack');
-                        options.style.textshadow = false;
-                    }
-                    t.setOptions(options, true);
-                });
-                //3d or plain
-                $('#generalstyle_' + index).click(function () {
-                    if ($(this).is(':checked')) {
-                        $($.fn.postitall.globals.prefix + index).removeClass('PIAplainpanel').addClass('PIApanel');
-                        options.style.tresd = true;
-                    } else {
-                        $($.fn.postitall.globals.prefix + index).removeClass('PIApanel').addClass('PIAplainpanel');
-                        options.style.tresd = false;
-                    }
-                    t.setOptions(options, true);
-                });
-                //Background and text color
-                if ($.minicolors) {
-                    //Config: change background-color
-                    $('#minicolors_bg_' + index).minicolors({
-                        //opacity: true,
-                        change: function (hex, rgb) {
-                            console.log(hex, rgb);
-                            $($.fn.postitall.globals.prefix + index).css('background-color', hex);
-                            //$($.fn.postitall.globals.prefix + index).css('opacity', rgb);
-                            options.style.backgroundcolor = hex;
-                            t.setOptions(options, true);
+                        if ($(this).is(':checked')) {
+                            $(this).closest('.PIApostit').find('.PIAcontent').addClass(t.getTextShadowStyle($('#minicolors_text_' + index).val())).removeClass('dosd');
+                            options.style.textshadow = true;
+                        } else {
+                            $(this).closest('.PIApostit').find('.PIAcontent').addClass('dosd').removeClass('tresd').removeClass('tresdblack');
+                            options.style.textshadow = false;
                         }
-                    });
-                    //Config: text color
-                    $('#minicolors_text_' + index).minicolors({
-                        change: function (hex) {
-                            $($.fn.postitall.globals.prefix + index).css('color', hex);
-                            options.style.textcolor = hex;
-                            t.setOptions(options, true);
-                        }
-                    });
-                } else {
-                    $('#minicolors_bg_' + index).change(function () {
-                        $(this).closest('.PIApostit').css('background-color', $(this).val());
-                        options.style.backgroundcolor = $(this).val();
                         t.setOptions(options, true);
                     });
-                    $('#minicolors_text_' + index).change(function () {
-                        $(this).closest('.PIApostit').css('color', $(this).val());
-                        options.style.textcolor = $(this).val();
+                    //3d or plain
+                    $('#generalstyle_' + index).click(function () {
+                        if ($(this).is(':checked')) {
+                            $($.fn.postitall.globals.prefix + index).removeClass('PIAplainpanel').addClass('PIApanel');
+                            options.style.tresd = true;
+                        } else {
+                            $($.fn.postitall.globals.prefix + index).removeClass('PIApanel').addClass('PIAplainpanel');
+                            options.style.tresd = false;
+                        }
                         t.setOptions(options, true);
                     });
-                }
+                    //Background and text color
+                    if ($.minicolors) {
+                        //Config: change background-color
+                        $('#minicolors_bg_' + index).minicolors({
+                            //opacity: true,
+                            change: function (hex, rgb) {
+                                console.log(hex, rgb);
+                                $($.fn.postitall.globals.prefix + index).css('background-color', hex);
+                                //$($.fn.postitall.globals.prefix + index).css('opacity', rgb);
+                                options.style.backgroundcolor = hex;
+                                t.setOptions(options, true);
+                            }
+                        });
+                        //Config: text color
+                        $('#minicolors_text_' + index).minicolors({
+                            change: function (hex) {
+                                $($.fn.postitall.globals.prefix + index).css('color', hex);
+                                options.style.textcolor = hex;
+                                t.setOptions(options, true);
+                            }
+                        });
+                    } else {
+                        $('#minicolors_bg_' + index).change(function () {
+                            $(this).closest('.PIApostit').css('background-color', $(this).val());
+                            options.style.backgroundcolor = $(this).val();
+                            t.setOptions(options, true);
+                        });
+                        $('#minicolors_text_' + index).change(function () {
+                            $(this).closest('.PIApostit').css('color', $(this).val());
+                            options.style.textcolor = $(this).val();
+                            t.setOptions(options, true);
+                        });
+                    }
 
-                //Autoresize to fit content when content load is done
-                t.autoresize();
-            });
+                    //Autoresize to fit content when content load is done
+                    t.autoresize();
+                });
+            }
 
             //Hover options
             if(!options.flags.minimized && !options.flags.expand && !options.flags.blocked) {
@@ -2779,6 +2828,13 @@ var delay = (function(){
                 t.saveOptions(options);
                 //OnCreated event (id, options, obj)
                 options.onCreated($.fn.postitall.globals.prefix + index, options, obj);
+                //Highlight note
+                if(options.flags.highlight) {
+                    t.scrollToNotePosition(options.posY, options.height, options.posX, options.width, function() {
+                        t.switchOffLights();
+                        t.enableKeyboardNav();
+                    });
+                }
             },200);
 
             //chaining

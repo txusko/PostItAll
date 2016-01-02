@@ -23,7 +23,7 @@ $(document).ready(function() {
             //newPos = newPos - ((scrollPosition[1] + $(window).height()) - $('#idSource').offset().top);
             newPos = $(document).height() - $(window).height() - footerHeight - barHeight + (magicNumber + $('idNavBar').innerHeight());
         }
-        console.log('newPos', newPos);
+        //console.log('newPos', newPos);
         if(scrollPosition[1] > ($('#home').height() - magicNumber))
             $('.fixit').css('top', newPos);
         else
@@ -39,11 +39,11 @@ $(document).ready(function() {
         var min = 4, max = 8;
         var noteNumber = randomIntFromInterval(min, max);
         var posX = 10, posY = 10;
-        console.log($(window).height(), $(window).width());
+        //console.log($(window).height(), $(window).width());
         for(i=min;i<=max;i++) {
             posX = randomIntFromInterval(0, $(window).width() - $.fn.postitall.defaults.width);
             posY = randomIntFromInterval(0, $(window).height() - $.fn.postitall.defaults.height);
-            console.log(posX, posY);
+            //console.log(posX, posY);
             $.PostItAll.new({
                 position: 'relative',
                 posX: posX,
@@ -546,7 +546,7 @@ $(document).ready(function() {
                     var props = ["randomColor", "changeoptions", "blocked", "minimized", "expand", "addNew", "fixed",
                         "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable"];
                     $.each(ides, function(a,b) {
-                        console.log(props[a],b);
+                        //console.log(props[a],b);
                         if(!$('#'+b).prop('checked'))
                             content += "    " + props[a] + " : " + $('#'+b).prop('checked').toString() + ",\n";
                     });
