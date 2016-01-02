@@ -21,7 +21,9 @@ bower install postitall
 
 Extension for add sticky notes to the pages you visit.
 
-http://postitall.txusko.com/extension.html
+**More info:** http://postitall.txusko.com/extension.html
+
+**Github repository:** https://github.com/txusko/PostItAll-ChromeExtension
 
 ## External libraries & plugins
 
