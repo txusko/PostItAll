@@ -77,10 +77,8 @@ var externalManager = {
     },
     add: function(obj, callback) {
         var varname = 'PostIt_' + parseInt(obj.id, 10);
-        var testPrefs = JSON.stringify(obj);
-        var jsonfile = {};
-        jsonfile[varname] = testPrefs;
-        console.log('add', varname, testPrefs);
+        var testPrefs = encodeURIComponent(JSON.stringify(obj));
+        //console.log('add', varname, testPrefs);
         getJsonRequest("option=add&key=" + varname + "&content=" + testPrefs, callback);
     },
     get: function(id, callback) {
