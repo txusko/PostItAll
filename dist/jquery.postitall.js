@@ -1090,7 +1090,7 @@ var delay = (function(){
                     (function(i) {
                         storageManager.get(i, function(content) {
                             //console.log('getIndex.get', paso, i, content);
-                            if(!paso && content == "" && $( "#idPostIt_" + i ).length <= 0) {
+                            if(!paso && (content == null || content == "") && $( "#idPostIt_" + i ).length <= 0) {
                                 //console.log('nou index', i);
                                 paso = true;
                             }
