@@ -124,13 +124,15 @@ input:focus, textarea:focus, div[contenteditable="true"]:focus {
   	border-radius: 4px 4px 4px 4px;
   	border: 1px solid #eee;*/
 }
-.PIApostit div.PIAtoolbar {
-	cursor: move;
+.PIApostit div.PIAtoolbar, .PIApostit div.PIAtoolbarBack {
 	margin: 0px 2px 0px 0px;
 	padding: 0px;
 	height: 22px;
 	width:100%;
 	float: right;
+}
+.PIApostit div.PIAtoolbar {
+	cursor: move;
 }
 .PIApostit div.PIAeditable {
 	clear: both;

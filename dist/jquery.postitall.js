@@ -1180,7 +1180,11 @@ var delay = (function(){
                 $($.fn.postitall.globals.prefix + id + ' > .ui-resizable-handle').css('visibility', 'hidden');
             });
             if($.fn.postitall.globals.resizable && $.ui) $($.fn.postitall.globals.prefix + id).resizable("disable");
-            //if($.fn.postitall.globals.draggable && $.ui) $($.fn.postitall.globals.prefix + id).draggable("disable");
+            if($.fn.postitall.globals.draggable && $.ui) {
+                setTimeout(function() {
+                    $($.fn.postitall.globals.prefix + id).draggable({disabled: true});
+                }, 500);
+            }
             //$(this).parent().parent().parent().parent().addClass('PIAflip');
         },
 
@@ -1195,7 +1199,11 @@ var delay = (function(){
                 $($.fn.postitall.globals.prefix + id + ' > .ui-resizable-handle').css('visibility', '');
             });
             if($.fn.postitall.globals.resizable && $.ui) $($.fn.postitall.globals.prefix + id).resizable("enable");
-            //if($.fn.postitall.globals.draggable && $.ui) $($.fn.postitall.globals.prefix + id).draggable("enable");
+            if($.fn.postitall.globals.draggable && $.ui) {
+                setTimeout(function() {
+                    $($.fn.postitall.globals.prefix + id).draggable({disabled: false});
+                }, 500);
+            }
         },
 
         //add transparency to note
@@ -1924,6 +1932,7 @@ var delay = (function(){
                                 });
                                 $('#idBackConfig_'+index).show();
                                 t.switchBackNoteOn('PIAflip2');
+
                             }
                             e.preventDefault();
                         })
@@ -2161,7 +2170,7 @@ var delay = (function(){
             //Creation date
             var d = new Date(options.created);
             //Back page: toolbar
-            toolbar = $('<div />', { 'class': 'PIAtoolbar', 'style': barCursor })
+            toolbar = $('<div />', { 'class': 'PIAtoolbarBack'  }) //, 'style': barCursor })
                 //Close config icon
                 .append($('<div />', {
                     'id': 'pia_close_' + index,
