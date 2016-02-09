@@ -144,7 +144,7 @@
                         <a id="doc_gettingstarted" class="anchor">&nbsp;</a>
                         <h2>Getting started</h2><hr />
                         <h4>Download</h4>
-                        <p><a href="">Download the plugin</a> from the GitHub page and include the css and the js files as usual.</p>
+                        <p><a href="">Download the plugin</a> from the GitHub repository and include the css and the js files as usual.</p>
 <pre class="prettyprint lang-html">
 &lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="dist/jquery.postitall.css"&gt;
@@ -154,12 +154,12 @@
 &lt;script src="dist/jquery.postitall.js"&gt;&lt;/script&gt;
 </pre>
                         <h4>Plugins</h4>
-                        <p>Postitall can work alone but you can add some plugins and gain extra features and usability.</p>
-                        <p>These are the list of supported plugins:</p>
+                        <p>Postitall can work alone but you can add some plugins to gain extra features and usability.</p>
+                        <p>This is the list of supported plugins:</p>
                         <ul>
-                            <li><a href="https://jqueryui.com/" target=_blank>Jquery UI</a> : The jQuery User Inteface. With this plugin you will improve the usage in the drag and resize note feature.</li>
-                            <li><a href="http://alex-d.github.io/Trumbowyg/" target=_blank>Trumbowyg</a> : A lightweight WYSIWYG editor. Whit this plugin you will be able to edit the notes content with an integrated html5 editor.</li>
-                            <li><a href="http://labs.abeautifulsite.net/jquery-minicolors/" target=_blank>Minicolors</a> : A Tiny Color Picker. Whit this plugin you will be able to change background and text note color with a color picker.</li>
+                            <li><a href="https://jqueryui.com/" target=_blank>Jquery UI</a> : The jQuery User Inteface. With this plugin you will improve notes drag and resize usage.</li>
+                            <li><a href="http://alex-d.github.io/Trumbowyg/" target=_blank>Trumbowyg</a> : A lightweight WYSIWYG editor. With this plugin you will be able to edit notes content with an integrated html5 editor.</li>
+                            <li><a href="http://labs.abeautifulsite.net/jquery-minicolors/" target=_blank>Minicolors</a> : A Tiny Color Picker. With this plugin you will be able to change background and text note color with a color picker.</li>
                         </ul>
 <pre class="prettyprint lang-html">
 &lt;!-- CSS --&gt;
@@ -175,7 +175,7 @@
 &lt;script src="libs/minicolors/jquery.minicolors.min.js"&gt;&lt;/script&gt;
 &lt;script src="dist/jquery.postitall.js"&gt;&lt;/script&gt;
 </pre>
-<p class="text-muted">* Note that the css file <span class="label label-default">jquery.postitall.css</span> override some css elements of the plugins for a correct integration with postitall.</p>
+<p class="text-muted">* Note that the css file <span class="label label-default">jquery.postitall.css</span> overrides some css elements of the plugins for a correct integration with postitall.</p>
 
                         <h4>Install with npm</h4>
                         <p>You can install PostItAll by using <a href="https://www.npmjs.com/">npm</a></p>
@@ -191,7 +191,7 @@ npm install jquery-ui trumbowyg jquery-minicolors
                         <h4>Install with bower</h4>
                         <p>Also, you can install PostItAll using <a href="http://bower.io/">Bower</a></p>
 <pre class="prettyprint lang-bsh">
-$ bower install postitall
+$ bower install PostItAll
 </pre>
                         <p>Plugins:</p>
 <pre class="prettyprint lang-sh">
@@ -223,7 +223,7 @@ $ bower install jquery-ui trumbowyg minicolors
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane active" id="option1">
                                             <p>In this first example we will create a note from scratch with a global call to the <span class="label label-info">new</span> method.<br>
-                                            With global functions you will be abble to create a note from scratch and can be filled with any content, either text or html.</p>
+                                            With global functions you will be able to create a note from scratch that can be filled with any content, either text or html.</p>
                                             <div class="row">
                                                 <div class="col-md-9">
 <pre class="prettyprint lang-js">
@@ -276,8 +276,8 @@ $(document).ready(function() {
                         <h2>Global configuration</h2>
                         <hr>
                         <div>
-                            <p>The notes have some features that can be changed to satisfy your needs. By default all of them are enable, but you can change any of these "flags" in the beggining of your scripts and all the new notes will be affected by these changes.</p>
-                            <p>These are the variables with default values:</p>
+                            <p>The notes have some features that can be changed to satisfy your needs. By default all of them are enabled, but you can change any of these "flags" in the beggining of your scripts and all the new notes will be affected by these changes.</p>
+                            <p>This are the variables with default values:</p>
 <pre class="prettyprint lang-js">
 //Global vars : enable and disable features and change the notes behaviour
 $.fn.postitall.globals = {
@@ -286,9 +286,9 @@ $.fn.postitall.globals = {
     savable         : false,        //Save postit in storage
     randomColor     : true,         //Random color in new postits
     toolbar         : true,         //Show or hide toolbar
-    autoHideToolBar : true,         //Animation efect on hover over postit shoing/hiding toolbar options
+    autoHideToolBar : true,         //Animation effect on hover over postit showing/hiding toolbar options
     removable       : true,         //Set removable feature on or off
-    askOnDelete     : true,         //Confirmation before note remove
+    askOnDelete     : true,         //Confirmation before note removal
     draggable       : true,         //Set draggable feature on or off
     resizable       : true,         //Set resizable feature on or off
     editable        : true,         //Set contenteditable and enable changing note content
@@ -301,8 +301,8 @@ $.fn.postitall.globals = {
     showInfo        : true,         //Show info icon
     pasteHtml       : true,         //Allow paste html in contenteditor
     htmlEditor      : true,         //Html editor (trumbowyg)
-    autoPosition    : true,         //Automatic reposition of the notes when user resize screen
-    addArrow        : 'back'        //Add arrow to notes : none, front, back, all
+    autoPosition    : true,         //Automatic reposition of the notes when user resizes the screen
+    addArrow        : 'back'        //Add an arrow to notes : none, front, back, all
 };
 </pre>
                         </div>
@@ -311,7 +311,7 @@ $.fn.postitall.globals = {
                         <h2>Note configuration</h2>
                         <hr>
                         <div>
-                            <p>These are the properties and event callbacks for each new note:</p>
+                            <p>This are the properties and event callbacks for each new note:</p>
 <pre class="prettyprint lang-js">
 //Note global vars : Properties, style, features and events of the note
 $.fn.postitall.defaults = {
@@ -320,7 +320,7 @@ $.fn.postitall.defaults = {
     created         : Date.now(),               //Creation date
     domain          : window.location.origin,   //Domain in the url
     page            : window.location.pathname, //Page in the url
-    osname          : navigator.appVersion,     //Browser informtion &amp; OS name,
+    osname          : navigator.appVersion,     //Browser informtion &amp; OS name
     content         : '',                       //Content of the note (text or html)
     position        : 'absolute',               //Position absolute or fixed
     posX            : '10px',                   //x coordinate (from left)
@@ -372,8 +372,8 @@ $.fn.postitall.defaults = {
                         <a id="doc_globalfunctions" class="anchor">&nbsp;</a>
                         <h2>Functions / Methods</h2>
                         <hr>
-                        <p>As we said before, you have two ways to call note actions: by calling global or plugin methods.</p>
-                        <p>This is the relation of all the actions with his calls and a brief description of each one:</p>
+                        <p>As said before, you have two ways to call note actions: by calling global or plugin methods.</p>
+                        <p>This is the relation of all the actions with its calls and a brief description of each one:</p>
                         <div class="row">
                             <div class="col-md-12">
                                 <table class="table table-striped">
@@ -418,7 +418,7 @@ $.fn.postitall.defaults = {
                                                 $(id).postitall('options',options);
                                             </td>
                                             <td>Get or set the options of the created notes.
-                                                <br><span class="label label-info">Global call</span> In the case you don't specify the note <b>id</b> the options changed affects to all the created notes.
+                                                <br><span class="label label-info">Global call</span> In case you don't specify the note <b>id</b> the options changes affect all created notes.
                                                 <br><b>options</b> is an object with the <a href="#doc_noteconfiguration">note options</a> to be changed.
                                                 <br><a href="#doc_changeoptions">View an example</a>
                                             </td>
@@ -512,7 +512,7 @@ $.fn.postitall.defaults = {
                                         <tr>
                                             <th scope="row">Load notes</th>
                                             <td colspan="2">$.PostItAll.load(callback, callbacks, highlight);</td>
-                                            <td>In the case you have stored notes, this method will load and show all notes from the current domain/page.
+                                            <td>In case you have stored notes, this method will load and show all notes from the current domain/page.
                                                 <br><b>callback</b> is the user function called when load is done.
                                                 <br><b>callbacks</b> is an object with the possible 'Event Handlers' of the <a href="#doc_noteconfiguration">note options</a>
                                                 <br><b>highlight</b> is the id of the note to be highlighted.
@@ -521,12 +521,12 @@ $.fn.postitall.defaults = {
                                         <tr>
                                             <th scope="row">Save notes</th>
                                             <td colspan="2">$.PostItAll.save();</td>
-                                            <td>In the case you have savable feature enabled (in global configuration and note features), this method will save all the notes in the storage.</td>
+                                            <td>In case you have savable feature enabled (in global configuration and note features), this method will save all the notes in the storage.</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">Number of notes</th>
                                             <td colspan="2">$.PostItAll.length(callback);</td>
-                                            <td>In the case you have stored notes, this method will return in the callback function the number of stored notes of the current domain.</td>
+                                            <td>In case you have stored notes, this method will return in the callback function the number of stored notes of the current domain.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -542,7 +542,7 @@ $.fn.postitall.defaults = {
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="card card-block">
-                                    <p class="card-text">You can change the global configuration of the plugin overwriting the default values in your script. The changes in the global configuration affects to the created new notes. Below you can change the global configuration.</p>
+                                    <p class="card-text">You can change the global configuration of the plugin by overwriting the default values in your script. Changes in the global configuration just affects new notes. Below you can change the global configuration.</p>
                                     <div class="row">
             							<div class="col-md-6">
                                             <div class="checkbox">
@@ -558,7 +558,7 @@ $.fn.postitall.defaults = {
                                                 <label><input id="idRemovable" type="checkbox" name="removable" class="feature" checked> <span class="label label-pill label-info">removable</span> Allow to delete (if not hide trash icon)</label>
                                             </div>
                                             <div class="checkbox">
-                                                <label><input id="idAskOnDelete" type="checkbox" name="askOnDelete" class="feature" checked> <span class="label label-pill label-info">askOnDelete</span> Ask for confirmation before delete a note</label>
+                                                <label><input id="idAskOnDelete" type="checkbox" name="askOnDelete" class="feature" checked> <span class="label label-pill label-info">askOnDelete</span> Ask for confirmation before note deletion</label>
                                             </div>
                                             <div class="checkbox">
                                                 <label><input id="idPasteHtml" type="checkbox" name="pasteHtml" class="feature" checked> <span class="label label-pill label-info">pasteHtml</span> Allow paste html content (if not, paste text content)</label>
@@ -624,7 +624,7 @@ $.fn.postitall.defaults = {
                                         </div>
                                     </div>
                                 </div>
-                                <p class="text-danger text-right">* This changes will affect to all the new notes created.</p>
+                                <p class="text-danger text-right">* Those changes will affect just new notes!</p>
                             </div>
                             <div class="col-md-4">
                                 <h5>Change global configuration / features</h5>
@@ -1270,12 +1270,12 @@ $.PostItAll.new({
 });
 </pre>
 
-                        <p>If you want to load the saved notes, you can call the global method <span class="label label-default">load</span></p>
+                        <p>If you want to load saved notes, you can call the global method <span class="label label-default">load</span></p>
 <pre class="prettyprint lang-js">
 //Load storage notes
 $.PostItAll.load();
 </pre>
-                        <p>If you want to know how many saved notes you have you can call the global method <span class="label label-default">length</span></p>
+                        <p>If you want to know how many saved notes you have, you can call the global method <span class="label label-default">length</span></p>
 <pre class="prettyprint lang-js">
 //Load storage notes
 $.PostItAll.length(function(total) {
