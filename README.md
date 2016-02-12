@@ -14,7 +14,7 @@ npm install postitall
 
 ### Install with bower
 ```shell
-bower install postitall
+bower install PostItAll
 ```
 
 ## Chrome extension
@@ -35,10 +35,10 @@ https://github.com/jquery/jquery
 * **Jquery UI** The jQuery User Interface. With this plugin you will improve the usage in the drag and resize note feature.
 https://github.com/jquery/jquery-ui
 
-* **Trumbowyg** A lightweight WYSIWYG editor. Whit this plugin you will be able to edit the notes content with an integrated html5 editor.
+* **Trumbowyg** A lightweight WYSIWYG editor. With this plugin you will be able to edit the notes content with an integrated html5 editor.
 https://github.com/Alex-D/Trumbowyg
 
-* **Minicolors** A Tiny Color Picker. Whit this plugin you will be able to change background and text note color with a color picker.
+* **Minicolors** A Tiny Color Picker. With this plugin you will be able to change the background and text note color with a color picker.
 https://github.com/claviska/jquery-miniColors
 
 ### For the examples layout:
