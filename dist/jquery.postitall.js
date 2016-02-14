@@ -526,67 +526,89 @@ var delay = (function(){
             }
         },
 
+        getNotes : function(callback) {
+          var len = -1;
+          var iteration = 0;
+          var finded = false;
+          var notes = [];
+          storageManager.getlength(function(len) {
+              if(!len) {
+                  if(typeof callback === 'function') callback(notes);
+                  return;
+              }
+              for (var i = 1; i <= len; i++) {
+                  storageManager.key(i, function(key) {
+                      storageManager.getByKey(key, function(o) {
+                          if (o != null) {
+                              if($.fn.postitall.globals.filter == "domain")
+                                  finded = (o.domain === window.location.origin);
+                              else if($.fn.postitall.globals.filter == "page")
+                                  finded = (o.domain === window.location.origin && o.page === window.location.pathname);
+                              else
+                                  finded = true;
+                              if(finded) {
+                                  notes.push(o);
+                              }
+                          }
+                          if(iteration == (len - 1) && callback != null) {
+                              if(typeof callback === 'function') callback(notes);
+                              callback = null;
+                          }
+                          iteration++;
+                      });
+                  });
+              }
+          });
+        },
+
         //Load all (from storage)
         load : function(callback, callbacks, highlight) {
-            var len = -1;
-            var iteration = 0;
-            var finded = false;
-            storageManager.getlength(function(len) {
-                if(!len) {
-                    if(typeof callback === 'function') callback();
-                    return;
-                }
-                for (var i = 1; i <= len; i++) {
-                    storageManager.key(i, function(key) {
-                        storageManager.getByKey(key, function(o) {
-                            if (o != null && $('#id' + key).length <= 0) {
-                                //console.log($.fn.postitall.globals.filter, o.domain, window.location.origin, window.location.pathname);
-                                //console.log('o', key, o);
-                                if($.fn.postitall.globals.filter == "domain")
-                                    finded = (o.domain === window.location.origin);
-                                else if($.fn.postitall.globals.filter == "page")
-                                    finded = (o.domain === window.location.origin && o.page === window.location.pathname);
-                                else
-                                    finded = true;
-                                if(finded) {
-                                    if(typeof callbacks === 'object') {
-                                        //console.log(callbacks);
-                                        if(callbacks.onCreated !== undefined) {
-                                            o.onCreated = callbacks.onCreated;
-                                        }
-                                        if(callbacks.onChange !== undefined) {
-                                            o.onChange = callbacks.onChange;
-                                        }
-                                        if(callbacks.onSelect !== undefined) {
-                                            o.onSelect = callbacks.onSelect;
-                                        }
-                                        if(callbacks.onDblClick !== undefined) {
-                                            o.onDblClick = callbacks.onDblClick;
-                                        }
-                                        if(callbacks.onRelease !== undefined) {
-                                            o.onRelease = callbacks.onRelease;
-                                        }
-                                        if(callbacks.onDelete !== undefined) {
-                                            o.onDelete = callbacks.onDelete;
-                                        }
-                                    }
-                                    if(o.flags !== undefined) {
-                                        o.flags.highlight = false;
-                                        if(highlight !== undefined && o.id == highlight) {
-                                            console.log('highlight note', highlight);
-                                            o.flags.highlight = true;
-                                        }
-                                    }
-                                    $.PostItAll.new(o);
+          var len = -1;
+          var iteration = 0;
+          $.PostItAll.getNotes(function(notes) {
+                if(notes.length > 0) {
+                    len = notes.length;
+                    $(notes).each(function(i,o) {
+                        if($($.fn.postitall.globals.prefix + o.id).length <= 0) {
+                            if(typeof callbacks === 'object') {
+                                //console.log(callbacks);
+                                if(callbacks.onCreated !== undefined) {
+                                    o.onCreated = callbacks.onCreated;
+                                }
+                                if(callbacks.onChange !== undefined) {
+                                    o.onChange = callbacks.onChange;
+                                }
+                                if(callbacks.onSelect !== undefined) {
+                                    o.onSelect = callbacks.onSelect;
+                                }
+                                if(callbacks.onDblClick !== undefined) {
+                                    o.onDblClick = callbacks.onDblClick;
+                                }
+                                if(callbacks.onRelease !== undefined) {
+                                    o.onRelease = callbacks.onRelease;
+                                }
+                                if(callbacks.onDelete !== undefined) {
+                                    o.onDelete = callbacks.onDelete;
                                 }
                             }
-                            if(iteration == (len - 1) && callback != null) {
-                                if(typeof callback === 'function') callback();
-                                callback = null;
+                            if(o.flags !== undefined) {
+                                o.flags.highlight = false;
+                                if(highlight !== undefined && o.id == highlight) {
+                                    //console.log('highlight note', highlight);
+                                    o.flags.highlight = true;
+                                }
                             }
-                            iteration++;
-                        });
+                            $.PostItAll.new(o);
+                        }
+                        if(iteration == (len - 1) && callback != null) {
+                            if(typeof callback === 'function') callback();
+                            callback = null;
+                        }
+                        iteration++;
                     });
+                } else {
+                    if(typeof callback === 'function') callback();
+                    return;
                 }
             });
         },
@@ -608,37 +630,8 @@ var delay = (function(){
 
         //Get number of notes (only in storage)
         length : function(callback) {
-            var total = 0;
-            var len = -1;
-            var iteration = 0;
-            var finded = false;
-            storageManager.getlength(function(len) {
-                if(!len) {
-                    callback(total);
-                    return;
-                }
-                for (var i = 1; i <= len; i++) {
-                  storageManager.key(i, function(key) {
-                    storageManager.getByKey(key, function(o) {
-                      if(o != null) {
-                        if($.fn.postitall.globals.filter == "domain")
-                          finded = (o.domain === window.location.origin);
-                        else if($.fn.postitall.globals.filter == "page")
-                          finded = (o.domain === window.location.origin && o.page === window.location.pathname);
-                        else
-                          finded = true;
-                        if (finded) {
-                            total++;
-                        }
-                      }
-                      if(iteration == (len - 1) && callback != null) {
-                          callback(total);
-                          callback = null;
-                      }
-                      iteration++;
-                    });
-                  });
-                }
+            $.PostItAll.getNotes(function(notes) {
+                if(callback !== undefined) callback(notes.length);
             });
         },
 
@@ -719,14 +712,14 @@ var delay = (function(){
             }
             this.setOptions(opt);
             // Do nothing if already initialized
-            if (obj.data('PIA-initialized')) {
+            if (obj.data('PIA-initialized') || $($.fn.postitall.globals.prefix + opt.id).length > 0) {
                 return;
             }
             //Modify page content
             opt = $.extend(this.options, opt);
             this.setOptions(opt);
             //obj id
-            obj.attr('id', 'PIApostit_' + opt.id);
+            obj.attr('id', $.fn.postitall.globals.prefix.substring(1) + opt.id);
 
             //console.log('init');
             this.attachedTo();
