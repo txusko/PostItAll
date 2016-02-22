@@ -85,7 +85,7 @@ var delay = (function(){
                             } else {
                                 t.destroy($(e), false);
                                 var tempoptions = $(e).data('PIA-options') || {};
-                                setTimeout(function() { $.PostItAll.new($.extend(true, tempoptions, data)); }, 200);
+                                setTimeout(function() {$.PostItAll.new($.extend(true, tempoptions, data));}, 400);
                             }
                         } else if($(e).attr('PIA-original') !== undefined) {
                             var oldObj = $(e).parent().parent().parent().parent();
@@ -95,8 +95,7 @@ var delay = (function(){
                             } else {
                                 t.destroy(oldObj, false);
                                 var tempoptions = oldObj.data('PIA-options') || {};
-                                //t.create($.extend(true, t.options, data));
-                                setTimeout(function() { $.PostItAll.new($.extend(true, tempoptions, data)); }, 200);
+                                setTimeout(function() { $.PostItAll.new($.extend(true, tempoptions, data)); }, 400);
                             }
                         }
                     });
@@ -734,15 +733,17 @@ var delay = (function(){
         },
 
         attachedTo : function(options) {
+            var t = this;
             var data = options;
             if(data === undefined) {
-                data = this.options;
+                data = t.options;
             }
 
             //Position relative to a dom object
             if(data.attachedTo === undefined || typeof data.attachedTo !== 'object') data.attachedTo = { };
             if(data.attachedTo.element !== undefined && data.attachedTo.element !== "") {
                 if($(''+data.attachedTo.element).length > 0) {
+
                     var objToAttach = $(''+data.attachedTo.element).first();
                     var objWidth = objToAttach.width() + parseInt(objToAttach.css('padding-left'),10) + parseInt(objToAttach.css('padding-right'),10);
                     objWidth += parseInt(objToAttach.css('margin-left'),10) + parseInt(objToAttach.css('margin-right'),10);
@@ -750,7 +751,7 @@ var delay = (function(){
                     objHeight += parseInt(objToAttach.css('margin-top'),10) + parseInt(objToAttach.css('margin-bottom'),10);
 
                     var position = {};
-                    //console.log('fixed?',this.elementOrParentIsFixed(data.attachedTo.element));
+                    //console.log('fixed?',this.elementOrParentIsFixed(data.attachedTo.element), $(window).width());
                     if(this.elementOrParentIsFixed(data.attachedTo.element))
                         position = objToAttach.position();
                     else
@@ -819,14 +820,46 @@ var delay = (function(){
                             }
                         break;
                     }
-                    //console.log('new pos:', data.posX, data.posY, objWidth, position, data);
+                    //console.log('new pos:', data.posX, data.posY, objWidth, objHeight, position);
+
+                    //Breakpoints / responsive behaviour (https://github.com/txusko/PostItAll/issues/11)
+                    if(pos1 === "left" || pos1 === "right") {
+                        if(data.posX < 0) {
+                            data.posX = position.left + 30;
+                            if(data.attachedTo.arrow) {
+                                data.style.arrow = "left";
+                            }
+                        } else if(data.posX > $(window).width()) {
+                            data.posX = (position.left + objWidth) - data.width - 30;
+                            if(data.attachedTo.arrow) {
+                                data.style.arrow = "right";
+                            }
+                        }
+                    }
+                    if(pos1 === "top" || pos1 === "bottom") {
+                        var scrollPosition = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
+                        if(data.posY < scrollPosition) {
+                            data.posY = position.top + 30;
+                            if(data.attachedTo.arrow) {
+                                data.style.arrow = "top";
+                            }
+                        } else if((data.posY + data.height) > (scrollPosition + $(window).height())) {
+                            data.posY = (position.top + objHeight) - data.height - 30;
+                            if(data.attachedTo.arrow) {
+                                data.style.arrow = "bottom";
+                            }
+                        }
+                    }
+
                     if($($.fn.postitall.globals.prefix + data.id).length > 0) {
                         $($.fn.postitall.globals.prefix + data.id).css({
                             'top': data.posY,
                             'left': data.posX
                         });
                         if(data.style.arrow != "none") {
-                            $($.fn.postitall.globals.prefix + data.id).css("overflow", "").css("resize", "");
+                            t.hideArrow();
+                            t.showArrow();
+                            //$($.fn.postitall.globals.prefix + data.id).css("overflow", "").css("resize", "");
                         }
                     }
 
@@ -866,7 +899,7 @@ var delay = (function(){
         saveOptions : function(options, callback) {
             if(options === undefined)
                 options = this.options;
-            console.log('saveOptions', options.posX, options.posY, options.width, options.height);
+            //console.log('saveOptions', options.posX, options.posY, options.width, options.height);
             if ($.fn.postitall.globals.savable || options.features.savable) {
                 //console.log(options);
                 storageManager.add(options, function(error) {
@@ -997,7 +1030,7 @@ var delay = (function(){
             $($.fn.postitall.globals.prefix + index).removeClass('arrow_box_top arrow_box_right arrow_box_bottom arrow_box_left', 1000, "easeInElastic");
             $($.fn.postitall.globals.prefix + index).find('.icon_box').hide();
             if(!$.ui) $($.fn.postitall.globals.prefix + index).css('overflow', 'hidden').css('resize', 'both');
-            console.log('hide');
+            //console.log('hide');
         },
 
         //Show arrow and icons
@@ -1025,7 +1058,7 @@ var delay = (function(){
             var icon = $($.fn.postitall.globals.prefix + index).find('div[data-value="'+options.style.arrow+'"]');
             icon.show();
             icon.find('span').hide();
-            console.log('show');
+            //console.log('show');
         },
 
         //Autoresize note
