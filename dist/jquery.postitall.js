@@ -41,7 +41,7 @@ var delay = (function(){
     "use strict";
 
     // Debug
-    var debugging = true; // or true
+    var debugging = false; // or true
     if (typeof console === "undefined") {
         console = {
             log: function () { return undefined; }
