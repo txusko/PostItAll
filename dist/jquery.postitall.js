@@ -41,7 +41,7 @@ var delay = (function(){
     "use strict";
 
     // Debug
-    var debugging = false; // or true
+    var debugging = true; // or true
     if (typeof console === "undefined") {
         console = {
             log: function () { return undefined; }
@@ -49,6 +49,28 @@ var delay = (function(){
     } else if (!debugging || console.log === undefined) {
         console.log = function () { return undefined; };
     }
+
+    //Date
+    Date.prototype.addDays = function(days) {
+        var dat = new Date(this.valueOf());
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    };
+    Date.prototype.addHours = function(hours) {
+        var dat = new Date(this.valueOf());
+        dat.setTime(dat.getTime() + (hours*60*60*1000));
+        return dat;
+    };
+    Date.prototype.addMinutes = function(minutes) {
+        var dat = new Date(this.valueOf());
+        dat.setTime(dat.getTime() + (minutes*60*1000));
+        return dat;
+    };
+    Date.prototype.addSeconds = function(seconds) {
+        var dat = new Date(this.valueOf());
+        dat.setTime(dat.getTime() + (seconds*1000));
+        return dat;
+    };
 
     // PLUGIN Public methods
     $.extend($.fn, {
@@ -215,7 +237,9 @@ var delay = (function(){
         pasteHtml       : true,         //Allow paste html in contenteditor
         htmlEditor      : true,         //Html editor (trumbowyg)
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
-        addArrow        : 'back'        //Add arrow to notes : none, front, back, all
+        addArrow        : 'back',       //Add arrow to notes : none, front, back, all
+        askOnHide       : true,         //Show configuration hideUntil back-panel (getBackPanelHideUntil)
+        hideUntil       : null          //Note will be hidden since that datetime
     };
 
     //Copy of the original global configuration
@@ -989,8 +1013,28 @@ var delay = (function(){
             if($($.fn.postitall.globals.prefix + id).length) {
                 var options = $($.fn.postitall.globals.prefix + id).data('PIA-options');
                 options.flags.hidden = false;
+                options.features.hideUntil = null;
                 $($.fn.postitall.globals.prefix + id).slideDown();
                 this.saveOptions(options);
+            }
+        },
+
+        //Show the note in a specific date
+        showAgain : function(index, dat) {
+            var t = this;
+            var setToHappen = function(fn, date){
+                var now = new Date().getTime();
+                var diff = date.getTime() - now;
+                return setTimeout(fn, diff);
+            };
+            var dateFinish = new Date(dat);
+            if(dateFinish > Date.now()) {
+                console.log('show again on ' + dateFinish, Date.now() );
+                setToHappen(function() {
+                    t.show(index);
+                }, dateFinish);
+            } else {
+                t.show(index);
             }
         },
 
@@ -1914,12 +1958,9 @@ var delay = (function(){
                         'id': 'pia_delete_' + index,
                         'class': 'PIAdelete PIAicon'
                     }).click(function (e) {
-                        //console.log('aki1');
                         if (obj.hasClass('PIAdragged')) {
-                            //console.log('aki2');
                             obj.removeClass('PIAdragged');
                         } else {
-                            //console.log('aki3');
                             if($.fn.postitall.globals.askOnDelete && options.features.askOnDelete) {
                                 if ($(this).parent().find('.ui-widget2').length <= 0) {
                                     $('.backContent_' + index).hide();
@@ -1996,7 +2037,17 @@ var delay = (function(){
                         if(obj.hasClass('PIAdragged')) {
                             obj.removeClass('PIAdragged');
                         } else {
-                            t.hide(index);
+                            if($.fn.postitall.globals.askOnHide && options.features.askOnHide) {
+                                $('.backContent_'+index).hide();
+                                $('#idHideUntil_'+index+' > .PIABox').css({
+                                    //'width': options.width - 10,
+                                    'height': options.height - 40
+                                });
+                                $('#idHideUntil_'+index).show();
+                                t.switchBackNoteOn('PIAflip2');
+                            } else {
+                                t.hide(index);
+                            }
                         }
                         e.preventDefault();
                     })
@@ -2193,209 +2244,29 @@ var delay = (function(){
                 'dir': 'ltr',
             }).append(toolbar).append(content);
 
-            //Creation date
-            var d = new Date(options.created);
-            //Back page: toolbar
-            toolbar = $('<div />', { 'class': 'PIAtoolbarBack'  }) //, 'style': barCursor })
-                //Close config icon
-                .append($('<div />', {
-                    'id': 'pia_close_' + index,
-                    'class': 'PIAclose PIAicon',
-                    'style': 'display:block;'
-                })
-                .click(function (e) {
-                    //var id = $(this).closest('.PIApostit').children().attr('data-id');
-                    t.switchBackNoteOff('PIAflip2');
-                    t.switchOnLights();
-                    //t.showArrow();
-                    e.preventDefault();
-                })
-            )
-            .append($('<span />', {
-                    'class': 'float-left minicolors_label',
-                    'style': 'padding: 5px;font-size: 6.5px;font-family:verdana;'
-                }).html(d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")")
-            );
-            //Back page: content
-            //Background color
-            var bgLabel = $('<label />', {
-                'class': 'minicolors_label',
-                'for': 'minicolors_bg_' + index,
-            }).html('Background-color:');
-            var bgString = $('<input />', {
-                'class': 'minicolors',
-                'id': 'minicolors_bg_' + index,
-                'type': 'text',
-                'height': '14px',
-                'style': 'font-size:smaller;',
-                'value': options.style.backgroundcolor,
-                'data-default-value': options.style.backgroundcolor
-            });
-            //Text color
-            var tcLabel = $('<label />', {
-                'class': 'minicolors_label',
-                'for': 'minicolors_text_' + index,
-                'style': 'margin-top: 5px;'
-            }).html('Text color:');
-            var tcString = $('<input />', {
-                'class': 'minicolors',
-                'id': 'minicolors_text_' + index,
-                'type': 'text',
-                'height': '14px',
-                'style': 'font-size:smaller;',
-                'value': options.style.textcolor,
-                'data-default-value': options.style.textcolor
-            });
-            //Text shadow
-            var checked = '';
-            if (options.style.textshadow) {
-                checked = 'checked';
-            }
 
-            var tsString = $('<input />', {
-                'id': 'textshadow_' + index,
-                'type': 'checkbox',
-                'checked': checked
-            });
-            var tsLabel = $('<label />', {
-                'class': 'minicolors_label',
-                'for': 'textshadow_' + index
-            }).append(tsString).append(' Text shadow');
-            //3d style
-            var checked2 = '';
-            if (options.style.tresd) {
-                checked2 = 'checked';
-            }
-            var gsString = $('<input />', {
-                'id': 'generalstyle_' + index,
-                'type': 'checkbox',
-                'checked': checked2
-            });
-            var gsLabel = $('<label />', {
-                'class': 'minicolors_label',
-                'for': 'generalstyle_' + index,
-            }).append(gsString).append(' 3D style');
-
-            //Add arrow selection in options
-            var aaString = "";
-            if($.fn.postitall.globals.addArrow == "back" || $.fn.postitall.globals.addArrow == "all"
-            || options.features.addArrow == "back" || options.features.addArrow == "all") {
-                aaString = $('<select />', {
-                    'id': 'idAddArrow_' + index,
-                    'style': 'margin-top: 5px;',
-                });
-                aaString.append('<option value="none" '+(options.style.arrow == "none" ? 'selected' : '')+'>Arrow in:</option>');
-                aaString.append('<option value="top" '+(options.style.arrow == "top" ? 'selected' : '')+'>Top</option>');
-                aaString.append('<option value="right" '+(options.style.arrow == "right" ? 'selected' : '')+'>Right</option>');
-                aaString.append('<option value="bottom" '+(options.style.arrow == "bottom" ? 'selected' : '')+'>Bottom</option>');
-                aaString.append('<option value="left" '+(options.style.arrow == "left" ? 'selected' : '')+'>Left</option>');
-                aaString.change(function(e) {
-                    options = t.arrowChangeOption($(this).val());
-                    e.preventDefault();
-                });
-            }
-
+            //// BACK PAGES ////
+            //Toolbar
+            var toolbar = this.__getBPToolbar(index);
             //Back 1: config
-            content = "";
-            if($.fn.postitall.globals.changeoptions) {
-                content = $('<div />', {
-                    'id': 'idBackConfig_'+index,
-                    'class': 'PIAcontent backContent_'+index,
-                }).append($('<div />', {
-                    'class': 'PIABox PIAconfigBox',
-                    //'style': 'margin-left: -5px;',
-                    //'width': options.width - 10,
-                    //'width': 'auto',
-                    'height': options.height - 40
-                }).append("<div class='PIAtitle'>Note config</div>")
-                    .append(bgLabel).append(bgString) // Bg color
-                    .append(gsLabel)  // 3d or plain style
-                    .append(tcLabel).append(tcString) // Text color
-                    .append(tsLabel) // Text shadow
-                    .append(aaString) //Arrow selection
-                );
-            }
-
+            var configInfo = this.__getBPConfig(index);
             //Back 2: info
-            var backInfo = "";
-            if($.fn.postitall.globals.showInfo && options.features.showInfo) {
-                var d = new Date(options.created);
-                var textDate = d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")";
-                var textInfo = "<div class='PIAtitle'>Note info</div>";
-                textInfo += "<strong>Id:</strong> "+$.fn.postitall.globals.prefix+index+"<br>";
-                textInfo += "<strong>Created on:</strong> "+textDate+"<br>";
-                if(options.domain.indexOf("http") >= 0)
-                    textInfo += "<strong>Domain:</strong> "+options.domain+"<br>";
-                textInfo += "<strong>Page:</strong> "+options.page+"<br>";
-                textInfo += "<strong>Op.System:</strong> " + t.getOSName() + " - "+options.osname+"<br>";
-                backInfo = $('<div />', {
-                    'id': 'idBackInfo_'+index,
-                    'class': 'PIAcontent backContent_'+index
-                }).append(
-                    $('<div />', {
-                        'class': 'PIAinfoBox PIABox',
-                        //'style': 'margin-left: -5px;',
-                        //'width': options.width - 10,
-                        //'width': 'auto'
-                        'height': options.height - 40
-                    }).append(textInfo)
-                );
-            }
-
+            var backInfo = this.__getBPInfo(index);
             //Back 3: delete
-            var deleteInfo = "";
-            if($.fn.postitall.globals.askOnDelete && options.features.askOnDelete) {
-                deleteInfo = $('<div />', {
-                    'id': 'idBackDelete_' + index,
-                    'class': 'PIAcontent backContent_'+index
-                }).append($('<div />', {
-                        'id': 'pia_confirmdel_' + index,
-                        'class': 'PIABox PIAwarningBox',
-                        //'style': 'margin-left: -5px;',
-                        //'width': options.width - 10,
-                        //'width': 'auto',
-                        'height': options.height - 40
-                    }).append("<div class='PIAtitle'>Delete note!</div>")
-                        .append($('<span />', {
-                                'style': 'line-height:10px;font-size:10px;',
-                                'class': 'PIAdelwar float-left'
-                            }))
-                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
-                                    $('<a />', { 'id': 'sure_delete_' + index, 'href': '#' })
-                                    .click(function(e) {
-                                        t.switchOnLights();
-                                        var id = obj.data('PIA-id');
-                                        t.destroy();
-                                        e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete this"))))
-                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
-                                    $('<a />', { 'id': 'all_' + index, 'href': '#' })
-                                    .click(function(e) {
-                                        t.switchOnLights();
-                                        $.PostItAll.destroy();
-                                        e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete all"))))
-                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
-                                    $('<a />', { 'id': 'cancel_' + index, 'href': '#' })
-                                    .click(function(e) {
-                                        t.switchOnLights();
-                                        $('#pia_editable_' + index).show();
-                                        t.switchBackNoteOff('PIAflip2');
-                                        e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelno' }).append("Cancel"))))
-                            .append($('<div />', { 'class': 'clear', 'style': 'line-height:10px;font-size:10px;font-weight: bold;' }).append("*This action cannot be undone"))
-                );
-            }
+            var deleteInfo = this.__getBPDelete(index, obj);
+            //Back 4: hideUntil
+            var hideUntilPanel = this.__getBPHideUntil(index);
 
-            //Back page
+            //Back page content
             var back = $('<div />', {
                 'class': 'PIAback PIAback1 PIAback2',
                 'style': 'visibility: hidden;'
             })
             .append(toolbar)
-            .append(content)
+            .append(configInfo)
             .append(backInfo)
-            .append(deleteInfo);
+            .append(deleteInfo)
+            .append(hideUntilPanel);
 
             //Create postit
             var postit = $('<div />', {
@@ -2725,7 +2596,7 @@ var delay = (function(){
                 var icon = $($.fn.postitall.globals.prefix+index).find('div[data-value="'+options.style.arrow+'"]');
                 icon.show();
                 icon.find('span').hide();
-                //console.log('aki?', arrowPaso, index, options.style.arrow);
+                //console.log('arrowPaso', arrowPaso, index, options.style.arrow);
             }
 
             //Change hidden state if note is higlighted
@@ -2796,6 +2667,12 @@ var delay = (function(){
                     //Autoresize to fit content when content load is done
                     t.autoresize();
                 });
+            } else {
+                if(options.features.hideUntil !== null)
+                    t.showAgain(index, options.features.hideUntil);
+                else
+                    console.log('estic amagat sense data de fi', options.features);
+
             }
 
             //Hover options
@@ -2874,7 +2751,346 @@ var delay = (function(){
 
             //chaining
             return obj;
+        },
+
+        //// Back panels
+
+        //Toolbar
+        __getBPToolbar : function(index) {
+            var t = this;
+            var options = t.options;
+            //Creation date
+            var d = new Date(options.created);
+            //Back page: toolbar
+            var toolbar = $('<div />', { 'class': 'PIAtoolbarBack'  }) //, 'style': barCursor })
+                //Close config icon
+                .append($('<div />', {
+                    'id': 'pia_close_' + index,
+                    'class': 'PIAclose PIAicon',
+                    'style': 'display:block;'
+                })
+                .click(function (e) {
+                    //var id = $(this).closest('.PIApostit').children().attr('data-id');
+                    t.switchBackNoteOff('PIAflip2');
+                    t.switchOnLights();
+                    //t.showArrow();
+                    e.preventDefault();
+                })
+            )
+            .append($('<span />', {
+                    'class': 'float-left minicolors_label',
+                    'style': 'padding: 5px;font-size: 6.5px;font-family:verdana;'
+                }).html(d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")")
+            );
+            return toolbar;
+        },
+
+        //Config back panel
+        __getBPConfig : function(index) {
+            var t = this;
+            var options = t.options;
+            //Back page: config content
+            var content = "";
+            if($.fn.postitall.globals.changeoptions) {
+                //Background color
+                var bgLabel = $('<label />', {
+                    'class': 'minicolors_label',
+                    'for': 'minicolors_bg_' + index,
+                }).html('Background-color:');
+                var bgString = $('<input />', {
+                    'class': 'minicolors',
+                    'id': 'minicolors_bg_' + index,
+                    'type': 'text',
+                    'height': '14px',
+                    'style': 'font-size:smaller;',
+                    'value': options.style.backgroundcolor,
+                    'data-default-value': options.style.backgroundcolor
+                });
+                //Text color
+                var tcLabel = $('<label />', {
+                    'class': 'minicolors_label',
+                    'for': 'minicolors_text_' + index,
+                    'style': 'margin-top: 5px;'
+                }).html('Text color:');
+                var tcString = $('<input />', {
+                    'class': 'minicolors',
+                    'id': 'minicolors_text_' + index,
+                    'type': 'text',
+                    'height': '14px',
+                    'style': 'font-size:smaller;',
+                    'value': options.style.textcolor,
+                    'data-default-value': options.style.textcolor
+                });
+                //Text shadow
+                var checked = '';
+                if (options.style.textshadow) {
+                    checked = 'checked';
+                }
+                var tsString = $('<input />', {
+                    'id': 'textshadow_' + index,
+                    'type': 'checkbox',
+                    'checked': checked
+                });
+                var tsLabel = $('<label />', {
+                    'class': 'minicolors_label',
+                    'for': 'textshadow_' + index
+                }).append(tsString).append(' Text shadow');
+                //3d style
+                var checked2 = '';
+                if (options.style.tresd) {
+                    checked2 = 'checked';
+                }
+                var gsString = $('<input />', {
+                    'id': 'generalstyle_' + index,
+                    'type': 'checkbox',
+                    'checked': checked2
+                });
+                var gsLabel = $('<label />', {
+                    'class': 'minicolors_label',
+                    'for': 'generalstyle_' + index,
+                }).append(gsString).append(' 3D style');
+
+                //Add arrow selection in options
+                var aaString = "";
+                if($.fn.postitall.globals.addArrow == "back" || $.fn.postitall.globals.addArrow == "all"
+                || options.features.addArrow == "back" || options.features.addArrow == "all") {
+                    aaString = $('<select />', {
+                        'id': 'idAddArrow_' + index,
+                        'style': 'margin-top: 5px;',
+                    });
+                    aaString.append('<option value="none" '+(options.style.arrow == "none" ? 'selected' : '')+'>Arrow in:</option>');
+                    aaString.append('<option value="top" '+(options.style.arrow == "top" ? 'selected' : '')+'>Top</option>');
+                    aaString.append('<option value="right" '+(options.style.arrow == "right" ? 'selected' : '')+'>Right</option>');
+                    aaString.append('<option value="bottom" '+(options.style.arrow == "bottom" ? 'selected' : '')+'>Bottom</option>');
+                    aaString.append('<option value="left" '+(options.style.arrow == "left" ? 'selected' : '')+'>Left</option>');
+                    aaString.change(function(e) {
+                        options = t.arrowChangeOption($(this).val());
+                        e.preventDefault();
+                    });
+                }
+
+                content = $('<div />', {
+                    'id': 'idBackConfig_'+index,
+                    'class': 'PIAcontent backContent_'+index,
+                }).append($('<div />', {
+                    'class': 'PIABox PIAconfigBox',
+                    //'style': 'margin-left: -5px;',
+                    //'width': options.width - 10,
+                    //'width': 'auto',
+                    'height': options.height - 40
+                }).append("<div class='PIAtitle'>Note config</div>")
+                    .append(bgLabel).append(bgString) // Bg color
+                    .append(gsLabel)  // 3d or plain style
+                    .append(tcLabel).append(tcString) // Text color
+                    .append(tsLabel) // Text shadow
+                    .append(aaString) //Arrow selection
+                );
+            }
+            return content;
+        },
+
+        //Delete back panel
+        __getBPDelete : function(index, obj) {
+            var t = this;
+            var options = t.options;
+            var deleteInfo = "";
+            if($.fn.postitall.globals.askOnDelete && options.features.askOnDelete) {
+                deleteInfo = $('<div />', {
+                    'id': 'idBackDelete_' + index,
+                    'class': 'PIAcontent backContent_'+index
+                }).append($('<div />', {
+                        'id': 'pia_confirmdel_' + index,
+                        'class': 'PIABox PIAwarningBox',
+                        //'style': 'margin-left: -5px;',
+                        //'width': options.width - 10,
+                        //'width': 'auto',
+                        'height': options.height - 40
+                    }).append("<div class='PIAtitle'>Delete note!</div>")
+                        .append($('<span />', {
+                                'style': 'line-height:10px;font-size:10px;',
+                                'class': 'PIAdelwar float-left'
+                            }))
+                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
+                                    $('<a />', { 'id': 'sure_delete_' + index, 'href': '#' })
+                                    .click(function(e) {
+                                        t.switchOnLights();
+                                        var id = obj.data('PIA-id');
+                                        t.destroy();
+                                        e.preventDefault();
+                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete this"))))
+                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
+                                    $('<a />', { 'id': 'all_' + index, 'href': '#' })
+                                    .click(function(e) {
+                                        t.switchOnLights();
+                                        $.PostItAll.destroy();
+                                        e.preventDefault();
+                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete all"))))
+                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
+                                    $('<a />', { 'id': 'cancel_' + index, 'href': '#' })
+                                    .click(function(e) {
+                                        t.switchOnLights();
+                                        $('#pia_editable_' + index).show();
+                                        t.switchBackNoteOff('PIAflip2');
+                                        e.preventDefault();
+                                    }).append($('<span />', { 'class': 'PIAdelno' }).append("Cancel"))))
+                            .append($('<div />', { 'class': 'clear', 'style': 'line-height:10px;font-size:10px;font-weight: bold;' }).append("*This action cannot be undone"))
+                );
+            }
+            return deleteInfo;
+        },
+
+        //Info back panel
+        __getBPInfo : function(index) {
+            var t = this;
+            var options = t.options;
+            //Back 2: info
+            var backInfo = "";
+            if($.fn.postitall.globals.showInfo && options.features.showInfo) {
+                var d = new Date(options.created);
+                var textDate = d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")";
+                var textInfo = "<div class='PIAtitle'>Note info</div>";
+                textInfo += "<strong>Id:</strong> "+$.fn.postitall.globals.prefix+index+"<br>";
+                textInfo += "<strong>Created on:</strong> "+textDate+"<br>";
+                if(options.domain.indexOf("http") >= 0)
+                    textInfo += "<strong>Domain:</strong> "+options.domain+"<br>";
+                textInfo += "<strong>Page:</strong> "+options.page+"<br>";
+                textInfo += "<strong>Op.System:</strong> " + t.getOSName() + " - "+options.osname+"<br>";
+                backInfo = $('<div />', {
+                    'id': 'idBackInfo_'+index,
+                    'class': 'PIAcontent backContent_'+index
+                }).append(
+                    $('<div />', {
+                        'class': 'PIAinfoBox PIABox',
+                        'height': options.height - 40
+                    }).append(textInfo)
+                );
+            }
+            return backInfo;
+        },
+
+        //Hide Until
+        __getBPHideUntil : function(index) {
+            var t = this;
+            var options = t.options;
+            var panel = "";
+            if($.fn.postitall.globals.askOnHide && options.features.askOnHide) {
+                var textInfo = "<div class='PIAtitle'>Hide note</div>";
+                var normalForm = "<div id='PIAhideUntilNormal_"+index+"'>";
+                normalForm += "<div>For how long do you want to hide this note?</div>";
+                normalForm += "<input type='text' id='numericIncrement_" + index + "' size=3 maxlength=2 value='30'>"
+                normalForm += "&nbsp;<select id='selectedIncrement_"+index+"'><option>Seconds</option><option>Minutes</option><option>Hours</option><option>Days</option></select>";
+                normalForm += "</div>";
+                var formContent = $('<div />');
+                var datePickerForm = "";
+
+                formContent.append(normalForm);
+                if($.ui) {
+                    datePickerForm += "<div id='PIAhideUntilDatePicker_"+index+"' style='display:none;'>";
+                    datePickerForm += "<div>The note will be displayed again on the following datetime : </div>";
+                    if($.ui.timepicker) {
+                        datePickerForm += "<input type='text' id='datepicker_"+index+"' placeholder='dd/mm/yyyy hh:mm'>";
+                    } else {
+                        datePickerForm += "<input type='text' id='datepicker_"+index+"' size=11 placeholder='dd/mm/yyyy'>";
+                        datePickerForm += "&nbsp;<input type='textbox' placeholder='hh:mm' id='timepicker_" + index + "' size=6>";
+                    }
+                    datePickerForm +="</div>";
+                    formContent.append(datePickerForm)
+                    .append($('<label />').append($('<input />', { 'id': 'PIAhideUntilCB_' + index, 'type': 'checkbox' }).click(function(e) {
+                            if ($(this).is(':checked')) {
+                                if($.ui.timepicker) {
+                                    $('#datepicker_'+index).datetimepicker({ minDate: 0, dateFormat: "yy-mm-dd", timeFormat: "HH:mm" });
+                                } else {
+                                    $('#datepicker_'+index).datepicker({ minDate: 0, dateFormat: "yy-mm-dd" });
+                                }
+                                $('#PIAhideUntilDatePicker_'+index).show();
+                                $('#PIAhideUntilNormal_'+index).hide();
+                            } else {
+                                $('#PIAhideUntilDatePicker_'+index).hide();
+                                $('#PIAhideUntilNormal_'+index).show();
+                            }
+                        })
+                    ).append(' Datepicker'));
+                }
+
+                panel = $('<div />', {
+                    'id': 'idHideUntil_'+index,
+                    'class': 'PIAcontent backContent_'+index
+                }).append(
+                    $('<div />', {
+                        'class': 'PIAinfoBox PIABox',
+                        'height': options.height - 40
+                    }).append(textInfo)
+                    .append(formContent)
+                    .append($('<span />', { 'id': 'PIAhideUntilError_' + index}))
+                    .append($('<br />'))
+                    .append($('<button />', { 'text': 'Hide' })
+                        .click(function(e) {
+                            var dat = new Date();
+                            var paso = false;
+                            if($.ui) {
+                                if($('#PIAhideUntilCB_' + index).is(':checked')) {
+                                    paso = true;
+                                    var gmt = new Date().toString().match(/([-\+][0-9]+)\s/)[1];
+                                    var datestr = "";
+                                    if($.ui.timepicker) {
+                                        //With timepicker
+                                        datestr = $('#datepicker_'+index).val();
+                                    } else {
+                                        //With datepicker
+                                        datestr = $('#datepicker_'+index).val() + " " + $('#timepicker_'+index).val();
+                                    }
+                                    datestr += " " + gmt;
+                                    dat = new Date(datestr);
+                                }
+                            }
+                            if(!paso) {
+                                //Normal
+                                var inc = parseInt($('#numericIncrement_' + index).val(), 10);
+                                if(inc < 0) inc = 1;
+                                if(inc > 99) inc = 99;
+                                switch ($('#selectedIncrement_' + index).val()) {
+                                    case 'Days':
+                                        dat = dat.addDays(inc);
+                                        break;
+                                    case 'Hours':
+                                        dat = dat.addHours(inc);
+                                        break;
+                                    case 'Minutes':
+                                        dat = dat.addMinutes(inc);
+                                        break;
+                                    case 'Seconds':
+                                    default:
+                                        dat = dat.addSeconds(inc);
+                                        break;
+                                }
+                            }
+                            if(!isNaN(dat)) {
+                                options.features.hideUntil = dat;
+                                t.switchOnLights();
+                                t.hide(index);
+                                t.saveOptions(options);
+                                t.showAgain(index, dat);
+                            } else {
+                                $('#PIAhideUntilError_' + index).css('color', 'red').html('Invalid date!').slideDown();
+                                setTimeout(function() { $('#PIAhideUntilError_' + index).slideUp(); }, 1000);
+                            }
+                            e.preventDefault();
+                        })
+                    )
+                    .append(
+                        $('<button />', { 'text': 'Cancel' })
+                        .click(function(e) {
+                            t.switchOnLights();
+                            $('#pia_editable_' + index).show();
+                            t.switchBackNoteOff('PIAflip2');
+                            e.preventDefault();
+                        })
+                    )
+                );
+            }
+            return panel;
         }
+
     };
 
     //Drag postits
