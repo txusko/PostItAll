@@ -2951,7 +2951,7 @@ var delay = (function(){
                 var textInfo = "<div class='PIAtitle'>Note info</div>";
                 textInfo += "<strong>Id:</strong> "+$.fn.postitall.globals.prefix+index+"<br>";
                 textInfo += "<strong>Created on:</strong> "+textDate+"<br>";
-                if(options.domain.indexOf("http") >= 0)
+                if(typeof options.domain === 'object' && options.domain.indexOf("http") >= 0)
                     textInfo += "<strong>Domain:</strong> "+options.domain+"<br>";
                 textInfo += "<strong>Page:</strong> "+options.page+"<br>";
                 textInfo += "<strong>Op.System:</strong> " + t.getOSName() + " - "+options.osname+"<br>";
