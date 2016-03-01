@@ -1295,7 +1295,10 @@ var delay = (function(){
             if($.fn.postitall.globals.resizable && $.ui) $($.fn.postitall.globals.prefix + id).resizable("enable");
             if($.fn.postitall.globals.draggable && $.ui) {
                 setTimeout(function() {
+                    //Enable draggable
                     $($.fn.postitall.globals.prefix + id).draggable({disabled: false});
+                    //Show back-date
+                    $('#idDateBackToolbar_' + id).show();
                 }, 500);
             }
         },
@@ -1456,7 +1459,7 @@ var delay = (function(){
                     obj = $($.fn.postitall.globals.prefix + $(e).data('PIA-id'));
                     options = $($.fn.postitall.globals.prefix + $(e).data('PIA-id')).data('PIA-options');
                     //console.log(i,options,obj);
-                    if(options.attachedTo.element !== undefined && options.attachedTo.element !== "") {
+                    if(options !== undefined && options.attachedTo.element !== undefined && options.attachedTo.element !== "") {
                         //Attached elements
                         if(options.attachedTo.fixed !== undefined && options.attachedTo.fixed)
                             t.attachedTo(options);
@@ -2211,11 +2214,18 @@ var delay = (function(){
                                 //'width': options.width - 10,
                                 'height': options.height - 40
                             });
+                            $('#idBackInfo_'+index+' .PIAtab span:nth-of-type(2)').css({
+                                'width': options.width - 30,
+                                'height': options.height - 60
+                            });
                             $('#idBackInfo_'+index).show();
                             t.switchBackNoteOn('PIAflip2');
                             //Open first tab
-                            if(typeof options.meta !== 'undefined' && typeof options.meta === 'object')
-                                top.location.href = window.location.origin + window.location.pathname + "#PIAtab-1"+index;
+                            if(typeof options.meta !== 'undefined' && typeof options.meta === 'object') {
+                                $('#idPIAtab-1'+index).click();
+                                //top.location.href = window.location.origin + window.location.pathname + "#PIAtab-1"+index;
+                                $('#idDateBackToolbar_' + index).hide();
+                            }
                         }
                         e.preventDefault();
                     });
@@ -2791,8 +2801,8 @@ var delay = (function(){
                 })
             )
             .append($('<span />', {
-                    'class': 'float-left minicolors_label',
-                    'style': 'padding: 5px;font-size: 6.5px;font-family:verdana;'
+                    'id': 'idDateBackToolbar_' + index,
+                    'class': 'PIAdateBackToolbar'
                 }).html(d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")")
             );
             return toolbar;
@@ -2973,7 +2983,7 @@ var delay = (function(){
                     datePickerForm += "<div>The note will be displayed again on the following datetime : </div>";
                     if($.ui.timepicker) {
                         datePickerForm += "<input type='text' id='datepicker_"+index+"' placeholder='dd/mm/yyyy hh:mm'>";
-                    } else {
+                    } else {
                         datePickerForm += "<input type='text' id='datepicker_"+index+"' size=11 placeholder='dd/mm/yyyy'>";
                         datePickerForm += "&nbsp;<input type='textbox' placeholder='hh:mm' id='timepicker_" + index + "' size=6>";
                     }
@@ -3178,18 +3188,28 @@ var delay = (function(){
                 finalPanel = $('<div />', { 'class' : 'PIAtabs' }).append(
                     $('<div />', { 'id' : 'PIAtab-1'+index, 'class': 'PIAtab' }).append(
                         $('<span />').append(
-                            $('<a />', { 'href' : '#PIAtab-1'+index }).append("Note info")
+                            $('<a />', { 'id' : 'idPIAtab-1'+index }).click(function() {
+                                $('#PIAtab-1'+index).addClass('PIAtab_selected');
+                                $('#PIAtab-2'+index).removeClass('PIAtab_selected');
+                                $('#idPIApanel1'+index).show();
+                                $('#idPIApanel2'+index).hide();
+                            }).append("Note info")
                         )
                     ).append(
-                        $('<span />', { 'class' : 'PIAinfoBox' }).append(textInfo)
+                        $('<span />', { 'id' : 'idPIApanel1'+index, 'class' : 'PIAinfoBox' }).append(textInfo)
                     )
                 ).append(
                     $('<div />', { 'id' : 'PIAtab-2'+index, 'class': 'PIAtab' }).append(
                         $('<span />').append(
-                            $('<a />', { 'href' : '#PIAtab-2'+index }).append("Meta data")
+                            $('<a />', { 'id' : 'idPIAtab-2'+index }).click(function() {
+                                $('#PIAtab-1'+index).removeClass('PIAtab_selected');
+                                $('#PIAtab-2'+index).addClass('PIAtab_selected');
+                                $('#idPIApanel1'+index).hide();
+                                $('#idPIApanel2'+index).show();
+                            }).append("Meta data")
                         )
                     ).append(
-                        $('<span />', { 'class' : 'PIAinfoBox' }).append(formInfo)
+                        $('<span />', { 'id' : 'idPIApanel2'+index, 'class' : 'PIAinfoBox' }).append(formInfo)
                     )
                 );
             } else if(addInfo) {
