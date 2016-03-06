@@ -233,7 +233,8 @@ var delay = (function(){
         expand          : true,         //Expand note
         fixed           : true,         //Allow to fix the note in page
         addNew          : true,         //Create a new postit
-        showInfo        : true,         //Show info icon
+        showInfo        : true,         //Show info icon (info tab)
+        showMeta        : true,         //Show info icon (meta tab)
         pasteHtml       : true,         //Allow paste html in contenteditor
         htmlEditor      : true,         //Html editor (trumbowyg)
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
@@ -511,7 +512,7 @@ var delay = (function(){
 
             //Check if we have the id
             var options = opt;
-            //console.log(options.style.backgroundcolor);
+            //console.log('options', options);
             if(options.id !== "") {
                 //Random bg & textcolor
                 options = randCol(options);
@@ -2192,7 +2193,8 @@ var delay = (function(){
             //Buttom icon toolbar
             if(($.fn.postitall.globals.showInfo && options.features.showInfo)
             || ($.fn.postitall.globals.addNew && options.features.addNew)
-            || (typeof options.meta !== 'undefined' && typeof options.meta === 'object')
+            || ($.fn.postitall.globals.showMeta && options.features.showMeta
+                && typeof options.meta !== 'undefined' && typeof options.meta === 'object')
             ) {
                 var bottomToolbar = $('<div />', {
                     'id': 'idPIAIconBottom_'+ index,
@@ -2200,7 +2202,9 @@ var delay = (function(){
                 });
                 //Info icon (show whit showInfo or with meta)
                 if (($.fn.postitall.globals.showInfo && options.features.showInfo)
-                || (typeof options.meta !== 'undefined' && typeof options.meta === 'object')) {
+                || ($.fn.postitall.globals.showMeta && options.features.showMeta
+                    && typeof options.meta !== 'undefined' && typeof options.meta === 'object')
+                ) {
                     var info = $('<a />', {
                         'href': '#',
                         'id': 'idInfo_'+index,
@@ -2221,9 +2225,10 @@ var delay = (function(){
                             $('#idBackInfo_'+index).show();
                             t.switchBackNoteOn('PIAflip2');
                             //Open first tab
-                            if(typeof options.meta !== 'undefined' && typeof options.meta === 'object') {
+                            if (($.fn.postitall.globals.showInfo && options.features.showInfo)
+                            && ($.fn.postitall.globals.showMeta && options.features.showMeta
+                                && typeof options.meta !== 'undefined' && typeof options.meta === 'object')) {
                                 $('#idPIAtab-1'+index).click();
-                                //top.location.href = window.location.origin + window.location.pathname + "#PIAtab-1"+index;
                                 $('#idDateBackToolbar_' + index).hide();
                             }
                         }
@@ -3096,7 +3101,8 @@ var delay = (function(){
             }
             //Show meta data tab?
             var addMeta = false;
-            if(typeof options.meta !== 'undefined' && typeof options.meta === 'object') {
+            if($.fn.postitall.globals.showMeta && options.features.showMeta
+            && typeof options.meta !== 'undefined' && typeof options.meta === 'object') {
                 addMeta = true;
             }
             //Nothing to show
