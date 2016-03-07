@@ -11,6 +11,63 @@
 .red a { color: red; font-weight: bold; text-decoration: none; }
 .red a:hover { text-decoration: underline; }
 
+/*tabs*/
+.PIAtabs {
+    margin: -28px auto 0px;
+}
+.PIAtab {
+    display: inline-block;
+    margin-left: 4px;
+}
+.PIAtab:first-of-type {
+    margin-left: 0;
+}
+.PIAtab span:first-of-type a {
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 6px;
+    color: #eee;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-decoration: none;
+	font-size:8px;
+	background-color: #ccc;
+	font-weight: bold;
+}
+.PIAtab_selected span:first-of-type a {
+    background: #eee;
+    padding: 6px 10px 5px 10px;
+    color: #333;
+	height: 100%;
+	font-weight: bold;
+}
+.PIAtab_selected span {
+    z-index: 1;
+}
+.PIAtab p {
+    padding: 0;
+    margin: 0;
+    text-align: justify;
+}
+.PIAtab span:nth-of-type(2) {
+    display: block;
+    padding: 8px;
+    color: #888;
+    background: #eee;
+    position: absolute;
+    left: 6px;
+}
+.PIAtab_selected span:first-of-type a:hover, .PIAtab span:first-of-type a:hover {
+    background: #eee;
+    color: #333;
+	font-weight: bold;
+}
+
+.PIApanelBox {
+    background: #eee;
+    border: 1px solid #ccc;
+}
+
 /* reset previous styles */
 input, textarea, div[contenteditable] {
 	width: auto;
@@ -105,6 +162,16 @@ input:focus, textarea:focus, div[contenteditable="true"]:focus {
 .PIAconfigBox {
   	background: rgba(207,231,226,0.8);
   	/*overflow: auto;*/
+}
+
+.PIAdateBackToolbar {
+    padding: 5px;
+    font-size: 6.5px;
+    font-family:verdana;
+    float: left;
+    margin:-3px 0px 0px 0px;
+  	display: block;
+  	line-height: 9px;
 }
 
 .PIAicon, .PIAiconFixed {

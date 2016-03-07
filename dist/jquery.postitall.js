@@ -41,7 +41,7 @@ var delay = (function(){
     "use strict";
 
     // Debug
-    var debugging = false; // or true
+    var debugging = true; // or true
     if (typeof console === "undefined") {
         console = {
             log: function () { return undefined; }
@@ -233,7 +233,8 @@ var delay = (function(){
         expand          : true,         //Expand note
         fixed           : true,         //Allow to fix the note in page
         addNew          : true,         //Create a new postit
-        showInfo        : true,         //Show info icon
+        showInfo        : true,         //Show info icon (info tab)
+        showMeta        : true,         //Show info icon (meta tab)
         pasteHtml       : true,         //Allow paste html in contenteditor
         htmlEditor      : true,         //Html editor (trumbowyg)
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
@@ -290,6 +291,30 @@ var delay = (function(){
             position        : 'right',              //Position relative to elemente : top, right, bottom or left
             fixed           : true,                 //Fix note to element when resize screen
             arrow           : true,                 //Show an arrow in the inverse position
+        },
+        //Meta data
+        meta: {
+            'Title': {
+                'type': 'input',
+                'maxlength': '20',
+                'value': '',
+                'placeholder': 'Note title'
+            },
+            'Category': {
+                'type': 'combo',
+                'value': '0',
+                'values': {
+                    '0': 'Select a category',
+                    '1': 'Personal',
+                    '2': 'Work',
+                    '3': 'Other'
+                }
+            },
+            'Observations': {
+                'type': 'textarea',
+                'value': '',
+                'placeholder': 'Other considerations ...'
+            }
         },
         // Callbacks / Event Handlers
         onCreated: function(id, options, obj) { return undefined; },    //Triggered after note creation
@@ -487,7 +512,7 @@ var delay = (function(){
 
             //Check if we have the id
             var options = opt;
-            //console.log(options.style.backgroundcolor);
+            //console.log('options', options);
             if(options.id !== "") {
                 //Random bg & textcolor
                 options = randCol(options);
@@ -1271,7 +1296,10 @@ var delay = (function(){
             if($.fn.postitall.globals.resizable && $.ui) $($.fn.postitall.globals.prefix + id).resizable("enable");
             if($.fn.postitall.globals.draggable && $.ui) {
                 setTimeout(function() {
+                    //Enable draggable
                     $($.fn.postitall.globals.prefix + id).draggable({disabled: false});
+                    //Show back-date
+                    $('#idDateBackToolbar_' + id).show();
                 }, 500);
             }
         },
@@ -1432,7 +1460,7 @@ var delay = (function(){
                     obj = $($.fn.postitall.globals.prefix + $(e).data('PIA-id'));
                     options = $($.fn.postitall.globals.prefix + $(e).data('PIA-id')).data('PIA-options');
                     //console.log(i,options,obj);
-                    if(options.attachedTo.element !== undefined && options.attachedTo.element !== "") {
+                    if(options !== undefined && options.attachedTo.element !== undefined && options.attachedTo.element !== "") {
                         //Attached elements
                         if(options.attachedTo.fixed !== undefined && options.attachedTo.fixed)
                             t.attachedTo(options);
@@ -2008,7 +2036,6 @@ var delay = (function(){
             }
 
             //Fixed
-            //console.log($.fn.postitall.globals.fixed, options.features.fixed);
             if($.fn.postitall.globals.fixed) {
                 if(options.features.fixed) {
                     toolbar.append(
@@ -2144,13 +2171,7 @@ var delay = (function(){
                         text = $.htmlClean(text, { format: true });
                     }
                 }
-                //console.log('text', text);
-
-                //$(this).html(text);
-                //$(this).trumbowyg('html', text);
                 t.options.content = text;
-
-                //options.content = $(this).html();
                 t.autoresize();
                 t.save(obj, function(error) {
                     if(error !== undefined && error !== "") {
@@ -2169,13 +2190,21 @@ var delay = (function(){
                 content.attr('contenteditable', false).css("cursor", "auto");
             }
 
-            //Info icon
-            if(($.fn.postitall.globals.showInfo && options.features.showInfo) || ($.fn.postitall.globals.addNew && options.features.addNew)) {
+            //Buttom icon toolbar
+            if(($.fn.postitall.globals.showInfo && options.features.showInfo)
+            || ($.fn.postitall.globals.addNew && options.features.addNew)
+            || ($.fn.postitall.globals.showMeta && options.features.showMeta
+                && typeof options.meta !== 'undefined' && typeof options.meta === 'object')
+            ) {
                 var bottomToolbar = $('<div />', {
                     'id': 'idPIAIconBottom_'+ index,
                     'class': 'PIAIconBottom'
                 });
-                if($.fn.postitall.globals.showInfo && options.features.showInfo) {
+                //Info icon (show whit showInfo or with meta)
+                if (($.fn.postitall.globals.showInfo && options.features.showInfo)
+                || ($.fn.postitall.globals.showMeta && options.features.showMeta
+                    && typeof options.meta !== 'undefined' && typeof options.meta === 'object')
+                ) {
                     var info = $('<a />', {
                         'href': '#',
                         'id': 'idInfo_'+index,
@@ -2189,51 +2218,53 @@ var delay = (function(){
                                 //'width': options.width - 10,
                                 'height': options.height - 40
                             });
+                            $('#idBackInfo_'+index+' .PIAtab span:nth-of-type(2)').css({
+                                'width': options.width - 30,
+                                'height': options.height - 60
+                            });
                             $('#idBackInfo_'+index).show();
                             t.switchBackNoteOn('PIAflip2');
+                            //Open first tab
+                            if (($.fn.postitall.globals.showInfo && options.features.showInfo)
+                            && ($.fn.postitall.globals.showMeta && options.features.showMeta
+                                && typeof options.meta !== 'undefined' && typeof options.meta === 'object')) {
+                                $('#idPIAtab-1'+index).click();
+                                $('#idDateBackToolbar_' + index).hide();
+                            }
                         }
                         e.preventDefault();
                     });
                     bottomToolbar.append(info);
                 }
-                //New note
+                //Copy note icon
                 if($.fn.postitall.globals.addNew && options.features.addNew) {
-                    //if (options.features.addNew) {
-                        var newNote = $('<a />', {
-                            'href': '#',
-                            'id': 'pia_new_' + index,
-                            'class': 'PIAnew PIAicon'
-                        }).click(function (e) {
-                            if (obj.hasClass('PIAdragged')) {
-                                obj.removeClass('PIAdragged');
-                            } else {
-                                var newOptions = {};
-                                newOptions.width = options.width;
-                                newOptions.width += parseInt($($.fn.postitall.globals.prefix + index).css('padding-left'), 10);
-                                newOptions.width += parseInt($($.fn.postitall.globals.prefix + index).css('padding-right'), 10);
-                                $.PostItAll.new({
-                                    content: options.content,
-                                    //position: 'absolute',
-                                    //posX: e.pageX,
-                                    //posY: e.pageY,
-                                    posX: parseInt(options.posX, 10) + 10,
-                                    posY: parseInt(options.posY, 10) + 10,
-                                    width: options.width,
-                                    height: options.height,
-                                    features: options.features,
-                                    attachedTo: options.attachedTo,
-                                    style: options.style,
-                                }, function(id, options, obj) {
-                                    setTimeout(function() {
-                                        $('.PIApostit').css('z-index', 999995);
-                                        $(id).css('z-index', 999999);
-                                    }, 100);
-                                });
-                            }
-                            e.preventDefault();
-                        });
-                        bottomToolbar.append(newNote);
-                    //}
+                    var newNote = $('<a />', {
+                        'href': '#',
+                        'id': 'pia_new_' + index,
+                        'class': 'PIAnew PIAicon'
+                    }).click(function (e) {
+                        if (obj.hasClass('PIAdragged')) {
+                            obj.removeClass('PIAdragged');
+                        } else {
+                            $.PostItAll.new({
+                                content: options.content,
+                                posX: parseInt(options.posX, 10) + 10,
+                                posY: parseInt(options.posY, 10) + 10,
+                                width: options.width,
+                                height: options.height,
+                                features: options.features,
+                                attachedTo: options.attachedTo,
+                                style: options.style,
+                            }, function(id, options, obj) {
+                                setTimeout(function() {
+                                    $('.PIApostit').css('z-index', 999995);
+                                    $(id).css('z-index', 999999);
+                                }, 100);
+                            });
+                        }
+                        e.preventDefault();
+                    });
+                    bottomToolbar.append(newNote);
                 }
                 toolbar.prepend(bottomToolbar);
             }
@@ -2244,18 +2275,17 @@ var delay = (function(){
                 'dir': 'ltr',
             }).append(toolbar).append(content);
 
-
             //// BACK PAGES ////
-            //Toolbar
+            //Back: Toolbar
             var toolbar = this.__getBPToolbar(index);
             //Back 1: config
             var configInfo = this.__getBPConfig(index);
-            //Back 2: info
-            var backInfo = this.__getBPInfo(index);
-            //Back 3: delete
+            //Back 2: delete
             var deleteInfo = this.__getBPDelete(index, obj);
-            //Back 4: hideUntil
+            //Back 3: hideUntil
             var hideUntilPanel = this.__getBPHideUntil(index);
+            //Back 4: Info & meta data
+            var metaDataPanel = this.__getBPMetaData(index);
 
             //Back page content
             var back = $('<div />', {
@@ -2264,9 +2294,9 @@ var delay = (function(){
             })
             .append(toolbar)
             .append(configInfo)
-            .append(backInfo)
             .append(deleteInfo)
-            .append(hideUntilPanel);
+            .append(hideUntilPanel)
+            .append(metaDataPanel);
 
             //Create postit
             var postit = $('<div />', {
@@ -2275,9 +2305,7 @@ var delay = (function(){
             });
             //Add front
             postit.append(front);
-
             //Add back
-            //if($.fn.postitall.globals.changeoptions && options.features.changeoptions)
             postit.append(back);
 
             //Convert relative position to prevent height and width in html layout
@@ -2778,8 +2806,8 @@ var delay = (function(){
                 })
             )
             .append($('<span />', {
-                    'class': 'float-left minicolors_label',
-                    'style': 'padding: 5px;font-size: 6.5px;font-family:verdana;'
+                    'id': 'idDateBackToolbar_' + index,
+                    'class': 'PIAdateBackToolbar'
                 }).html(d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")")
             );
             return toolbar;
@@ -2939,35 +2967,6 @@ var delay = (function(){
             return deleteInfo;
         },
 
-        //Info back panel
-        __getBPInfo : function(index) {
-            var t = this;
-            var options = t.options;
-            //Back 2: info
-            var backInfo = "";
-            if($.fn.postitall.globals.showInfo && options.features.showInfo) {
-                var d = new Date(options.created);
-                var textDate = d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")";
-                var textInfo = "<div class='PIAtitle'>Note info</div>";
-                textInfo += "<strong>Id:</strong> "+$.fn.postitall.globals.prefix+index+"<br>";
-                textInfo += "<strong>Created on:</strong> "+textDate+"<br>";
-                if(typeof options.domain === 'object' && options.domain.indexOf("http") >= 0)
-                    textInfo += "<strong>Domain:</strong> "+options.domain+"<br>";
-                textInfo += "<strong>Page:</strong> "+options.page+"<br>";
-                textInfo += "<strong>Op.System:</strong> " + t.getOSName() + " - "+options.osname+"<br>";
-                backInfo = $('<div />', {
-                    'id': 'idBackInfo_'+index,
-                    'class': 'PIAcontent backContent_'+index
-                }).append(
-                    $('<div />', {
-                        'class': 'PIAinfoBox PIABox',
-                        'height': options.height - 40
-                    }).append(textInfo)
-                );
-            }
-            return backInfo;
-        },
-
         //Hide Until
         __getBPHideUntil : function(index) {
             var t = this;
@@ -2989,7 +2988,7 @@ var delay = (function(){
                     datePickerForm += "<div>The note will be displayed again on the following datetime : </div>";
                     if($.ui.timepicker) {
                         datePickerForm += "<input type='text' id='datepicker_"+index+"' placeholder='dd/mm/yyyy hh:mm'>";
-                    } else {
+                    } else {
                         datePickerForm += "<input type='text' id='datepicker_"+index+"' size=11 placeholder='dd/mm/yyyy'>";
                         datePickerForm += "&nbsp;<input type='textbox' placeholder='hh:mm' id='timepicker_" + index + "' size=6>";
                     }
@@ -3089,8 +3088,159 @@ var delay = (function(){
                 );
             }
             return panel;
-        }
+        },
 
+        //Meta data panel
+        __getBPMetaData : function(index) {
+            var t = this;
+            var options = t.options;
+            //Show info tab?
+            var addInfo = false;
+            if($.fn.postitall.globals.showInfo && options.features.showInfo) {
+                addInfo = true;
+            }
+            //Show meta data tab?
+            var addMeta = false;
+            if($.fn.postitall.globals.showMeta && options.features.showMeta
+            && typeof options.meta !== 'undefined' && typeof options.meta === 'object') {
+                addMeta = true;
+            }
+            //Nothing to show
+            if(!addInfo && !addMeta)
+                return "";
+
+            //Info note
+            if(addInfo) {
+                var d = new Date(options.created);
+                var textDate = d.toLocaleDateString() + " (" + d.toLocaleTimeString() + ")";
+                var textInfo = "";
+                if(!addMeta)
+                    textInfo += "<div class='PIAtitle'>Note info</div>";
+                textInfo += "<strong>Id:</strong> "+$.fn.postitall.globals.prefix+index+"<br>";
+                textInfo += "<strong>Created on:</strong> "+textDate+"<br>";
+                if(typeof options.domain === 'object' && options.domain.indexOf("http") >= 0)
+                    textInfo += "<strong>Domain:</strong> "+options.domain+"<br>";
+                textInfo += "<strong>Page:</strong> "+options.page+"<br>";
+                textInfo += "<strong>Op.System:</strong> " + t.getOSName() + " - "+options.osname+"<br>";
+            }
+
+            //Meta data
+            if(addMeta) {
+                //Get form input
+                var _FormElement = function(index, key, element) {
+                    var ret = "";
+                    if(typeof element === 'object' && element.type !== undefined) {
+                        ret = $("<div />");
+                        //On-change event
+                        var _onChange = function(e) {
+                            var tmpObj = $(this)
+                            delay(function() {
+                                //Save meta-data
+                                options.meta[tmpObj.attr("data-title")].value = tmpObj.val();
+                                t.setOptions(options, true);
+                            },500);
+                        };
+                        var objElement = null;
+                        var val = element.value;
+                        //Input properties
+                        var tmpObj = { 'name': 'input_' + key + '_' + index, 'data-title': key };
+                        if(element.maxlength !== undefined) tmpObj.maxlength = parseInt(element.maxlength, 10);
+                        if(element.size !== undefined) tmpObj.size = parseInt(element.size, 10);
+                        if(element.placeholder !== undefined) tmpObj.placeholder = element.placeholder;
+                        //type treatment
+                        switch(element.type) {
+                            //Combo type
+                            case 'combo':
+                                objElement = $('<select />', tmpObj).keypress(_onChange).change(_onChange);
+                                $(element.values).each(function(i,e) {
+                                    $.each(this, function (tmpName, tmpValue) {
+                                        var tmpSelOpt = { 'value' : tmpName };
+                                        if(val !== undefined && val === tmpName) tmpSelOpt.selected = 'selected';
+                                        objElement.append($('<option />', tmpSelOpt).append(tmpValue));
+                                    });
+                                });
+                                break;
+                            //Textarea type
+                            case 'textarea':
+                                objElement = $('<textarea />', tmpObj).keypress(_onChange).change(_onChange).append(val);
+                                break;
+                            //Default & input type
+                            default:
+                            case 'input':
+                                tmpObj.type = 'text';
+                                if(val !== undefined) tmpObj.value = val;
+                                objElement = $('<input />', tmpObj).keypress(_onChange).change(_onChange);
+                                break;
+                        }
+                        //Add form element
+                        ret.append($("<label />").append(key).append($('<br />')).append(objElement));
+                    }
+                    return ret;
+                };
+
+                var formInfo = $('<div />', { 'class' : 'meta-form' });
+                $(options.meta).each(function() {
+                    $.each(this, function (key, element) {
+                        formInfo.append(_FormElement(index, key, element));
+                   });
+                });
+            }
+
+            var finalPanel = "";
+            var panelClass = "";
+            if(addInfo && addMeta) {
+                //Tabs : info & meta
+                panelClass = "PIApanelBox";
+                finalPanel = $('<div />', { 'class' : 'PIAtabs' }).append(
+                    $('<div />', { 'id' : 'PIAtab-1'+index, 'class': 'PIAtab' }).append(
+                        $('<span />').append(
+                            $('<a />', { 'id' : 'idPIAtab-1'+index }).click(function() {
+                                $('#PIAtab-1'+index).addClass('PIAtab_selected');
+                                $('#PIAtab-2'+index).removeClass('PIAtab_selected');
+                                $('#idPIApanel1'+index).show();
+                                $('#idPIApanel2'+index).hide();
+                            }).append("Note info")
+                        )
+                    ).append(
+                        $('<span />', { 'id' : 'idPIApanel1'+index, 'class' : 'PIAinfoBox' }).append(textInfo)
+                    )
+                ).append(
+                    $('<div />', { 'id' : 'PIAtab-2'+index, 'class': 'PIAtab' }).append(
+                        $('<span />').append(
+                            $('<a />', { 'id' : 'idPIAtab-2'+index }).click(function() {
+                                $('#PIAtab-1'+index).removeClass('PIAtab_selected');
+                                $('#PIAtab-2'+index).addClass('PIAtab_selected');
+                                $('#idPIApanel1'+index).hide();
+                                $('#idPIApanel2'+index).show();
+                            }).append("Meta data")
+                        )
+                    ).append(
+                        $('<span />', { 'id' : 'idPIApanel2'+index, 'class' : 'PIAinfoBox' }).append(formInfo)
+                    )
+                );
+            } else if(addInfo) {
+                //Only info
+                panelClass = "PIAinfoBox";
+                finalPanel = textInfo
+            } else {
+                //Only meta
+                panelClass = "PIAinfoBox";
+                var formTitle = $('<div />', { 'class' : 'PIAtitle' }).append("Meta data");
+                finalPanel = formInfo.prepend(formTitle);
+            }
+
+            //Final obj
+            var panel = $('<div />', {
+                'id': 'idBackInfo_'+index,
+                'class': 'PIAcontent backContent_'+index
+            }).append(
+                $('<div />', {
+                    'class': 'PIABox ' + panelClass,
+                    'height': options.height - 40
+                }).append(finalPanel)
+            );
+            return panel;
+        }
     };
 
     //Drag postits
