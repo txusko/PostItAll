@@ -71,6 +71,45 @@ var delay = (function(){
         dat.setTime(dat.getTime() + (seconds*1000));
         return dat;
     };
+    Date.prototype.toFormat = function (f) {
+        var nm = this.getMonthName();
+        var nd = this.getDayName();
+        f = f.replace(/yyyy/g, this.getFullYear());
+        f = f.replace(/yy/g, String(this.getFullYear()).substr(2,2));
+        f = f.replace(/MMM/g, nm.substr(0,3).toUpperCase());
+        f = f.replace(/Mmm/g, nm.substr(0,3));
+        f = f.replace(/MM\*/g, nm.toUpperCase());
+        f = f.replace(/Mm\*/g, nm);
+        f = f.replace(/mm/g, String(this.getMonth()+1).padLeft('0',2));
+        f = f.replace(/DDD/g, nd.substr(0,3).toUpperCase());
+        f = f.replace(/Ddd/g, nd.substr(0,3));
+        f = f.replace(/DD\*/g, nd.toUpperCase());
+        f = f.replace(/Dd\*/g, nd);
+        f = f.replace(/dd/g, String(this.getDate()).padLeft('0',2));
+        f = f.replace(/d\*/g, this.getDate());
+        return f;
+    };
+    Date.prototype.getMonthName = function () {
+        return this.toLocaleString().replace(/[^a-z]/gi,'');
+    };
+    //n.b. this is sooo not i18n safe :)
+    Date.prototype.getDayName = function () {
+        switch(this.getDay())
+        {
+        	case 0: return 'Sunday';
+        	case 1: return 'Monday';
+        	case 2: return 'Tuesday';
+        	case 3: return 'Wednesday';
+        	case 4: return 'Thursday';
+        	case 5: return 'Friday';
+        	case 6: return 'Saturday';
+        }
+    };
+    String.prototype.padLeft = function (value, size) {
+        var x = this;
+        while (x.length < size) {x = value + x;}
+        return x;
+    };
 
     // PLUGIN Public methods
     $.extend($.fn, {
@@ -240,7 +279,8 @@ var delay = (function(){
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
         addArrow        : 'back',       //Add arrow to notes : none, front, back, all
         askOnHide       : true,         //Show configuration hideUntil back-panel (getBackPanelHideUntil)
-        hideUntil       : null          //Note will be hidden since that datetime
+        hideUntil       : null,         //Note will be hidden since that datetime
+        export          : true          //Note can be exported
     };
 
     //Copy of the original global configuration
@@ -334,6 +374,69 @@ var delay = (function(){
 
     //Global functions
     jQuery.PostItAll = {
+
+        //Initialize environement
+        __initialize : function() {
+            //The notes
+            if($('#the_notes').length <= 0) {
+                $('<div id="the_notes"></div>').appendTo($('body'));
+            }
+            //The ligths
+            if($('#the_lights').length <= 0) {
+                $('<div id="the_lights"><div id="the_lights_close"></div></div>').appendTo($('body'));
+                $('#the_lights').click(function() {
+                    note.switchOnLights();
+                });
+            }
+            //Upload note
+            if($('#the_imports').length <= 0) {
+                var updString = $("<div />", { 'the_imports': '', 'style' : 'display:none;' });
+                //Input fle
+                var impFile = $('<input />', { id : "idImportFile", type : "file", name : "files" }).on("change", function () {
+                    $('#idImportUpload').click();
+                    $('#idImportFile').val("");
+                });
+                //Input button
+                var impBut = $('<button />', { id : "idImportUpload", type : "file", name : "files" }).on("click", function() {
+                    //Check support
+                    if (!window.FileReader) {
+                        console.log('Browser do not support FileReader.')
+                        return;
+                    }
+                    //Get file
+                    var input = $('#idImportFile').get(0);
+                    if (input.files.length) {
+                        //Get text
+                        var textFile = input.files[0];
+                        if(textFile.size > 0 && textFile.type == "text/plain") {
+                            //Create a new FileReader & read content
+                            var reader = new FileReader();
+                            reader.readAsText(textFile);
+                            $(reader).on('load', function(e) {
+                                //Text readed
+                                var file = e.target.result,results;
+                                if (file && file.length) {
+                                    var obj = JSON.parse(file);
+                                    //Check object
+                                    if(typeof obj === 'object' && obj.id !== undefined) {
+                                        obj.id = "";
+                                        //Create imported note
+                                        $.PostItAll.new(obj);
+                                    } else {
+                                        console.log('Invalid content');
+                                    }
+                                }
+                            });
+                        } else {
+                            console.log('The file is empty or is not a text file.');
+                        }
+                    } else {
+                        console.log('Please upload a file before continuing.')
+                    }
+                });
+                updString.append(impFile).append(impBut).prependTo($('body'));
+            }
+        },
 
         //Change configuration : type (global, note), opt (object)
         changeConfig : function(type, opt) {
@@ -471,17 +574,6 @@ var delay = (function(){
 
             //New note object
             var note = new PostItAll();
-
-            //Add content
-            if($('#the_notes').length <= 0) {
-                $('<div id="the_notes"></div>').appendTo($('body'));
-            }
-            if($('#the_lights').length <= 0) {
-                $('<div id="the_lights"><div id="the_lights_close"></div></div>').appendTo($('body'));
-                $('#the_lights').click(function() {
-                    note.switchOnLights();
-                });
-            }
             if(obj === undefined) {
                 obj = $('<div />', {
                     html: (content !== undefined ? content : '')
@@ -574,6 +666,7 @@ var delay = (function(){
             }
         },
 
+        //Get all notes
         getNotes : function(callback) {
           var len = -1;
           var iteration = 0;
@@ -739,6 +832,32 @@ var delay = (function(){
                     if(callback !== undefined) callback();
                 });
             }
+        },
+
+        //Import note
+        import : function() {
+            //Show upload dialog
+            $('#idImportFile').trigger('click');
+        },
+
+        //Export note
+        export : function(index) {
+            //Get options
+            var obj = $.PostItAll.options($.fn.postitall.globals.prefix + index);
+            //Reset id
+            obj.id = "";
+            var dat = new Date();
+            //Create element
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj)));
+            element.setAttribute('download', dat.toFormat("yyyymmdd") + $.fn.postitall.globals.prefix + index + '.txt');
+            element.style.display = 'none';
+            //Append element to body
+            document.body.appendChild(element);
+            //Trigger download
+            element.click();
+            //Remove temporal element
+            document.body.removeChild(element);
         }
     };
 
@@ -2266,6 +2385,23 @@ var delay = (function(){
                     });
                     bottomToolbar.append(newNote);
                 }
+                //Export note
+                if(options.features.export) {
+                    var exportNote = $('<a />', {
+                        'href': '#',
+                        'id': 'pia_export_' + index,
+                        'class': 'PIAexport PIAicon'
+                    }).click(function (e) {
+                        if (obj.hasClass('PIAdragged')) {
+                            obj.removeClass('PIAdragged');
+                        } else {
+                            $.PostItAll.export(index);
+                        }
+                        e.preventDefault();
+                    });
+                    bottomToolbar.append(exportNote);
+                }
+
                 toolbar.prepend(bottomToolbar);
             }
 
@@ -3328,9 +3464,13 @@ var delay = (function(){
         },
         get: function (id, callback) {
             this.loadManager(function() {
-                $storage.get(id, function(varvalue) {
-                    if(callback != null) callback(varvalue);
-                });
+                if(id !== "") {
+                    $storage.get(id, function(varvalue) {
+                        if(callback != null) callback(varvalue);
+                    });
+                } else {
+                    if(callback != null) callback(null);
+                }
             });
         },
         getAll: function (callback) {
@@ -3344,7 +3484,11 @@ var delay = (function(){
             this.loadManager(function() {
                 if (key != null && key.slice(0,7) === "PostIt_") {
                     key = key.slice(7,key.length);
-                    storageManager.get(key, callback);
+                    if(key !== "") {
+                        storageManager.get(key, callback);
+                    } else {
+                        if(callback != null) callback(null);
+                    }
                 } else {
                     if(callback != null) callback(null);
                 }
@@ -3454,5 +3598,10 @@ var delay = (function(){
             console.log('TODO getAll on localStorage');
         }
     };
+
+    //Initialize environement
+    $(document).ready(function() {
+        $.PostItAll.__initialize();
+    });
 
 }(jQuery, window.localStorage));
