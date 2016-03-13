@@ -377,27 +377,25 @@ var delay = (function(){
 
         //Initialize environement
         __initialize : function() {
+
             //The notes
             if($('#the_notes').length <= 0) {
                 $('<div id="the_notes"></div>').appendTo($('body'));
             }
+
             //The ligths
             if($('#the_lights').length <= 0) {
                 $('<div id="the_lights"><div id="the_lights_close"></div></div>').appendTo($('body'));
                 $('#the_lights').click(function() {
+                    var note = new PostItAll();
                     note.switchOnLights();
                 });
             }
+
             //Upload note
             if($('#the_imports').length <= 0) {
-                var updString = $("<div />", { 'the_imports': '', 'style' : 'display:none;' });
-                //Input fle
-                var impFile = $('<input />', { id : "idImportFile", type : "file", name : "files" }).on("change", function () {
-                    $('#idImportUpload').click();
-                    $('#idImportFile').val("");
-                });
-                //Input button
-                var impBut = $('<button />', { id : "idImportUpload", type : "file", name : "files" }).on("click", function() {
+                //Import file
+                var importFile = function() {
                     //Check support
                     if (!window.FileReader) {
                         console.log('Browser do not support FileReader.')
@@ -416,24 +414,53 @@ var delay = (function(){
                                 //Text readed
                                 var file = e.target.result,results;
                                 if (file && file.length) {
-                                    var obj = JSON.parse(file);
                                     //Check object
-                                    if(typeof obj === 'object' && obj.id !== undefined) {
-                                        obj.id = "";
-                                        //Create imported note
-                                        $.PostItAll.new(obj);
+                                    var obj = JSON.parse(file);
+                                    if(typeof obj === 'object') {
+                                        //create new note
+                                        var newNote = function(obj) {
+                                            delete obj.id; //reset id
+                                            //TODO : reset domain&page or redirect?
+                                            delete obj.domain;
+                                            delete obj.page;
+                                            $.PostItAll.new(obj);
+                                        }
+                                        if(obj.id !== undefined) {
+                                            //One note
+                                            newNote(obj);
+                                        } else if($(obj).length > 0) {
+                                            //Various notes
+                                            $(obj).each(function(n1,obj2) {
+                                                if(obj2.id !== undefined) {
+                                                    setTimeout(function() {
+                                                        newNote(obj2);
+                                                    }, 250 + ( n1 * 250 ));
+                                                }
+                                            });
+                                        } else {
+                                            alert('No notes to import');
+                                        }
                                     } else {
-                                        console.log('Invalid content');
+                                        alert('Invalid file content');
                                     }
                                 }
                             });
                         } else {
-                            console.log('The file is empty or is not a text file.');
+                            alert('The file is empty or is not a text file.');
                         }
                     } else {
-                        console.log('Please upload a file before continuing.')
+                        alert('Please upload a file before continuing.')
                     }
+                };
+                //The imports
+                var updString = $("<div />", { 'the_imports': '', 'style' : 'display:none;' });
+                //Input fle
+                var impFile = $('<input />', { id : "idImportFile", type : "file", name : "files" }).on("change", function () {
+                    $('#idImportUpload').click();
+                    $('#idImportFile').val("");
                 });
+                //Input button
+                var impBut = $('<button />', { id : "idImportUpload", type : "file", name : "files" }).on("click", importFile);
                 updString.append(impFile).append(impBut).prependTo($('body'));
             }
         },
@@ -667,11 +694,13 @@ var delay = (function(){
         },
 
         //Get all notes
-        getNotes : function(callback) {
+        getNotes : function(callback, filtered) {
           var len = -1;
           var iteration = 0;
           var finded = false;
           var notes = [];
+          if(typeof filtered === 'undefined')
+            filtered = $.fn.postitall.globals.filter;
           storageManager.getlength(function(len) {
               if(!len) {
                   if(typeof callback === 'function') callback(notes);
@@ -681,9 +710,9 @@ var delay = (function(){
                   storageManager.key(i, function(key) {
                       storageManager.getByKey(key, function(o) {
                           if (o != null) {
-                              if($.fn.postitall.globals.filter == "domain")
+                              if(filtered == "domain")
                                   finded = (o.domain === window.location.origin);
-                              else if($.fn.postitall.globals.filter == "page")
+                              else if(filtered == "page")
                                   finded = (o.domain === window.location.origin && o.page === window.location.pathname);
                               else
                                   finded = true;
@@ -704,9 +733,9 @@ var delay = (function(){
 
         //Load all (from storage)
         load : function(callback, callbacks, highlight) {
-          var len = -1;
-          var iteration = 0;
-          $.PostItAll.getNotes(function(notes) {
+            var len = -1;
+            var iteration = 0;
+            $.PostItAll.getNotes(function(notes) {
                 if(notes.length > 0) {
                     len = notes.length;
                     $(notes).each(function(i,o) {
@@ -841,23 +870,59 @@ var delay = (function(){
         },
 
         //Export note
-        export : function(index) {
-            //Get options
-            var obj = $.PostItAll.options($.fn.postitall.globals.prefix + index);
-            //Reset id
-            obj.id = "";
-            var dat = new Date();
-            //Create element
-            var element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj)));
-            element.setAttribute('download', dat.toFormat("yyyymmdd") + $.fn.postitall.globals.prefix + index + '.txt');
-            element.style.display = 'none';
-            //Append element to body
-            document.body.appendChild(element);
-            //Trigger download
-            element.click();
-            //Remove temporal element
-            document.body.removeChild(element);
+        export : function(opt) {
+            var obj = null;
+            if(typeof opt === 'undefined') {
+                opt = "loaded";
+            }
+            if(typeof opt === 'string') {
+                switch(opt) {
+                    case "all":
+                    case "domain":
+                    case "page":
+                        obj = [];
+                        $.PostItAll.getNotes(function(notes, opt) {
+                            if(notes.length > 0) {
+                                $(notes).each(function(i,o) {
+                                    var obj2 = $.PostItAll.options($.fn.postitall.globals.prefix + o.id);
+                                    obj.push(obj2);
+                                });
+                            }
+                        });
+                        break;
+                    case "loaded":
+                        obj = [];
+                        $('.PIApostit').each(function(i,e) {
+                            var obj2 = $.PostItAll.options($.fn.postitall.globals.prefix + $(e).data('PIA-id'));
+                            obj.push(obj2);
+                        });
+                        break;
+                    default:
+                        //Get options
+                        obj = $.PostItAll.options($.fn.postitall.globals.prefix + opt);
+                        break;
+                }
+
+                setTimeout(function() {
+                    if(obj != null && (obj.id !== undefined || obj.length > 0)) {
+                        var dat = new Date();
+                        //Create element
+                        var element = document.createElement('a');
+                        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj)));
+                        element.setAttribute('download', dat.toFormat("yyyymmdd") + $.fn.postitall.globals.prefix + opt + '.txt');
+                        element.style.display = 'none';
+                        //Append element to body
+                        document.body.appendChild(element);
+                        //Trigger download
+                        element.click();
+                        //Remove temporal element
+                        document.body.removeChild(element);
+                    } else {
+                        alert('No notes to export');
+                        console.log(obj);
+                    }
+                }, 250);
+            }
         }
     };
 
