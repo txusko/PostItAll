@@ -21,8 +21,12 @@ class PostItAll
 
     //Constructor
     function __construct() {
+    	//Cors for the gh-page example
+        $this->cors("http://txusko.github.io");
+
         //Connection
         $this->mysqli = mysqli_connect($this->db_host, $this->db_user, $this->db_password, $this->db_database, $this->db_port) or die("Error " . mysqli_error($link));
+
         //Create table
         $this->createTable() or die("Table creation error " . mysqli_error($link));
     }
@@ -32,6 +36,38 @@ class PostItAll
         //Close connection
         $this->mysqli->close();
     }
+
+    /**
+	 *  An example CORS-compliant method.  It will allow any GET, POST, or OPTIONS requests from any
+	 *  origin.
+	 *
+	 *  In a production environment, you probably want to be more restrictive, but this gives you
+	 *  the general idea of what is involved.  For the nitty-gritty low-down, read:
+	 *
+	 *  - https://developer.mozilla.org/en/HTTP_access_control
+	 *  - http://www.w3.org/TR/cors/
+	 *
+	 */
+    private function cors($server_url) {
+	    // Allow from any origin
+	    if (isset($_SERVER['HTTP_ORIGIN'])) {
+	        header("Access-Control-Allow-Origin: {$server_url}");
+	        header('Access-Control-Allow-Credentials: true');
+	        header('Access-Control-Max-Age: 86400');    // cache for 1 day
+	    }
+
+	    // Access-Control headers are received during OPTIONS requests
+	    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+	        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+	            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+	        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+	            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+	        exit(0);
+	    }
+	}
 
     //Parse request
     private function getRequest() {
