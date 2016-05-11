@@ -78,6 +78,12 @@
                                   <li class="nav-item">
                                       <a class="nav-link" href="#" id="idShowAll2"><i class="fa fa-toggle-on fa-fw"></i> Show all</a>
                                   </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link" href="#" id="idExport"><i class="fa fa-upload fa-fw"></i> Export all</a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link" href="#" id="idImport"><i class="fa fa-download fa-fw"></i> Import</a>
+                                  </li>
                               </ul>
                               <ul class="nav navbar-nav pull-right">
                                   <li class="nav-item">
@@ -127,6 +133,13 @@
     $(document).ready(function() {
         //Load previous saved notes
         $.PostItAll.load();
+        //Import note
+        $('#idImport').click(function() {
+            $.PostItAll.import();
+        });
+        $('#idExport').click(function() {
+            $.PostItAll.export();
+        });
     });
     </script>
 

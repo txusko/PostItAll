@@ -71,6 +71,45 @@ var delay = (function(){
         dat.setTime(dat.getTime() + (seconds*1000));
         return dat;
     };
+    Date.prototype.toFormat = function (f) {
+        var nm = this.getMonthName();
+        var nd = this.getDayName();
+        f = f.replace(/yyyy/g, this.getFullYear());
+        f = f.replace(/yy/g, String(this.getFullYear()).substr(2,2));
+        f = f.replace(/MMM/g, nm.substr(0,3).toUpperCase());
+        f = f.replace(/Mmm/g, nm.substr(0,3));
+        f = f.replace(/MM\*/g, nm.toUpperCase());
+        f = f.replace(/Mm\*/g, nm);
+        f = f.replace(/mm/g, String(this.getMonth()+1).padLeft('0',2));
+        f = f.replace(/DDD/g, nd.substr(0,3).toUpperCase());
+        f = f.replace(/Ddd/g, nd.substr(0,3));
+        f = f.replace(/DD\*/g, nd.toUpperCase());
+        f = f.replace(/Dd\*/g, nd);
+        f = f.replace(/dd/g, String(this.getDate()).padLeft('0',2));
+        f = f.replace(/d\*/g, this.getDate());
+        return f;
+    };
+    Date.prototype.getMonthName = function () {
+        return this.toLocaleString().replace(/[^a-z]/gi,'');
+    };
+    //n.b. this is sooo not i18n safe :)
+    Date.prototype.getDayName = function () {
+        switch(this.getDay())
+        {
+        	case 0: return 'Sunday';
+        	case 1: return 'Monday';
+        	case 2: return 'Tuesday';
+        	case 3: return 'Wednesday';
+        	case 4: return 'Thursday';
+        	case 5: return 'Friday';
+        	case 6: return 'Saturday';
+        }
+    };
+    String.prototype.padLeft = function (value, size) {
+        var x = this;
+        while (x.length < size) {x = value + x;}
+        return x;
+    };
 
     // PLUGIN Public methods
     $.extend($.fn, {
@@ -240,7 +279,8 @@ var delay = (function(){
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
         addArrow        : 'back',       //Add arrow to notes : none, front, back, all
         askOnHide       : true,         //Show configuration hideUntil back-panel (getBackPanelHideUntil)
-        hideUntil       : null          //Note will be hidden since that datetime
+        hideUntil       : null,         //Note will be hidden since that datetime
+        export          : true          //Note can be exported
     };
 
     //Copy of the original global configuration
@@ -334,6 +374,96 @@ var delay = (function(){
 
     //Global functions
     jQuery.PostItAll = {
+
+        //Initialize environement
+        __initialize : function() {
+
+            //The notes
+            if($('#the_notes').length <= 0) {
+                $('<div id="the_notes"></div>').appendTo($('body'));
+            }
+
+            //The ligths
+            if($('#the_lights').length <= 0) {
+                $('<div id="the_lights"><div id="the_lights_close"></div></div>').appendTo($('body'));
+                $('#the_lights').click(function() {
+                    var note = new PostItAll();
+                    note.switchOnLights();
+                });
+            }
+
+            //Upload note
+            if($('#the_imports').length <= 0) {
+                //Import file
+                var importFile = function() {
+                    //Check support
+                    if (!window.FileReader) {
+                        console.log('Browser do not support FileReader.')
+                        return;
+                    }
+                    //Get file
+                    var input = $('#idImportFile').get(0);
+                    if (input.files.length) {
+                        //Get text
+                        var textFile = input.files[0];
+                        if(textFile.size > 0 && textFile.type == "text/plain") {
+                            //Create a new FileReader & read content
+                            var reader = new FileReader();
+                            reader.readAsText(textFile);
+                            $(reader).on('load', function(e) {
+                                //Text readed
+                                var file = e.target.result,results;
+                                if (file && file.length) {
+                                    //Check object
+                                    var obj = JSON.parse(file);
+                                    if(typeof obj === 'object') {
+                                        //create new note
+                                        var newNote = function(obj) {
+                                            delete obj.id; //reset id
+                                            //TODO : reset domain&page or redirect?
+                                            delete obj.domain;
+                                            delete obj.page;
+                                            $.PostItAll.new(obj);
+                                        }
+                                        if(obj.id !== undefined) {
+                                            //One note
+                                            newNote(obj);
+                                        } else if($(obj).length > 0) {
+                                            //Various notes
+                                            $(obj).each(function(n1,obj2) {
+                                                if(obj2.id !== undefined) {
+                                                    setTimeout(function() {
+                                                        newNote(obj2);
+                                                    }, 250 + ( n1 * 250 ));
+                                                }
+                                            });
+                                        } else {
+                                            alert('No notes to import');
+                                        }
+                                    } else {
+                                        alert('Invalid file content');
+                                    }
+                                }
+                            });
+                        } else {
+                            alert('The file is empty or is not a text file.');
+                        }
+                    } else {
+                        alert('Please upload a file before continuing.')
+                    }
+                };
+                //The imports
+                var updString = $("<div />", { 'the_imports': '', 'style' : 'display:none;' });
+                //Input fle
+                var impFile = $('<input />', { id : "idImportFile", type : "file", name : "files" }).on("change", function () {
+                    $('#idImportUpload').click();
+                    $('#idImportFile').val("");
+                });
+                //Input button
+                var impBut = $('<button />', { id : "idImportUpload", type : "file", name : "files" }).on("click", importFile);
+                updString.append(impFile).append(impBut).prependTo($('body'));
+            }
+        },
 
         //Change configuration : type (global, note), opt (object)
         changeConfig : function(type, opt) {
@@ -471,17 +601,6 @@ var delay = (function(){
 
             //New note object
             var note = new PostItAll();
-
-            //Add content
-            if($('#the_notes').length <= 0) {
-                $('<div id="the_notes"></div>').appendTo($('body'));
-            }
-            if($('#the_lights').length <= 0) {
-                $('<div id="the_lights"><div id="the_lights_close"></div></div>').appendTo($('body'));
-                $('#the_lights').click(function() {
-                    note.switchOnLights();
-                });
-            }
             if(obj === undefined) {
                 obj = $('<div />', {
                     html: (content !== undefined ? content : '')
@@ -574,11 +693,14 @@ var delay = (function(){
             }
         },
 
-        getNotes : function(callback) {
+        //Get all notes
+        getNotes : function(callback, filtered) {
           var len = -1;
           var iteration = 0;
           var finded = false;
           var notes = [];
+          if(typeof filtered === 'undefined')
+            filtered = $.fn.postitall.globals.filter;
           storageManager.getlength(function(len) {
               if(!len) {
                   if(typeof callback === 'function') callback(notes);
@@ -588,9 +710,9 @@ var delay = (function(){
                   storageManager.key(i, function(key) {
                       storageManager.getByKey(key, function(o) {
                           if (o != null) {
-                              if($.fn.postitall.globals.filter == "domain")
+                              if(filtered == "domain")
                                   finded = (o.domain === window.location.origin);
-                              else if($.fn.postitall.globals.filter == "page")
+                              else if(filtered == "page")
                                   finded = (o.domain === window.location.origin && o.page === window.location.pathname);
                               else
                                   finded = true;
@@ -611,9 +733,9 @@ var delay = (function(){
 
         //Load all (from storage)
         load : function(callback, callbacks, highlight) {
-          var len = -1;
-          var iteration = 0;
-          $.PostItAll.getNotes(function(notes) {
+            var len = -1;
+            var iteration = 0;
+            $.PostItAll.getNotes(function(notes) {
                 if(notes.length > 0) {
                     len = notes.length;
                     $(notes).each(function(i,o) {
@@ -738,6 +860,68 @@ var delay = (function(){
                     console.log("Storage cleared");
                     if(callback !== undefined) callback();
                 });
+            }
+        },
+
+        //Import note
+        import : function() {
+            //Show upload dialog
+            $('#idImportFile').trigger('click');
+        },
+
+        //Export note
+        export : function(opt) {
+            var obj = null;
+            if(typeof opt === 'undefined') {
+                opt = "loaded";
+            }
+            if(typeof opt === 'string') {
+                switch(opt) {
+                    case "all":
+                    case "domain":
+                    case "page":
+                        obj = [];
+                        $.PostItAll.getNotes(function(notes, opt) {
+                            if(notes.length > 0) {
+                                $(notes).each(function(i,o) {
+                                    var obj2 = $.PostItAll.options($.fn.postitall.globals.prefix + o.id);
+                                    obj.push(obj2);
+                                });
+                            }
+                        });
+                        break;
+                    case "loaded":
+                        obj = [];
+                        $('.PIApostit').each(function(i,e) {
+                            var obj2 = $.PostItAll.options($.fn.postitall.globals.prefix + $(e).data('PIA-id'));
+                            obj.push(obj2);
+                        });
+                        break;
+                    default:
+                        //Get options
+                        obj = $.PostItAll.options($.fn.postitall.globals.prefix + opt);
+                        break;
+                }
+
+                setTimeout(function() {
+                    if(obj != null && (obj.id !== undefined || obj.length > 0)) {
+                        var dat = new Date();
+                        //Create element
+                        var element = document.createElement('a');
+                        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj)));
+                        element.setAttribute('download', dat.toFormat("yyyymmdd") + $.fn.postitall.globals.prefix + opt + '.txt');
+                        element.style.display = 'none';
+                        //Append element to body
+                        document.body.appendChild(element);
+                        //Trigger download
+                        element.click();
+                        //Remove temporal element
+                        document.body.removeChild(element);
+                    } else {
+                        alert('No notes to export');
+                        console.log(obj);
+                    }
+                }, 250);
             }
         }
     };
@@ -2266,6 +2450,23 @@ var delay = (function(){
                     });
                     bottomToolbar.append(newNote);
                 }
+                //Export note
+                if(options.features.export) {
+                    var exportNote = $('<a />', {
+                        'href': '#',
+                        'id': 'pia_export_' + index,
+                        'class': 'PIAexport PIAicon'
+                    }).click(function (e) {
+                        if (obj.hasClass('PIAdragged')) {
+                            obj.removeClass('PIAdragged');
+                        } else {
+                            $.PostItAll.export(index);
+                        }
+                        e.preventDefault();
+                    });
+                    bottomToolbar.append(exportNote);
+                }
+
                 toolbar.prepend(bottomToolbar);
             }
 
@@ -3328,9 +3529,13 @@ var delay = (function(){
         },
         get: function (id, callback) {
             this.loadManager(function() {
-                $storage.get(id, function(varvalue) {
-                    if(callback != null) callback(varvalue);
-                });
+                if(id !== "") {
+                    $storage.get(id, function(varvalue) {
+                        if(callback != null) callback(varvalue);
+                    });
+                } else {
+                    if(callback != null) callback(null);
+                }
             });
         },
         getAll: function (callback) {
@@ -3344,7 +3549,11 @@ var delay = (function(){
             this.loadManager(function() {
                 if (key != null && key.slice(0,7) === "PostIt_") {
                     key = key.slice(7,key.length);
-                    storageManager.get(key, callback);
+                    if(key !== "") {
+                        storageManager.get(key, callback);
+                    } else {
+                        if(callback != null) callback(null);
+                    }
                 } else {
                     if(callback != null) callback(null);
                 }
@@ -3454,5 +3663,10 @@ var delay = (function(){
             console.log('TODO getAll on localStorage');
         }
     };
+
+    //Initialize environement
+    $(document).ready(function() {
+        $.PostItAll.__initialize();
+    });
 
 }(jQuery, window.localStorage));
