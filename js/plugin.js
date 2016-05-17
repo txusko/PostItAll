@@ -261,9 +261,9 @@ $(document).ready(function() {
         var content = "<p style='text-align:center;font-size:medium;'>";
         content += "This note is attached to the " + position + " of the " + divId + " element.<br>";
         if(arrow)
-            content += "Whit arrow";
+            content += "With arrow";
         else
-            content += "Whitout arrow";
+            content += "Without arrow";
         content += "</p>";
 
         if(idAttachedNote == null) {

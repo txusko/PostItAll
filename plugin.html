@@ -260,7 +260,7 @@ $(document).ready(function() {
                                                 </div>
                                                 <div class="col-md-2">
                                                     <a href="#" id="idRunTheCode2"><i class="fa fa-play fa-fw"></i> Run the code</a>
-                                                    <p class="notes">This paragraph have the "notes" class.</p>
+                                                    <p class="notes">This paragraph has the "notes" class.</p>
                                                 </div>
                                             </div>
                                       </div>
@@ -1303,9 +1303,36 @@ $.PostItAll.length(function(total) {
                 <h3>External storage</h3>
                 <p class="text-danger"><b>Comming soon</b></p>
 
-                <!-- End Getting Started -->
-
                 <br><hr><br>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a id="idComments" class="anchor">&nbsp;</a>
+                        <h3>Comments</h3>
+                        <div id="disqus_thread"></div>
+                        <script>
+                        /**
+                        * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                        * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+                        */
+                        /*
+                        var disqus_config = function () {
+                        this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+                        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                        };
+                        */
+                        (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+
+                        s.src = '//postitall.disqus.com/embed.js';
+
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                        })();
+                        </script>
+                        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -1324,7 +1351,7 @@ $.PostItAll.length(function(total) {
                     <div class="clearfix"></div>
                     <p class="lead">You can check the <a href="https://github.com/txusko/PostItAll" target="_blank">Source Code on <span class="fa fa-github fa-fw"></span> Github</a>.<br>Any kind of help or comment will be apreciated.</p>
                     <p>Bug report and issues:  <a href="https://github.com/txusko/PostItAll/issues">https://github.com/txusko/PostItAll/issues</a></p>
-                    <p>Contact by email at: <a href="mailto:postitall@txusko.com">postitall@txusko.com</a></p>
+                    <p>Contact me via email: <a href="mailto:postitall@txusko.com">postitall@txusko.com</a></p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive" src="img/source.png" alt="">
@@ -1390,6 +1417,15 @@ $.PostItAll.length(function(total) {
                     </ul>
                     <p class="copyright text-muted small">&copy; 2015 by <a href="https://about.me/txusko">Javi Filella</a>.</p>
                 </div>
+                <div class="col-lg-2" id="idPayPal"><small class="pull-right">:)</small>
+                	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+						<input type="hidden" name="cmd" value="_s-xclick">
+						<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+						">
+						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+						<img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+					</form>
+                </div>
             </div>
         </div>
     </footer>
@@ -1409,6 +1445,17 @@ $.PostItAll.length(function(total) {
 
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-71086346-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 
 </body>
 

@@ -35,6 +35,8 @@
     <link rel="stylesheet" href="dist/jquery.postitall.css">
     <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
 
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ifbdckgghfmehefajfoichlhcdiibkoc">
+
 </head>
 
 <body>
@@ -76,7 +78,7 @@
                         <hr class="intro-divider">
                         <h4>The chrome extension to add sticky notes to the pages you visit</h4>
 
-                        <br><a href="https://chrome.google.com/webstore/detail/ifbdckgghfmehefajfoichlhcdiibkoc" class="btn btn-success" role="button"><i class="fa fa-chrome fa-fw"></i> Get the extension</a><br><br>
+                        <br><a onclick="javascript:chrome.webstore.install()" class="btn btn-success" role="button"><i class="fa fa-chrome fa-fw"></i> Add to chrome</a><br><br>
 
                         <!--hr class="intro-divider"-->
                         <p>
@@ -85,7 +87,7 @@
                             <a class="github-button" href="https://github.com/txusko/PostItAll" data-style="mega" data-count-href="/txusko/txusko/stargazers" data-count-api="/repos/txusko/PostItAll#stargazers_count">Star</a>&nbsp;
                             <a class="github-button" href="https://github.com/txusko/PostItAll" data-style="mega" data-count-href="/txusko/txusko/network" data-count-api="/repos/txusko/PostItAll#forks_count">Fork</a>&nbsp;
 
-<script id='fb8mxa3'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=txusko&button=compact&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=28;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fb8mxa3');</script>
+                            <script id='fbhm4k7'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//button.flattr.com/view/?fid=pwjo9k&button=compact&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=28;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fbhm4k7');</script>
 
                         </p>
                     </div>
@@ -265,6 +267,44 @@
     </div>
     <!-- /.content-section-a -->
 
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <a id="idComments" class="anchor">&nbsp;</a>
+                    <h3>Comments</h3>
+                    <div id="disqus_thread"></div>
+                    <script>
+                    /**
+                    * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                    * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+                    */
+                    /*
+                    var disqus_config = function () {
+                    this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+                    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                    };
+                    */
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+
+                    s.src = '//postitall.disqus.com/embed.js';
+
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })();
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+
     <div class="banner" id="about">
 
         <div class="container">
@@ -318,6 +358,15 @@
                     </ul>
                     <p class="copyright text-muted small">&copy; 2015 by <a href="https://about.me/txusko">Javi Filella</a>.</p>
                 </div>
+                <div class="col-lg-2" id="idPayPal"><small class="pull-right">:)</small>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                        <input type="hidden" name="cmd" value="_s-xclick">
+                        <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+                        ">
+                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                        <img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+                    </form>
+                </div>
             </div>
         </div>
     </footer>
@@ -334,6 +383,17 @@
 
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-71086346-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
 
 </body>
 
