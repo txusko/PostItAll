@@ -1,7 +1,8 @@
 <?php
 
 /**
-* Class PostItAll
+* Class PostItAll : note controller
+* @author Javi Filella <postitall@txusko.com>
 */
 class PostItAll
 {
@@ -13,16 +14,18 @@ class PostItAll
     private $db_port        = "3306";
     private $mysqli         = null;
 
-    //public properties
+    //Public properties
     public $iduser          = -1;
     public $option          = "";
     public $key             = "";
     public $content         = "";
 
-    //Constructor
+    /**
+	 *  Class constructor
+	 */
     function __construct() {
     	//Cors for the gh-page example
-        $this->cors("http://txusko.github.io");
+        $this->cors("http://postitall.txusko.com");
 
         //Connection
         $this->mysqli = mysqli_connect($this->db_host, $this->db_user, $this->db_password, $this->db_database, $this->db_port) or die("Error " . mysqli_error($link));
@@ -31,7 +34,9 @@ class PostItAll
         $this->createTable() or die("Table creation error " . mysqli_error($link));
     }
 
-    //Destructor
+    /**
+	 *  Class destructor
+	 */
     function __destruct() {
         //Close connection
         $this->mysqli->close();
@@ -69,13 +74,15 @@ class PostItAll
 	    }
 	}
 
-    //Parse request
+    /**
+	 *  Parse request method
+	 */
     private function getRequest() {
         //Option
-        if(!isset($_REQUEST["option"]) || !$_REQUEST["option"]) {
-            die("No option");
+        $this->option = "";
+        if(isset($_REQUEST["option"]) && $_REQUEST["option"]) {
+            $this->option = mysqli_escape_string($this->mysqli, $_REQUEST["option"]);
         }
-        $this->option = mysqli_escape_string($this->mysqli, $_REQUEST["option"]);
         //Iduser
         $this->iduser = -1;
         if(isset($_REQUEST["iduser"]) && $_REQUEST["iduser"]) {
@@ -93,7 +100,9 @@ class PostItAll
         }
     }
 
-    //Create table
+    /**
+	 *  Create DB structure
+	 */
     private function createTable() {
         $createdb = "CREATE TABLE IF NOT EXISTS `postitall` (
                       `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -105,7 +114,9 @@ class PostItAll
         return $this->mysqli->query($createdb);
     }
 
-    //Main method
+    /**
+	 *  Main method
+	 */
     public function main() {
         $error = false;
         $ret = "";
@@ -160,6 +171,9 @@ class PostItAll
         }
     }
 
+    /**
+	 *  Get number of notes
+	 */
     protected function getLength($idUser) {
         $sql = "select count(*) as total from postitall where iduser='" . $idUser . "'";
         $resultado = $this->mysqli->query($sql);
@@ -167,6 +181,9 @@ class PostItAll
         return intval($array["total"]);
     }
 
+    /**
+	 *  Get a specific note
+	 */
     protected function get($idUser, $idNote) {
         $sql = "select content from postitall where iduser='" . $idUser . "' and idnote='" . $idNote . "'";
         $resultado = $this->mysqli->query($sql);
@@ -174,10 +191,16 @@ class PostItAll
         return $array["content"];
     }
 
+    /**
+	 *  Add a note in the DB
+	 */
     protected function add($idUser, $idNote, $content) {
         return $this->save($idUser, $idNote, $content);
     }
 
+    /**
+	 *  Check if a note exists
+	 */
     protected function exists($idUser, $idNote) {
         if($this->get($idUser, $idNote)) {
             return true;
@@ -185,6 +208,9 @@ class PostItAll
         return false;
     }
 
+    /**
+	 *  Get idnote
+	 */
     protected function key($idUser, $key) {
         if(!$key) $key = "0";
         $sql = "select idnote from postitall where iduser='" . $idUser . "' limit " . $key . ",1";
@@ -195,13 +221,9 @@ class PostItAll
         return "";
     }
 
-    public function getData($idUser) {
-        $sql = "select content from postitall where iduser = " . $idUser;
-        $resultado = $this->mysqli->query($sql);
-        $array = $resultado->fetch_array();
-        return $array["content"];
-    }
-
+    /**
+	 *  Save (insert or update) note to DB
+	 */
     protected function save($idUser, $idNote, $content)
     {
         //$json = json_decode($content);
@@ -215,23 +237,33 @@ class PostItAll
         //}
     }
 
+    /**
+	 *  Insert note
+	 */
     private function insertNote($idUser, $idNote, $content) {
         $sql = "insert into postitall (iduser, idnote, content) values ('".$idUser."','".$idNote."','".$content."')";
         return $this->mysqli->query($sql);
     }
 
+    /**
+	 *  Update note
+	 */
     private function updateNote($idUser, $idNote, $content) {
         $sql = "update postitall set content='".$content."' where iduser='".$idUser."' and idNote='".$idNote."'";
         return $this->mysqli->query($sql);
     }
 
+    /**
+	 *  Delete note
+	 */
     private function removeNote($idUser, $idNote) {
         $sql = "delete from postitall where iduser='".$idUser."' and idNote='".$idNote."'";
         return $this->mysqli->query($sql);
     }
 }
 
+if(!isset($_REQUEST["option"]) || !$_REQUEST["option"]) {
+    die("No option");
+}
 $pia = new PostItAll();
 echo $pia->main();
-
-?>
