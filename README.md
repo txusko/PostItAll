@@ -41,6 +41,9 @@ https://github.com/Alex-D/Trumbowyg
 * **Minicolors** A Tiny Color Picker. With this plugin you will be able to change the background and text note color with a color picker.
 https://github.com/claviska/jquery-miniColors
 
+* **Timepicker addon** Timepicker for the jQuery UI Datepicker. When you hide a note, you will be able to set the exact date and time when the note will be shown again.
+https://github.com/trentrichardson/jQuery-Timepicker-Addon
+
 ### For the examples layout:
 * **Bootstrap** The most popular HTML, CSS, and JavaScript framework for developing responsive, mobile first projects on the web
 https://github.com/twbs/bootstrap
