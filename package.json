@@ -23,13 +23,6 @@
   "dependencies": {
     "jquery": "~2.1.4"
   },
-  "devDependencies": {
-    "jquery-ui": "~1.11.4",
-    "minicolors": "~2.1.12",
-    "trumbowyg": "~2.0.0-beta.5",
-    "bootstrap": "~4.0.0",
-    "fontawesome": "~4.4.0"
-  },
   "files": [
     "dist/",
     "README.md"
