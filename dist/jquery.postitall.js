@@ -1511,7 +1511,6 @@ var delay = (function(){
                 'leftMinimized': leftMinimized,
             };
             this.options.oldPosition = propCss;
-            //console.log('saveOldPosition', this.options.oldPosition);
             this.setOptions(this.options, true);
         },
 
@@ -1532,50 +1531,70 @@ var delay = (function(){
                 $('html, body').animate({
                     scrollTop: scrollTop2 - parseInt(tmpHeight,10),
                     scrollLeft: scrollLeft2 - parseInt(tmpWidth,10)
-                }, 800, function() {
+                }, 400);
+
+                setTimeout(function() {
                     if(callback !== undefined) callback();
-                });
+                }, 500);
             }
         },
 
         //Restore note with options.oldPosition
-        restoreOldPosition : function(scrollToNote) {
+        restoreOldPosition : function(scrollToNote, callback) {
             if(scrollToNote === undefined)
                 scrollToNote = false;
 
-            //console.log('restoreOldPosition');
             var t = this;
             var options = t.options;
             var id = options.id;
-            //console.log('restoreOldPosition', options.oldPosition);
-            $($.fn.postitall.globals.prefix + id).animate({
-                'left': options.oldPosition.left,
-                'width': options.oldPosition.width,
-                'height': options.oldPosition.height,
-            }, 500, function() {
-                if(scrollToNote) {
-                    if(options.position != "fixed") {
-                        t.scrollToNotePosition(options.oldPosition.top, options.height, options.oldPosition.left, options.width);
-                    }
+            var showNote = function() {
+                if(options.oldPosition.position == "absolute") {
+                    $($.fn.postitall.globals.prefix + id).css({
+                        'top': parseInt($($.fn.postitall.globals.prefix + id).css('top'), 10) + $(document).scrollTop()
+                    });
+                } else {
+                    $($.fn.postitall.globals.prefix + id).css({
+                        'top': $($.fn.postitall.globals.prefix + id).css('top'),
+                    });
                 }
-                t.showArrow();
-                $(this).css({
-                    'position': options.oldPosition.position,
-                    'top': options.oldPosition.top,
+                $($.fn.postitall.globals.prefix + id).css({
+                    'position': 'absolute',
                     'bottom': 'auto',
                 });
-                $(this).find( ".PIAeditable" ).css('height', 'auto');
-                t.autoresize();
-                //animate resize
-                if(options.flags.blocked) {
-                    options.flags.blocked = false;
-                    t.blockNote();
-                } else {
-                    t.hoverOptions(id, true);
-                }
-                t.switchTrasparentNoteOff();
-                t.switchOnLights();
-            });
+                setTimeout(function(){
+                    $($.fn.postitall.globals.prefix + id).animate({
+                        'top': options.oldPosition.top,
+                        'left': options.oldPosition.left,
+                        'width': options.oldPosition.width,
+                        'height': options.oldPosition.height,
+                    }, 500, function() {
+                        t.showArrow();
+                        $(this).find( ".PIAeditable" ).css('height', 'auto');
+                        t.autoresize();
+                        //animate resize
+                        if(options.flags.blocked) {
+                            options.flags.blocked = false;
+                            t.blockNote();
+                        } else {
+                            t.hoverOptions(id, true);
+                        }
+                        t.switchTrasparentNoteOff();
+                        t.switchOnLights();
+
+                        if(callback !== undefined) callback();
+
+                    }).css({
+                        'position': options.oldPosition.position,
+                    });
+                }, 100);
+            };
+
+            if(scrollToNote && options.position != "fixed") {
+                t.scrollToNotePosition(options.oldPosition.top, options.height, options.oldPosition.left, options.width, showNote);
+            } else {
+                showNote();
+            }
+
         },
 
         //hide/show divList objects
@@ -1663,6 +1682,7 @@ var delay = (function(){
             var index = t.options.id;
             var options = t.options;
 
+            //console.log('collapseNote', options);
             $('#the_lights_close').show();
             $('#pia_expand_' + index).removeClass('PIAmaximize').addClass('PIAexpand');
             $($.fn.postitall.globals.prefix + index).css('position', options.position);
@@ -1710,31 +1730,48 @@ var delay = (function(){
                 }
                 t.saveOldPosition();
                 //Minimize
-                $($.fn.postitall.globals.prefix + index).css({'position': 'fixed','top':'auto'}).animate({
-                    'width': (options.minWidth + 20),
-                    'height': '20px',
-                    'bottom': '0',
-                    'left': options.oldPosition.leftMinimized,
-                }, 500, function() {
-                    t.hideArrow();
-                    t.switchTrasparentNoteOn();
-                    $($.fn.postitall.globals.prefix + index).css({position:'fixed'})
+                var hideNote = function() {
+                    $($.fn.postitall.globals.prefix + index).animate({
+                        'width': (options.minWidth + 20),
+                        'height': '20px',
+                        'bottom': '0',
+                        'left': options.oldPosition.leftMinimized,
+                    }, 500, function() {
+                        t.hideArrow();
+                        t.switchTrasparentNoteOn();
+                        $($.fn.postitall.globals.prefix + index).css({position:'fixed'})
+                    }).css({
+                        'top': 'auto',
+                    });
+                };
+
+                $($.fn.postitall.globals.prefix + index).css({
+                    'position': 'fixed',
                 });
+                if(options.position == "absolute") {
+                    $($.fn.postitall.globals.prefix + index).css({
+                        'top': parseInt(options.posY, 10) - $(document).scrollTop(),
+                    });
+                }
+                setTimeout(function(){
+                    hideNote();
+                }, 100);
             };
             //maximize action (restoreOldPosition)
             var maximize = function() {
-                $('#pia_editable_'+index).show();
-                $('#pia_minimize_'+index).removeClass('PIAmaximize').addClass('PIAminimize');
-                options.flags.minimized = false;
-                // show toolbar
-                t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
-                $('#pia_minimized_text_'+index).remove();
-                //Remove draggable axis
-                if ($.fn.postitall.globals.draggable && options.features.draggable) {
-                    if ($.ui) obj.draggable({ axis: "none" });
-                }
-                t.restoreOldPosition(true);
-                t.switchTrasparentNoteOff();
+                t.restoreOldPosition(true, function() {
+                    $('#pia_editable_'+index).show();
+                    $('#pia_minimize_'+index).removeClass('PIAmaximize').addClass('PIAminimize');
+                    options.flags.minimized = false;
+                    // show toolbar
+                    t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
+                    $('#pia_minimized_text_'+index).remove();
+                    //Remove draggable axis
+                    if ($.fn.postitall.globals.draggable && options.features.draggable) {
+                        if ($.ui) obj.draggable({ axis: "none" });
+                    }
+                    t.switchTrasparentNoteOff();
+                });
             };
             //Action
             if(!options.flags.minimized) {
