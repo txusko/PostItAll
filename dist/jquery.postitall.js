@@ -965,6 +965,7 @@ var delay = (function(){
             return newObj;
         },
 
+        //Attach the note to a dom object
         attachedTo : function(options) {
             var t = this;
             var data = options;
@@ -974,148 +975,144 @@ var delay = (function(){
 
             //Position relative to a dom object
             if(data.attachedTo === undefined || typeof data.attachedTo !== 'object') data.attachedTo = { };
-            if(data.attachedTo.element !== undefined && data.attachedTo.element !== "") {
-                if($(''+data.attachedTo.element).length > 0) {
 
-                    var objToAttach = $(''+data.attachedTo.element).first();
-                    var objWidth = objToAttach.width() + parseInt(objToAttach.css('padding-left'),10) + parseInt(objToAttach.css('padding-right'),10);
-                    objWidth += parseInt(objToAttach.css('margin-left'),10) + parseInt(objToAttach.css('margin-right'),10);
-                    var objHeight = objToAttach.height() + parseInt(objToAttach.css('padding-top'),10) + parseInt(objToAttach.css('padding-bottom'),10);
-                    objHeight += parseInt(objToAttach.css('margin-top'),10) + parseInt(objToAttach.css('margin-bottom'),10);
-
-                    var position = {};
-                    //console.log('fixed?',this.elementOrParentIsFixed(data.attachedTo.element), $(window).width());
-                    if(this.elementOrParentIsFixed(data.attachedTo.element))
-                        position = objToAttach.position();
-                    else
-                        position = objToAttach.offset();
-
-                    if(data.attachedTo.arrow === undefined)
-                        data.attachedTo.arrow = true;
-
-                    if(data.attachedTo.position === undefined || data.attachedTo.position === "")
-                        data.attachedTo.position = "right middle";
-                    var tmpPos = data.attachedTo.position.split(" ");
-                    var pos1 = tmpPos[0], pos2 = tmpPos[1];
-                    switch(pos1) {
-                        case 'top':
-                            data.posY = position.top - data.height - 30;
-                            if(pos2 == "left") {
-                                data.posX = (position.left + (objWidth * 0.1)) - (data.width / 2);
-                            } else if(pos2 == "right") {
-                                data.posX = (position.left + (objWidth - (objWidth * 0.1))) - (data.width / 2);
-                            } else {
-                                data.posX = (position.left + (objWidth / 2)) - (data.width / 2);
-                            }
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "bottom";
-                            }
-                        break;
-                        case 'right':
-                        default:
-                            data.posX = position.left + objWidth + 30;
-                            if(pos2 == "top") {
-                                data.posY = (position.top + (objHeight * 0.1)) - (data.height / 2);
-                            } else if(pos2 == "bottom") {
-                                data.posY = (position.top + (objHeight - (objHeight * 0.1))) - (data.height / 2);
-                            } else {
-                                data.posY = (position.top + (objHeight / 2)) - (data.height / 2);
-                            }
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "left";
-                            }
-                        break;
-                        case 'bottom':
-                            data.posY = position.top + objHeight + 30;
-                            if(pos2 == "left") {
-                                data.posX = (position.left + (objWidth * 0.1)) - (data.width / 2);
-                            } else if(pos2 == "right") {
-                                data.posX = (position.left + (objWidth - (objWidth * 0.1))) - (data.width / 2);
-                            } else {
-                                data.posX = (position.left + (objWidth / 2)) - (data.width / 2);
-                            }
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "top";
-                            }
-                        break;
-                        case 'left':
-                            data.posX = position.left - data.width - 30;
-                            if(pos2 == "top") {
-                                data.posY = (position.top + (objHeight * 0.1)) - (data.height / 2);
-                            } else if(pos2 == "bottom") {
-                                data.posY = (position.top + (objHeight - (objHeight * 0.1))) - (data.height / 2);
-                            } else {
-                                data.posY = (position.top + (objHeight / 2)) - (data.height / 2);
-                            }
-
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "right";
-                            }
-                        break;
+            //Dom object to attach (mandatory)
+            var objToAttach
+            if(data.attachedTo.element !== undefined) {
+                if(typeof data.attachedTo.element === 'object') {
+                    objToAttach = data.attachedTo.element;
+                } else if(typeof data.attachedTo.element === 'string') {
+                    if($(''+data.attachedTo.element).length > 0) {
+                        objToAttach = $(''+data.attachedTo.element).first();
+                    } else {
+                        return;
                     }
-                    //console.log('new pos:', data.posX, data.posY, objWidth, objHeight, position);
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
 
-                    //Breakpoints / responsive behaviour (https://github.com/txusko/PostItAll/issues/11)
-                    if(pos1 === "left" || pos1 === "right") {
-                        if(data.posX < 0) {
-                            data.posX = position.left + 30;
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "left";
-                            }
-                        } else if(data.posX > $(window).width()) {
-                            data.posX = (position.left + objWidth) - data.width - 30;
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "right";
-                            }
-                        }
+            var objWidth = objToAttach.width() + parseInt(objToAttach.css('padding-left'),10) + parseInt(objToAttach.css('padding-right'),10);
+            objWidth += parseInt(objToAttach.css('margin-left'),10) + parseInt(objToAttach.css('margin-right'),10);
+            var objHeight = objToAttach.height() + parseInt(objToAttach.css('padding-top'),10) + parseInt(objToAttach.css('padding-bottom'),10);
+            objHeight += parseInt(objToAttach.css('margin-top'),10) + parseInt(objToAttach.css('margin-bottom'),10);
+
+            var position = {};
+            //console.log('fixed?',this.elementOrParentIsFixed(data.attachedTo.element), $(window).width());
+            if(this.elementOrParentIsFixed(data.attachedTo.element))
+                position = objToAttach.position();
+            else
+                position = objToAttach.offset();
+
+            if(data.attachedTo.arrow === undefined)
+                data.attachedTo.arrow = true;
+
+            if(data.attachedTo.position === undefined || data.attachedTo.position === "")
+                data.attachedTo.position = "right middle";
+            var tmpPos = data.attachedTo.position.split(" ");
+            var pos1 = tmpPos[0], pos2 = tmpPos[1];
+            switch(pos1) {
+                case 'top':
+                    data.posY = position.top - data.height - 30;
+                    if(pos2 == "left") {
+                        data.posX = (position.left + (objWidth * 0.1)) - (data.width / 2);
+                    } else if(pos2 == "right") {
+                        data.posX = (position.left + (objWidth - (objWidth * 0.1))) - (data.width / 2);
+                    } else {
+                        data.posX = (position.left + (objWidth / 2)) - (data.width / 2);
                     }
-                    if(pos1 === "top" || pos1 === "bottom") {
-                        var scrollPosition = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
-                        if(data.posY < scrollPosition) {
-                            data.posY = position.top + 30;
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "top";
-                            }
-                        } else if((data.posY + data.height) > (scrollPosition + $(window).height())) {
-                            data.posY = (position.top + objHeight) - data.height - 30;
-                            if(data.attachedTo.arrow) {
-                                data.style.arrow = "bottom";
-                            }
-                        }
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "bottom";
+                    }
+                break;
+                case 'right':
+                default:
+                    data.posX = position.left + objWidth + 30;
+                    if(pos2 == "top") {
+                        data.posY = (position.top + (objHeight * 0.1)) - (data.height / 2);
+                    } else if(pos2 == "bottom") {
+                        data.posY = (position.top + (objHeight - (objHeight * 0.1))) - (data.height / 2);
+                    } else {
+                        data.posY = (position.top + (objHeight / 2)) - (data.height / 2);
+                    }
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "left";
+                    }
+                break;
+                case 'bottom':
+                    data.posY = position.top + objHeight + 30;
+                    if(pos2 == "left") {
+                        data.posX = (position.left + (objWidth * 0.1)) - (data.width / 2);
+                    } else if(pos2 == "right") {
+                        data.posX = (position.left + (objWidth - (objWidth * 0.1))) - (data.width / 2);
+                    } else {
+                        data.posX = (position.left + (objWidth / 2)) - (data.width / 2);
+                    }
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "top";
+                    }
+                break;
+                case 'left':
+                    data.posX = position.left - data.width - 30;
+                    if(pos2 == "top") {
+                        data.posY = (position.top + (objHeight * 0.1)) - (data.height / 2);
+                    } else if(pos2 == "bottom") {
+                        data.posY = (position.top + (objHeight - (objHeight * 0.1))) - (data.height / 2);
+                    } else {
+                        data.posY = (position.top + (objHeight / 2)) - (data.height / 2);
                     }
 
-                    if($($.fn.postitall.globals.prefix + data.id).length > 0) {
-                        $($.fn.postitall.globals.prefix + data.id).css({
-                            'top': data.posY,
-                            'left': data.posX
-                        });
-                        if(data.style.arrow != "none") {
-                            t.hideArrow();
-                            t.showArrow();
-                            //$($.fn.postitall.globals.prefix + data.id).css("overflow", "").css("resize", "");
-                        }
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "right";
                     }
+                break;
+            }
+            //console.log('new pos:', data.posX, data.posY, objWidth, objHeight, position);
 
-                    //this.setOptions(data);
-                    if(data.attachedTo.fixed === undefined)
-                        data.attachedTo.fixed = true;
-                    if(data.attachedTo.fixed) {
-                        //data.features.toolbar = false;
-                        //this.hoverOptions();
-                        /*if(!data.flags.blocked && $($.fn.postitall.globals.prefix + data.id).length > 0) {
-                            $('#pia_blocked_' + data.id).click();
-                        } else {
-                            data.flags.blocked = true;
-                        }*/
-
-                        //if($($.fn.postitall.globals.prefix + data.id).length > 0) {
-                            //$($.fn.postitall.globals.prefix + data.id).find('.PIAicon').hide();
-                        //}
-                        //data.features.draggable = false;
-                        //data.features.resizable = false;
+            //Breakpoints / responsive behaviour (https://github.com/txusko/PostItAll/issues/11)
+            if(pos1 === "left" || pos1 === "right") {
+                if(data.posX < 0) {
+                    data.posX = position.left + 30;
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "left";
+                    }
+                } else if(data.posX > $(window).width()) {
+                    data.posX = (position.left + objWidth) - data.width - 30;
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "right";
                     }
                 }
             }
+            if(pos1 === "top" || pos1 === "bottom") {
+                var scrollPosition = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
+                if(data.posY < scrollPosition) {
+                    data.posY = position.top + 30;
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "top";
+                    }
+                } else if((data.posY + data.height) > (scrollPosition + $(window).height())) {
+                    data.posY = (position.top + objHeight) - data.height - 30;
+                    if(data.attachedTo.arrow) {
+                        data.style.arrow = "bottom";
+                    }
+                }
+            }
+
+            if($($.fn.postitall.globals.prefix + data.id).length > 0) {
+                $($.fn.postitall.globals.prefix + data.id).css({
+                    'top': data.posY,
+                    'left': data.posX
+                });
+                if(data.style.arrow != "none") {
+                    t.hideArrow();
+                    t.showArrow();
+                }
+            }
+
+            if(data.attachedTo.fixed === undefined)
+                data.attachedTo.fixed = true;
         },
 
         //Save object
