@@ -244,7 +244,7 @@ $(document).ready(function() {
         content += "    attachedTo : {\n";
         content += "        element: '#divToAttach',\n";
         content += "        position: '" + $('#idSelectPosition').val().toString() + "',\n";
-        content += "        arrow: " + $('#idWithArrow').prop('checked').toString()+"\n";
+        content += "        arrow: " + $('#idWithArrow').prop('checked').toString()+",\n";
         content += "        fixed: " + $('#idFixedTo').prop('checked').toString()+"\n";
         content += "    }\n";
         content += "});\n";
