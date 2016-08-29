@@ -27,7 +27,6 @@
 
     <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
-    <link href="css/landing-page.css" rel="stylesheet">
 
   </head>
 
@@ -43,7 +42,7 @@
           <nav class="navbar navbar-dark navbar-light navbar-fixed-top">
               <div class="container">
                   <ul class="nav navbar-nav pull-left">
-                      <li class="nav-item"><a class="navbar-brand masthead-brand" href="index.html" id="idTitle">Post It All!</a></li>
+                      <li class="nav-item"><a class="navbar-brand masthead-brand" href="index.html">Post It All!</a></li>
                   </ul>
                   <ul class="nav navbar-nav pull-right">
                     <li class="nav-item active">
@@ -54,7 +53,7 @@
           </nav>
 
           <div class="inner cover">
-            <h1 class="cover-heading"><i class="fa fa-sticky-note fa-fw"></i> Post It All!</h1>
+            <h1 class="cover-heading" id="idTitle"><i class="fa fa-sticky-note fa-fw"></i> Post It All!</h1>
             <p class="lead">Customizable sticky notes for the web.</p>
             <p class="lead">
               <a id="idLinkPlugin" href="plugin.html" class="btn btn-lg btn-primary"><i class="fa fa-code fa-fw"></i> Jquery plugin</a>
@@ -63,17 +62,17 @@
             </p>
           </div>
 
-          <div class="mastfoot">
-            <div class="inner">
-              <p>&copy; <a href="https://postitall.txusko.com/">PostItAll</a> by <a href="https://about.me/txusko">Javi Filella</a> - 2015.</p>
-            </div>
-          </div>
-
         </div>
 
       </div>
 
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <a href="https://postitall.txusko.com/">PostItAll</a> by <a href="https://about.me/txusko">Javi Filella</a> - 2015.</p>
+        </div>
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -108,7 +107,12 @@
           },
           attachedTo : {
               element: '#idTitle',
-              position: 'bottom'
+              position: 'top'
+          },
+          onCreated: function(id) {
+              setTimeout(function() {
+                $.PostItAll.destroy(id);
+            }, 8000);
           }
       });
     });
