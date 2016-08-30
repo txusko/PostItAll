@@ -327,7 +327,7 @@ var delay = (function(){
         },
         //Attach the note to al html element
         attachedTo : {
-            element         : '',                   //Where to attach
+            element         : '',                   //Where to attach (string or object / '#idObject' or $('#idObject'))
             position        : 'right',              //Position relative to elemente : top, right, bottom or left
             fixed           : true,                 //Fix note to element when resize screen
             arrow           : true,                 //Show an arrow in the inverse position
@@ -604,7 +604,7 @@ var delay = (function(){
             if(obj === undefined) {
                 obj = $('<div />', {
                     html: (content !== undefined ? content : '')
-                });
+                }).hide();
             } else {
                 var oldObj = obj;
                 $(oldObj).attr('PIA-original', '1');
@@ -954,7 +954,7 @@ var delay = (function(){
             obj.attr('id', $.fn.postitall.globals.prefix.substring(1) + opt.id);
 
             //console.log('init');
-            this.attachedTo();
+            //this.attachedTo();
 
             //create stuff
             var newObj = this.create(obj);
@@ -972,6 +972,39 @@ var delay = (function(){
             if(data === undefined) {
                 data = t.options;
             }
+            var id = data.id;
+            var obj = $($.fn.postitall.globals.prefix + id);
+
+            //Recovers object selector (http://stackoverflow.com/questions/2420970/how-can-i-get-selector-from-jquery-object/14093425#14093425)
+            var get_selector = function (element) {
+                var $el = element;
+                var id = $el.attr("id");
+                if (id) { //"should" only be one of these if theres an ID
+                    return "#"+ id;
+                }
+                var selector = $el.parents()
+                            .map(function() { return this.tagName; })
+                            .get().reverse().join(" ");
+                if (selector) {
+                    selector += " "+ $el[0].nodeName;
+                }
+                var classNames = $el.attr("class");
+                if (classNames) {
+                    selector += "." + $.trim(classNames).replace(/\s/gi, ".");
+                }
+                var name = $el.attr('name');
+                if (name) {
+                    selector += "[name='" + name + "']";
+                }
+                if (!name){
+                    var index = $el.index();
+                    if (index) {
+                        index = index + 1;
+                        selector += ":nth-child(" + index + ")";
+                    }
+                }
+                return selector;
+            };
 
             //Position relative to a dom object
             if(data.attachedTo === undefined || typeof data.attachedTo !== 'object') data.attachedTo = { };
@@ -979,28 +1012,28 @@ var delay = (function(){
             //Dom object to attach (mandatory)
             var objToAttach
             if(data.attachedTo.element !== undefined) {
+                //DOM object
                 if(typeof data.attachedTo.element === 'object') {
-                    objToAttach = data.attachedTo.element;
-                } else if(typeof data.attachedTo.element === 'string') {
+                    //Get object selector
+                    data.attachedTo.element = get_selector(data.attachedTo.element);
+                }
+                //String object
+                if(typeof data.attachedTo.element === 'string' && data.attachedTo.element !== "") {
                     if($(''+data.attachedTo.element).length > 0) {
                         objToAttach = $(''+data.attachedTo.element).first();
                     } else {
+                        console.log('Object to attach not found in DOM.');
                         return;
                     }
                 } else {
+                    console.log('Incorrect object to attach. Define a jQuery object or a DOM selector for the element property.');
                     return;
                 }
             } else {
                 return;
             }
 
-            var objWidth = objToAttach.width() + parseInt(objToAttach.css('padding-left'),10) + parseInt(objToAttach.css('padding-right'),10);
-            objWidth += parseInt(objToAttach.css('margin-left'),10) + parseInt(objToAttach.css('margin-right'),10);
-            var objHeight = objToAttach.height() + parseInt(objToAttach.css('padding-top'),10) + parseInt(objToAttach.css('padding-bottom'),10);
-            objHeight += parseInt(objToAttach.css('margin-top'),10) + parseInt(objToAttach.css('margin-bottom'),10);
-
             var position = {};
-            //console.log('fixed?',this.elementOrParentIsFixed(data.attachedTo.element), $(window).width());
             if(this.elementOrParentIsFixed(data.attachedTo.element))
                 position = objToAttach.position();
             else
@@ -1013,9 +1046,78 @@ var delay = (function(){
                 data.attachedTo.position = "right middle";
             var tmpPos = data.attachedTo.position.split(" ");
             var pos1 = tmpPos[0], pos2 = tmpPos[1];
+            var objWidth = objToAttach.width() + parseInt(objToAttach.css('padding-left'),10) + parseInt(objToAttach.css('padding-right'),10);
+            var objHeight = objToAttach.height() + parseInt(objToAttach.css('padding-top'),10) + parseInt(objToAttach.css('padding-bottom'),10);
+            var noteWidth = parseInt(obj.width(), 10) + parseInt(obj.css('padding-left'),10) + parseInt(obj.css('padding-right'),10);
+            var noteHeight = parseInt(obj.height(), 10) + parseInt(obj.css('padding-top'),10) + parseInt(obj.css('padding-bottom'),10);
+
+            //Breakpoints / responsive behaviour (https://github.com/txusko/PostItAll/issues/11)
+            var fixVertical = function(callback) {
+                var scrollPosition = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
+                //console.log(data.posY, scrollPosition, (data.posY + data.height), (scrollPosition + $(window).height()));
+                if(data.posY < scrollPosition) {
+                    data.posY = position.top + 20;
+                    if(data.attachedTo.arrow && data.style.arrow != "top") {
+                        data.style.arrow = "top";
+                        t.hideArrow(data.id);
+                    }
+                    if(callback != null) setTimeout(function() { callback(); }, 100);
+                } else if((data.posY + data.height) > (scrollPosition + $(window).height())) {
+                    data.posY = position.top + objHeight - noteHeight - 20;
+                    if(data.attachedTo.arrow && data.style.arrow != "bottom") {
+                        data.style.arrow = "bottom";
+                        t.hideArrow(data.id);
+                    }
+                    if(callback != null) setTimeout(function() { callback(); }, 100);
+                }
+            };
+            var fixHorizontal = function(callback) {
+                var dataPosX = data.posX;
+                if(pos1 == "right")
+                    dataPosX = dataPosX + noteWidth;
+                //console.log(dataPosX, data.posX, $(window).width());
+                if(dataPosX < 0) {
+                    data.posX = position.left + 20;
+                    if(data.attachedTo.arrow && data.style.arrow != "left") {
+                        data.style.arrow = "left";
+                        t.hideArrow(data.id);
+                    }
+                    if(callback != null) setTimeout(function() { callback(); }, 100);
+                } else if(dataPosX > $(window).width()) {
+                    data.posX = (position.left + objWidth) - data.width - 20 - getScrollWidth();
+                    if(data.attachedTo.arrow && data.style.arrow != "right") {
+                        data.style.arrow = "right";
+                        t.hideArrow(data.id);
+                    }
+                    if(callback != null) setTimeout(function() { callback(); }, 100);
+                }
+            };
+
+            var getScrollWidth = function() {
+                var outer = $('<div>').css({visibility: 'hidden', width: 94, overflow: 'scroll'}).appendTo('body');
+                var widthWithScroll = $('<div>').css({width: '100%'}).appendTo(outer).outerWidth();
+                outer.remove();
+                return 100 - widthWithScroll;
+            }
+
+            var updateNote = function() {
+                if($($.fn.postitall.globals.prefix + data.id).length > 0) {
+                    $($.fn.postitall.globals.prefix + data.id).animate({
+                        'top': data.posY,
+                        'left': data.posX
+                    }, 200, function() {
+                        if(data.style.arrow != "none") {
+                            //t.hideArrow(data.id, function() {
+                                t.showArrow(data.id, data);
+                            //});
+                        }
+                    });
+                }
+            }
+
             switch(pos1) {
                 case 'top':
-                    data.posY = position.top - data.height - 30;
+                    data.posY = position.top - noteHeight - 20;
                     if(pos2 == "left") {
                         data.posX = (position.left + (objWidth * 0.1)) - (data.width / 2);
                     } else if(pos2 == "right") {
@@ -1023,13 +1125,14 @@ var delay = (function(){
                     } else {
                         data.posX = (position.left + (objWidth / 2)) - (data.width / 2);
                     }
-                    if(data.attachedTo.arrow) {
+                    if(data.attachedTo.arrow && data.style.arrow != "bottom") {
                         data.style.arrow = "bottom";
+                        t.hideArrow(data.id);
                     }
                 break;
                 case 'right':
                 default:
-                    data.posX = position.left + objWidth + 30;
+                    data.posX = position.left + objWidth + 20;
                     if(pos2 == "top") {
                         data.posY = (position.top + (objHeight * 0.1)) - (data.height / 2);
                     } else if(pos2 == "bottom") {
@@ -1037,12 +1140,13 @@ var delay = (function(){
                     } else {
                         data.posY = (position.top + (objHeight / 2)) - (data.height / 2);
                     }
-                    if(data.attachedTo.arrow) {
+                    if(data.attachedTo.arrow && data.style.arrow != "left") {
                         data.style.arrow = "left";
+                        t.hideArrow(data.id);
                     }
                 break;
                 case 'bottom':
-                    data.posY = position.top + objHeight + 30;
+                    data.posY = position.top + objHeight + 20;
                     if(pos2 == "left") {
                         data.posX = (position.left + (objWidth * 0.1)) - (data.width / 2);
                     } else if(pos2 == "right") {
@@ -1050,12 +1154,13 @@ var delay = (function(){
                     } else {
                         data.posX = (position.left + (objWidth / 2)) - (data.width / 2);
                     }
-                    if(data.attachedTo.arrow) {
+                    if(data.attachedTo.arrow && data.style.arrow != "top") {
                         data.style.arrow = "top";
+                        t.hideArrow(data.id);
                     }
                 break;
                 case 'left':
-                    data.posX = position.left - data.width - 30;
+                    data.posX = position.left - noteWidth - 20;
                     if(pos2 == "top") {
                         data.posY = (position.top + (objHeight * 0.1)) - (data.height / 2);
                     } else if(pos2 == "bottom") {
@@ -1064,55 +1169,27 @@ var delay = (function(){
                         data.posY = (position.top + (objHeight / 2)) - (data.height / 2);
                     }
 
-                    if(data.attachedTo.arrow) {
+                    if(data.attachedTo.arrow && data.style.arrow != "right") {
                         data.style.arrow = "right";
+                        t.hideArrow(data.id);
                     }
                 break;
             }
-            //console.log('new pos:', data.posX, data.posY, objWidth, objHeight, position);
 
-            //Breakpoints / responsive behaviour (https://github.com/txusko/PostItAll/issues/11)
             if(pos1 === "left" || pos1 === "right") {
-                if(data.posX < 0) {
-                    data.posX = position.left + 30;
-                    if(data.attachedTo.arrow) {
-                        data.style.arrow = "left";
-                    }
-                } else if(data.posX > $(window).width()) {
-                    data.posX = (position.left + objWidth) - data.width - 30;
-                    if(data.attachedTo.arrow) {
-                        data.style.arrow = "right";
-                    }
-                }
-            }
-            if(pos1 === "top" || pos1 === "bottom") {
-                var scrollPosition = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
-                if(data.posY < scrollPosition) {
-                    data.posY = position.top + 30;
-                    if(data.attachedTo.arrow) {
-                        data.style.arrow = "top";
-                    }
-                } else if((data.posY + data.height) > (scrollPosition + $(window).height())) {
-                    data.posY = (position.top + objHeight) - data.height - 30;
-                    if(data.attachedTo.arrow) {
-                        data.style.arrow = "bottom";
-                    }
-                }
-            }
-
-            if($($.fn.postitall.globals.prefix + data.id).length > 0) {
-                $($.fn.postitall.globals.prefix + data.id).css({
-                    'top': data.posY,
-                    'left': data.posX
+                fixHorizontal(function() {
+                    fixVertical();
                 });
-                if(data.style.arrow != "none") {
-                    t.hideArrow();
-                    t.showArrow();
-                }
+            } else if(pos1 === "top" || pos1 === "bottom") {
+                fixVertical(function() {
+                    fixHorizontal();
+                });
             }
 
             if(data.attachedTo.fixed === undefined)
                 data.attachedTo.fixed = true;
+
+            setTimeout(function() { updateNote(); }, 200);
         },
 
         //Save object
@@ -1201,7 +1278,8 @@ var delay = (function(){
                 /*.hide("slow", function () {
                     $(this).remove();
                 });*/
-            $(window).off('resize');
+            if(this.length <= 0)
+                $(window).off('resize');
         },
 
         hide : function(id) {
@@ -1267,52 +1345,67 @@ var delay = (function(){
             //Change options arrow select
             $('#idAddArrow_'+index).val(options.style.arrow);
 
-            this.hideArrow();
-            this.showArrow();
+            this.hideArrow(index);
+            this.showArrow(index, options);
             this.saveOptions(options);
             return options;
         },
 
         //Hide arrow & icons
-        hideArrow : function() {
+        hideArrow : function(ind, callback) {
             var index = this.options.id;
+            if(ind !== undefined)
+                index = ind;
+
             //Remove previous arrow
             $($.fn.postitall.globals.prefix + index).removeClass('arrow_box_top arrow_box_right arrow_box_bottom arrow_box_left', 1000, "easeInElastic");
             $($.fn.postitall.globals.prefix + index).find('.icon_box').hide();
             if(!$.ui) $($.fn.postitall.globals.prefix + index).css('overflow', 'hidden').css('resize', 'both');
             //console.log('hide');
+            if(callback !== undefined) setTimeout(function() { callback(); }, 100);
         },
 
         //Show arrow and icons
-        showArrow : function(index, options) {
+        showArrow : function(ind, opt) {
+
             var index = this.options.id;
+            if(ind !== undefined)
+                index = ind;
             var options = this.options;
-            //Add arrow
-            switch(options.style.arrow) {
-                case 'top':
-                    $($.fn.postitall.globals.prefix + index).addClass('arrow_box_top', 1000, "easeInElastic").css('overflow', '').css('resize', '');
-                break;
-                case 'right':
-                    $($.fn.postitall.globals.prefix + index).addClass('arrow_box_right', 1000, "easeInElastic").css('overflow', '').css('resize', '');
-                break;
-                case 'bottom':
-                    $($.fn.postitall.globals.prefix + index).addClass('arrow_box_bottom', 1000, "easeInElastic").css('overflow', '').css('resize', '');
-                break;
-                case 'left':
-                    $($.fn.postitall.globals.prefix + index).addClass('arrow_box_left', 1000, "easeInElastic").css('overflow', '').css('resize', '');
-                break;
-            }
-            //console.log('options.style.arrow',options.style.arrow);
-            if(options.style.arrow == 'none')
-                $($.fn.postitall.globals.prefix + index).find('.icon_box').show();
-            var icon = $($.fn.postitall.globals.prefix + index).find('div[data-value="'+options.style.arrow+'"]');
-            icon.show();
-            icon.find('span').hide();
-            //console.log('show');
+            if(opt !== undefined)
+                options = opt;
+
+            //delay(function() {
+                //Add arrow
+                //console.log(options.style.arrow, ($.fn.postitall.globals.prefix + index));
+                switch(options.style.arrow) {
+                    case 'top':
+                        $($.fn.postitall.globals.prefix + index).addClass('arrow_box_top', 1000, "easeInElastic").css('overflow', '').css('resize', '');
+                    break;
+                    case 'right':
+                        $($.fn.postitall.globals.prefix + index).addClass('arrow_box_right', 1000, "easeInElastic").css('overflow', '').css('resize', '');
+                    break;
+                    case 'bottom':
+                        $($.fn.postitall.globals.prefix + index).addClass('arrow_box_bottom', 1000, "easeInElastic").css('overflow', '').css('resize', '');
+                    break;
+                    case 'left':
+                        $($.fn.postitall.globals.prefix + index).addClass('arrow_box_left', 1000, "easeInElastic").css('overflow', '').css('resize', '');
+                    break;
+                }
+                //console.log('options.style.arrow',options.style.arrow);
+                if(options.style.arrow == 'none')
+                    $($.fn.postitall.globals.prefix + index).find('.icon_box').show();
+                var icon = $($.fn.postitall.globals.prefix + index).find('div[data-value="'+options.style.arrow+'"]');
+                icon.show();
+                icon.find('span').hide();
+                //console.log('show');
+
+            //}, 250);
         },
 
         //Autoresize note
         autoresize : function() {
+            var t = this;
             var id = this.options.id;
             var options = this.options;
             var obj = $($.fn.postitall.globals.prefix + id);
@@ -1343,8 +1436,10 @@ var delay = (function(){
             //console.log('auto', divWidth);
             options.width = divWidth;
 
-            if(options.attachedTo.element !== "" && options.attachedTo.fixed)
-                this.attachedTo();
+            if(!$( "#pia_editable_" + id ).is(':focus')) {
+                if(options.attachedTo.element !== "" && options.attachedTo.fixed)
+                    t.attachedTo();
+            }
         },
 
         //Get next note Id
@@ -1750,7 +1845,7 @@ var delay = (function(){
                         'width': options.oldPosition.width,
                         'height': options.oldPosition.height,
                     }, 500, function() {
-                        t.showArrow();
+                        t.showArrow(id, options);
                         $(this).find( ".PIAeditable" ).css('height', 'auto');
                         t.autoresize();
                         //animate resize
@@ -2784,6 +2879,7 @@ var delay = (function(){
                                 //if ($.fn.postitall.globals.savable && options.features.savable) {
                                     options.posY = obj.css('top');
                                     options.posX = obj.css('left');
+                                    t.autoresize();
                                     t.saveOptions(options);
                                 //}
                                 //onRelease event
@@ -2845,8 +2941,6 @@ var delay = (function(){
                 obj.append(checks);
 
                 $('.selectedArrow_'+index).click(function(e) {
-                    //console.log('click al link', $(this).attr('data-index'), $(this).attr('data-value'));
-                    console.log('arrowChangeOption');
                     if (obj.hasClass('PIAdragged')) {
                         obj.removeClass('PIAdragged');
                     } else {
@@ -3033,10 +3127,8 @@ var delay = (function(){
                     'style': 'display:block;'
                 })
                 .click(function (e) {
-                    //var id = $(this).closest('.PIApostit').children().attr('data-id');
                     t.switchBackNoteOff('PIAflip2');
                     t.switchOnLights();
-                    //t.showArrow();
                     e.preventDefault();
                 })
             )
