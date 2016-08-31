@@ -1,0 +1,74 @@
+.note {
+    border: 1px solid red;
+    background-color: yellow;
+    color: red;
+    font-size: bold;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 200px;
+    min-height: 150px;
+    min-width: 150px;
+    position: fixed;
+}
+
+.note1 {
+
+    width: 400px;
+    height: 200px;
+    top:10%;
+    left: 10%;
+
+    color: rgba(118,204,250,1);
+
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 2px solid rgba(118,204,250,1);
+
+    -webkit-box-shadow: 0px 0px 22px 4px rgba(118,204,250,1);
+    -moz-box-shadow: 0px 0px 22px 4px rgba(118,204,250,1);
+    box-shadow: 0px 0px 22px 4px rgba(118,204,250,1);
+
+    background: rgba(179,220,237,1);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 97%, rgba(188,224,238,1) 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(179,220,237,1)), color-stop(97%, rgba(41,184,229,1)), color-stop(100%, rgba(188,224,238,1)));
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 97%, rgba(188,224,238,1) 100%);
+    background: -o-radial-gradient(center, ellipse cover, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 97%, rgba(188,224,238,1) 100%);
+    background: -ms-radial-gradient(center, ellipse cover, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 97%, rgba(188,224,238,1) 100%);
+    background: radial-gradient(ellipse at center, rgba(179,220,237,1) 0%, rgba(41,184,229,1) 97%, rgba(188,224,238,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee', GradientType=1 );
+
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -o-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
+
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+}
+.note1:hover {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+
+.note2 {
+    top:10em;
+    left: 20em;
+
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
