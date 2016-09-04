@@ -80,9 +80,11 @@ $(document).ready(function() {
     var updateGlobalExample = function() {
         var content = "$.PostItAll.changeConfig('global', {\n";
         var ides = ["idRandomColor", "idChangeOptions", "idAllowBlock", "idAllowMinimize", "idAllowExpand", "idAddNew", "idAllowFix",
-            "idHideToolbar", "idAskOnDelete", "idShowInfo", "idPasteHtml", "idHtmlEditor", "idAutoPosition", "idResizable", "idToolbar", "idRemovable"];
+            "idHideToolbar", "idAskOnDelete", "idShowInfo", "idPasteHtml", "idHtmlEditor", "idAutoPosition", "idResizable",
+            "idToolbar", "idRemovable", "idAskOnHide", "idShowMeta", "idExport", "idDraggable", "idEditable"];
         var props = ["randomColor", "changeoptions", "blocked", "minimized", "expand", "addNew", "fixed",
-            "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable"];
+            "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable",
+            "toolbar", "removable", "askOnHide", "showMeta", "exportNote", "draggable", "editable"];
         $.each(ides, function(a,b) {
             if(!$('#'+b).prop('checked'))
                 content += "    " + props[a] + " : " + $('#'+b).prop('checked').toString() + ",\n";
@@ -127,6 +129,11 @@ $(document).ready(function() {
             addArrow        : $('#idPosArrow').val(),
             toolbar         : $('#idToolbar').prop('checked'),
             removable       : $('#idRemovable').prop('checked'),
+            askOnHide       : $('#idAskOnHide').prop('checked'),
+            showMeta        : $('#idShowMeta').prop('checked'),
+            exportNote      : $('#idExport').prop('checked'),
+            draggable       : $('#idDraggable').prop('checked'),
+            editable        : $('#idEditable').prop('checked'),
         });
         if($('#idCreateNewNote').prop('checked')) {
             $.PostItAll.new('Global configuration was updated successfully');
@@ -694,4 +701,47 @@ $(document).ready(function() {
         e.preventDefault();
     });
     $('#lenghtNotes').click();
+
+    //Export all
+    $('#idExportAll').click(function(e) {
+        $.PostItAll.export();
+        e.preventDefault();
+    });
+
+    //Import all
+    $('#idImportAll').click(function(e) {
+        $.PostItAll.import();
+        e.preventDefault();
+    });
+
+    //Meta data
+    $('#idMetaData').click(function(e) {
+
+        $.PostItAll.new({
+            meta: {
+                'Field of type input': {
+                    'type': 'input',
+                    'maxlength': '20',
+                    'value': '',
+                    'placeholder': 'Placeholder for the input field'
+                },
+                'Field of type combo': {
+                    'type': 'combo',
+                    'value': '0',
+                    'values': {
+                        '0': 'Value 0',
+                        '1': 'Value 1',
+                        '2': 'Value 2'
+                    }
+                },
+                'Field of type textarea': {
+                    'type': 'textarea',
+                    'value': '',
+                    'placeholder': 'Placeholder for the textarea field'
+                }
+            },
+        });
+
+        e.preventDefault();
+    });
 });

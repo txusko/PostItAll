@@ -27,6 +27,7 @@
 
     <!-- Post It All! -->
     <link rel="stylesheet" href="libs/jquery-ui/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="libs/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css">
     <link rel="stylesheet" href="libs/trumbowyg/dist/ui/trumbowyg.css">
     <link rel="stylesheet" href="libs/minicolors/jquery.minicolors.css">
     <link rel="stylesheet" href="dist/jquery.postitall.css">
@@ -119,7 +120,9 @@
                         <ul>
                             <li class="nav-item"><a href="#doc_changeglobalconfig" class="nav-link">Change global configuration</a></li>
                             <li class="nav-item"><a href="#doc_newnote" class="nav-link">Create a customized note</a></li>
+                            <li class="nav-item"><a href="#doc_importexport" class="nav-link">Import &amp; Export notes</a></li>
                             <li class="nav-item"><a href="#doc_attachnote" class="nav-link">Attach note to an element</a></li>
+                            <li class="nav-item"><a href="#doc_metadata" class="nav-link">Custom meta-data information</a></li>
                             <li class="nav-item"><a href="#doc_noteevents" class="nav-link">Note events</a></li>
                             <li class="nav-item"><a href="#doc_changeoptions" class="nav-link">Change note options</a></li>
                             <li class="nav-item"><a href="#doc_showhide1" class="nav-link">Show hide and remove notes</a></li>
@@ -160,12 +163,14 @@
                             <li><a href="https://jqueryui.com/" target=_blank>Jquery UI</a> : The jQuery User Inteface. With this plugin you will improve notes drag and resize usage.</li>
                             <li><a href="http://alex-d.github.io/Trumbowyg/" target=_blank>Trumbowyg</a> : A lightweight WYSIWYG editor. With this plugin you will be able to edit notes content with an integrated html5 editor.</li>
                             <li><a href="http://labs.abeautifulsite.net/jquery-minicolors/" target=_blank>Minicolors</a> : A Tiny Color Picker. With this plugin you will be able to change background and text note color with a color picker.</li>
+                            <li><a href="https://github.com/trentrichardson/jQuery-Timepicker-Addon" target=_blank>jQuery Timepicker Addon</a> : Adds a timepicker to jQueryUI Datepicker.</li>
                         </ul>
 <pre class="prettyprint lang-html">
 &lt;!-- CSS --&gt;
 &lt;link rel="stylesheet" href="libs/jquery-ui/themes/base/jquery-ui.css"&gt;
 &lt;link rel="stylesheet" href="libs/trumbowyg/dist/ui/trumbowyg.css"&gt;
 &lt;link rel="stylesheet" href="libs/minicolors/jquery.minicolors.css"&gt;
+&lt;link rel="stylesheet" href="libs/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css"&gt;
 &lt;link rel="stylesheet" href="dist/jquery.postitall.css"&gt;
 
 &lt;!-- JS --&gt;
@@ -173,6 +178,7 @@
 &lt;script src="libs/jquery-ui/jquery-ui.min.js"&gt;&lt;/script&gt;
 &lt;script src="libs/trumbowyg/dist/trumbowyg.min.js"&gt;&lt;/script&gt;
 &lt;script src="libs/minicolors/jquery.minicolors.min.js"&gt;&lt;/script&gt;
+&lt;script src="libs/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js"&gt;&lt;/script&gt;
 &lt;script src="dist/jquery.postitall.js"&gt;&lt;/script&gt;
 </pre>
 <p class="text-muted">* Note that the css file <span class="label label-default">jquery.postitall.css</span> overrides some css elements of those plugins for a correct integration with postitall.</p>
@@ -184,7 +190,7 @@ npm install postitall
 </pre>
                         <p>Plugins:</p>
 <pre class="prettyprint lang-sh">
-npm install jquery-ui trumbowyg jquery-minicolors
+npm install jquery-ui trumbowyg jquery-minicolors jquery-ui-timepicker-addon
 </pre>
                         <p class="text-muted">* Remember to change references to your npm destination directory</p>
 
@@ -195,7 +201,7 @@ $ bower install PostItAll
 </pre>
                         <p>Plugins:</p>
 <pre class="prettyprint lang-sh">
-$ bower install jquery-ui trumbowyg minicolors
+$ bower install jquery-ui trumbowyg minicolors jqueryui-timepicker-addon
 </pre>
                         <p class="text-muted">* Remember to change references to your bower destination directory</p>
 
@@ -286,24 +292,30 @@ $.fn.postitall.globals = {
     savable         : false,        //Save postit in storage
     randomColor     : true,         //Random color in new postits
     toolbar         : true,         //Show or hide toolbar
-    autoHideToolBar : true,         //Animation effect on hover over postit showing/hiding toolbar options
+    autoHideToolBar : false,         //Animation efect on hover over postit shoing/hiding toolbar options
     removable       : true,         //Set removable feature on or off
-    askOnDelete     : true,         //Confirmation before note removal
+    askOnDelete     : true,         //Confirmation before note remove
     draggable       : true,         //Set draggable feature on or off
     resizable       : true,         //Set resizable feature on or off
     editable        : true,         //Set contenteditable and enable changing note content
     changeoptions   : true,         //Set options feature on or off
     blocked         : true,         //Postit can not be modified
+    hidden          : true,         //The note can be hidden
     minimized       : true,         //true = minimized, false = maximixed
     expand          : true,         //Expand note
     fixed           : true,         //Allow to fix the note in page
     addNew          : true,         //Create a new postit
-    showInfo        : true,         //Show info icon
+    showInfo        : true,         //Show info icon (info tab)
+    showMeta        : true,         //Show info icon (meta tab)
     pasteHtml       : true,         //Allow paste html in contenteditor
     htmlEditor      : true,         //Html editor (trumbowyg)
-    autoPosition    : true,         //Automatic reposition of the notes when user resizes the screen
-    addArrow        : 'back'        //Add an arrow to notes : none, front, back, all
+    autoPosition    : true,         //Automatic reposition of the notes when user resize screen
+    addArrow        : 'back',       //Add arrow to notes : none, front, back, all
+    askOnHide       : true,         //Show configuration hideUntil back-panel (getBackPanelHideUntil)
+    hideUntil       : null,         //Note will be hidden since that datetime
+    export          : true          //Note can be exported
 };
+
 </pre>
                         </div>
 
@@ -320,16 +332,16 @@ $.fn.postitall.defaults = {
     created         : Date.now(),               //Creation date
     domain          : window.location.origin,   //Domain in the url
     page            : window.location.pathname, //Page in the url
-    osname          : navigator.appVersion,     //Browser informtion &amp; OS name
+    osname          : navigator.appVersion,     //Browser informtion &amp; OS name,
     content         : '',                       //Content of the note (text or html)
-    position        : 'absolute',               //Position absolute or fixed
+    position        : 'absolute',               //Position relative, fixed or absolute
     posX            : '10px',                   //x coordinate (from left)
     posY            : '10px',                   //y coordinate (from top)
     right           : '',                       //x coordinate (from right). This property invalidate posX
     height          : 200,                      //Note total height
     width           : 160,                      //Note total width
-    minHeight       : 210,                      //Note resizable min-width
-    minWidth        : 170,                      //Note resizable min-height
+    minHeight       : 200,                      //Note resizable min-width
+    minWidth        : 160,                      //Note resizable min-height
     oldPosition     : {},                       //Position when minimized/collapsed (internal use)
     //Config note style
     style : {
@@ -337,12 +349,14 @@ $.fn.postitall.defaults = {
         backgroundcolor : '#FFFA3C',            //Background color in new postits when randomColor = false
         textcolor       : '#333333',            //Text color
         textshadow      : true,                 //Shadow in the text
-        fontfamily      : 'verdana',            //Default font
-        fontsize        : 'small',              //Default font size
+        fontfamily      : 'Open Sans',            //Default font
+        fontsize        : 'medium',              //Default font size
         arrow           : 'none',               //Default arrow : none, top, right, bottom, left
     },
+    //css clases
+    cssclases : $.extend({}, $.fn.postitall.cssclases, true),
     //Enable / Disable features
-    features : $.fn.postitall.globals,          //By default, copy of global defaults
+    features : $.extend({}, $.fn.postitall.globals, true),
     //Note flags
     flags : {
         blocked         : false,                //If true, the note cannot be edited
@@ -350,13 +364,38 @@ $.fn.postitall.defaults = {
         expand          : false,                //true = Expanded note / false = normal
         fixed           : false,                //Set position fixed
         highlight       : false,                //Higlight note
+        hidden          : false,                //Hidden note
     },
     //Attach the note to al html element
     attachedTo : {
-        element         : '',                   //Where to attach
-        position        : 'right',              //Position relative to elemente : top, right, bottom or left
+        element         : '',                   //Where to attach (string or object / '#idObject' or $('#idObject'))
+        position        : 'right',              //Position relative to elemente : top,right,bottom,left or combinations (top left, right bottom, ...)
         fixed           : true,                 //Fix note to element when resize screen
         arrow           : true,                 //Show an arrow in the inverse position
+    },
+    //Meta data
+    meta: {
+        'Title': {
+            'type': 'input',
+            'maxlength': '20',
+            'value': '',
+            'placeholder': 'Note title'
+        },
+        'Category': {
+            'type': 'combo',
+            'value': '0',
+            'values': {
+                '0': 'Select a category',
+                '1': 'Personal',
+                '2': 'Work',
+                '3': 'Other'
+            }
+        },
+        'Observations': {
+            'type': 'textarea',
+            'value': '',
+            'placeholder': 'Other considerations ...'
+        }
     },
     // Callbacks / Event Handlers
     onCreated: function(id, options, obj) { return undefined; },    //Triggered after note creation
@@ -561,6 +600,15 @@ $.fn.postitall.defaults = {
                                                 <label><input id="idAskOnDelete" type="checkbox" name="askOnDelete" class="feature" checked> <span class="label label-pill label-info">askOnDelete</span> Ask for confirmation before note deletion</label>
                                             </div>
                                             <div class="checkbox">
+                                                <label><input id="idDraggable" type="checkbox" name="draggable" class="feature" checked> <span class="label label-pill label-info">draggable</span> Set draggable feature on or off</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idResizable" type="checkbox" name="resizable" class="feature" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idEditable" type="checkbox" name="editable" class="feature" checked> <span class="label label-pill label-info">editable</span> Set contenteditable and enable changing note content</label>
+                                            </div>
+                                            <div class="checkbox">
                                                 <label><input id="idPasteHtml" type="checkbox" name="pasteHtml" class="feature" checked> <span class="label label-pill label-info">pasteHtml</span> Allow paste html content (if not, paste text content)</label>
                                             </div>
                                             <div class="checkbox">
@@ -568,6 +616,9 @@ $.fn.postitall.defaults = {
                                             </div>
                                             <div class="checkbox">
                                                 <label><input id="idAutoPosition" type="checkbox" name="autoPosition" class="feature" checked> <span class="label label-pill label-info">autoPosition</span> Relative note position on browser resize</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idExport" type="checkbox" name="export" class="feature" checked> <span class="label label-pill label-info">export</span> Allow to export the note in JSON format.</label>
                                             </div>
             							</div>
             							<div class="col-md-6">
@@ -590,11 +641,15 @@ $.fn.postitall.defaults = {
                                                 <label><input id="idAddNew" type="checkbox" name="addNew" class="feature" checked> <span class="label label-pill label-info">addNew</span> Allow copying note (if not hide copy icon)</label>
                                             </div>
                                             <div class="checkbox">
-                                                <label><input id="idShowInfo" type="checkbox" name="showInfo" class="feature" checked> <span class="label label-pill label-info">showInfo</span> Show info icon (if not hide info icon)</label>
+                                                <label><input id="idShowInfo" type="checkbox" name="showInfo" class="feature" checked> <span class="label label-pill label-info">showInfo</span> Show note information under info icon (if not and meta info disabled, hide info icon)</label>
                                             </div>
                                             <div class="checkbox">
-                                                <label><input id="idResizable" type="checkbox" name="resizable" class="feature" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                                <label><input id="idShowMeta" type="checkbox" name="showMeta" class="feature" checked> <span class="label label-pill label-info">showMeta</span> Show meta information under info icon (if not and note info diabled, hide info icon)</label>
                                             </div>
+                                            <div class="checkbox">
+                                                <label><input id="idAskOnHide" type="checkbox" name="askOnHide" class="feature" checked> <span class="label label-pill label-info">askOnHide</span> If this feature is enabled, when you hide a note a datepicker selector will be shown to pick up a date when the note will be shown again.</label>
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -956,6 +1011,96 @@ $.PostItAll.restoreConfig('note');
                         </div>
                     </div>
                 </div>
+
+
+                <hr>
+                <a id="doc_importexport" class="anchor">&nbsp;</a>
+                <h3>Import &amp; Export notes</h3>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-block">
+                            <p class="card-text">
+                                The notes have a featured called "export" by default enabled. When this feature is enabled, an icon in the bottom-left of the notes will appear .
+                                When you click on this icon, the current note will be saves as a JSON string in a auto-generated file.
+                                <br>The filename generated by this options will have this format : date#note_id.txt
+                            </p>
+                            <p class="card-text">
+                                Also you can export or import notes massively with the global methods :
+                                <span class="label label-default">$.PostItAll.import();</span> and <span class="label label-default">$.PostItAll.export();</span>
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    <a id="idExportAll" href="#"><i class="fa fa-upload" aria-hidden="true"></i> Export all notes</a>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <a id="idImportAll" href="#"><i class="fa fa-download" aria-hidden="true"></i> Import notes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <pre class="prettyprint lang-js">
+//Export notes
+//opt : all or loaded (only visible notes)
+var opt = "loaded";
+$.PostItAll.export(opt);
+
+//Import notes
+$.PostItAll.import();
+                        </pre>
+                    </div>
+                </div>
+
+
+                <hr>
+                <a id="doc_metadata" class="anchor">&nbsp;</a>
+                <h3>Custom meta-data information</h3>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-block">
+                            <p class="card-text">
+                                You can add aditional info to the notes by definig the meta data of this. When the feature "metaInfo" is enabled, the info icon in the
+                                bottom left corner of the note will be visible. When you click on it, under the tab "Meta info" you can add this additional information
+                                to the note, in order to classify it, or add relevant information of the note.
+                            </p>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <a id="idMetaData" href="#">Custom meta-data note</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <pre class="prettyprint lang-js">
+//Custom meta-data note
+$.PostItAll.new({
+    meta: {
+        'Field of type input': {
+            'type': 'input',
+            'maxlength': '20',
+            'value': '',
+            'placeholder': 'Placeholder for the input field'
+        },
+        'Field of type combo': {
+            'type': 'combo',
+            'value': '0',
+            'values': {
+                '0': 'Value 0',
+                '1': 'Value 1',
+                '2': 'Value 2'
+            }
+        },
+        'Field of type textarea': {
+            'type': 'textarea',
+            'value': '',
+            'placeholder': 'Placeholder for the textarea field'
+        }
+    },
+});
+                        </pre>
+                    </div>
+                </div>
+
 
                 <hr>
                 <a id="doc_attachnote" class="anchor">&nbsp;</a>
@@ -1433,6 +1578,7 @@ $.PostItAll.length(function(total) {
     <script src="libs/jquery/dist/jquery.min.js"></script>
     <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="libs/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js"></script>
     <script src="libs/trumbowyg/dist/trumbowyg.min.js"></script>
     <script src="libs/minicolors/jquery.minicolors.min.js"></script>
     <script src="dist/jquery.postitall.js"></script>
