@@ -255,7 +255,7 @@ var delay = (function(){
 
     //Css clases
     $.fn.postitall.cssclases = {
-        note                : '.note', //Default note style
+        note                : 'note', //Default note style
         withTextShadowWhite : 'withTextShadowWhite', //Note with text-shadow for dark fonts (default)
         withTextShadowBlack : 'withTextShadowBlack', //Note with text-shadow for light fonts (default)
         withoutTextShadow   : 'withoutTextShadow', //Note without text-shadows
@@ -2042,6 +2042,7 @@ var delay = (function(){
                     txtContent = txtContent.substring(0,15) + "...";
                 var smallText = $('<div id="pia_minimized_text_'+index+'" class="PIAminimizedText" />').text(txtContent);
                 $('#pia_toolbar_'+index).append(smallText);
+                $('#pia_minimize_'+index).attr('title', 'Restore note');
                 //hide toolbar
                 t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
 
@@ -2091,6 +2092,8 @@ var delay = (function(){
                     // show toolbar
                     t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
                     $('#pia_minimized_text_'+index).remove();
+                    $('#pia_minimize_'+index).attr('title', 'Minimize note');
+
                     //Remove draggable axis
                     if ($.fn.postitall.globals.draggable && options.features.draggable) {
                         if ($.ui) obj.draggable({ axis: "none" });
@@ -2125,7 +2128,7 @@ var delay = (function(){
                 ides.push('pia_minimize_');
 
             if(options.flags.blocked) {
-                $('#pia_blocked_'+index.toString()).removeClass(options.cssclases.icons.blockedOn).addClass(options.cssclases.icons.blocked);
+                $('#pia_blocked_'+index.toString()).removeClass(options.cssclases.icons.blockedOn).addClass(options.cssclases.icons.blocked).attr("title", "Block note");
                 $('#pia_editable_'+index.toString()).attr('contenteditable', true).css("cursor", "");
                 //toolbar
                 t.toogleToolbar('show', ides);
@@ -2134,7 +2137,7 @@ var delay = (function(){
                 //new state
                 options.flags.blocked = false;
             } else {
-                $('#pia_blocked_'+index.toString()).removeClass(options.cssclases.icons.blocked).addClass(options.cssclases.icons.blockedOn);
+                $('#pia_blocked_'+index.toString()).removeClass(options.cssclases.icons.blocked).addClass(options.cssclases.icons.blockedOn).attr("title", "Unblock note");
                 $('#pia_editable_'+index.toString()).attr('contenteditable', false).css("cursor", "auto");
                 //disabel onhover actios
                 t.hoverOptions(index, false);
@@ -2154,14 +2157,14 @@ var delay = (function(){
             var options = t.options;
             var obj = $($.fn.postitall.globals.prefix + index);
             if(options.flags.fixed) {
-                $('#pia_fixed_'+index).removeClass(options.cssclases.icons.fixedOn).addClass(options.cssclases.icons.fixed).attr("alt", "Fix note");
+                $('#pia_fixed_'+index).removeClass(options.cssclases.icons.fixedOn).addClass(options.cssclases.icons.fixed).attr("title", "Fix note");
                 options.position = "absolute";
                 options.posY = obj.offset().top;
                 obj.removeClass("fixed");
                 options.attachedTo.element = "";
                 options.flags.fixed = false;
             } else {
-                $('#pia_fixed_'+index).removeClass(options.cssclases.icons.fixed).addClass(options.cssclases.icons.fixedOn).attr("alt", "Unfix note");
+                $('#pia_fixed_'+index).removeClass(options.cssclases.icons.fixed).addClass(options.cssclases.icons.fixedOn).attr("title", "Unfix note");
                 options.position = "fixed";
                 options.posY = parseInt(options.posY, 10) - $(document).scrollTop();
                 obj.addClass("fixed");
@@ -2454,7 +2457,8 @@ var delay = (function(){
                             }
                         }
                         e.preventDefault();
-                    }));
+                    }).attr("title", "Delete note")
+                );
                 }
             }
 
@@ -2479,7 +2483,7 @@ var delay = (function(){
 
                             }
                             e.preventDefault();
-                        })
+                        }).attr("title", "Configure note")
                     );
                 }
             }
@@ -2499,7 +2503,7 @@ var delay = (function(){
                                 t.fixNote();
                             }
                             e.preventDefault();
-                        })
+                        }).attr("title", (options.flags.fixed ? "Unfix note" : "Fix note"))
                     );
                 }
             }
@@ -2527,7 +2531,7 @@ var delay = (function(){
                             }
                         }
                         e.preventDefault();
-                    })
+                    }).attr("title", "Hide note")
                 );
             } else {
                 options.flags.hidden = false;
@@ -2547,7 +2551,7 @@ var delay = (function(){
                             t.minimizeNote();
                         }
                         e.preventDefault();
-                    })
+                    }).attr("title", "Minimize note")
                 );
             } else {
                 options.flags.minimized = false;
@@ -2571,7 +2575,7 @@ var delay = (function(){
                             }
                         }
                         e.preventDefault();
-                    })
+                    }).attr("title", "Maximize note")
                 );
             } else {
                 options.flags.expand = false;
@@ -2592,7 +2596,7 @@ var delay = (function(){
                             t.blockNote();
                         }
                         e.preventDefault();
-                    })
+                    }).attr("title", (options.flags.blocked ? "Unblock note" : "Block note"))
                 );
             }
 
@@ -2688,7 +2692,7 @@ var delay = (function(){
                             }
                         }
                         e.preventDefault();
-                    });
+                    }).attr("title", "View information");
                     bottomToolbar.append(info);
                 }
                 //Copy note icon
@@ -2718,7 +2722,7 @@ var delay = (function(){
                             });
                         }
                         e.preventDefault();
-                    });
+                    }).attr("title", "Copy note");
                     bottomToolbar.append(newNote);
                 }
                 //Export note
@@ -2734,7 +2738,7 @@ var delay = (function(){
                             $.PostItAll.export(index);
                         }
                         e.preventDefault();
-                    });
+                    }).attr("title", "Export note");
                     bottomToolbar.append(exportNote);
                 }
 
@@ -3361,7 +3365,7 @@ var delay = (function(){
                     t.switchBackNoteOff('PIAflip2');
                     t.switchOnLights();
                     e.preventDefault();
-                })
+                }).attr("title", "Close")
             )
             .append($('<span />', {
                     'id': 'idDateBackToolbar_' + index,
