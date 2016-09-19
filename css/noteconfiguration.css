@@ -1,25 +1,6 @@
 /** POSTITAL : CSS example note style **/
 
-/* Example with 'all readable by plugin' properties */
-.note {
-    border: 10px solid #ff6400;
-    background-color: #ffb77e;
-    color: white;
-    top: 40px;
-    /*bottom: 20px;*/
-    left: 60px;
-    /*right: 20px;*/
-    width: 320px;
-    height: 200px;
-    min-width: 160px;
-    min-height: 200px;
-
-    opacity: 0.8;
-	filter:Alpha(Opacity=0.8);
-
-    /*font-size: 32px;*/
-}
-
+/* Overwriting some default plugin clases */
 .withBoxShadow {
     box-shadow: inset 0px 0px 0 rgba(0, 0, 0, 0.45) ,inset 0px 0px 0 rgba(0, 0, 0, 0.45) , 0 1px 30px rgba(0, 0, 0, 0.45);
 
@@ -57,7 +38,7 @@
 	-moz-text-shadow: -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;
 }
 
-/* ICONS */
+/* Overwriting deafult clases for note icons */
 .PIAicon:hover {
     background-color: #ff6400;
 }
@@ -111,7 +92,7 @@
 }
 /* ICONS END */
 
-/* ARROWS */
+/* Overwriting default clases for note arrows */
 .arrow_box {
 	position: relative;
 }
@@ -167,21 +148,42 @@
 }
 /* END ARROWS */
 
+/* New class with 'all readable by plugin' properties */
+.customNote {
+    border: 10px solid #ff6400;
+    background-color: #ffb77e;
+    color: white;
 
-/* Other examples with diferent shapes */
+    top: 40px;
+    /*bottom: 20px;*/
+    left: 60px;
+    /*right: 20px;*/
+    position: relative;
+
+    width: 320px;
+    height: 200px;
+    min-width: 160px;
+    min-height: 200px;
+
+    opacity: 0.8;
+	filter:Alpha(Opacity=0.8);
+
+    /*font-size: 32px;*/
+}
+
+/* Other example clases with diferent shapes */
 .parallelogram { -webkit-transform: skew(20deg); -moz-transform: skew(20deg); -o-transform: skew(20deg); }
-
 .circle { -moz-border-radius: 50%; -webkit-border-radius: 50%; border-radius: 50%; }
-
-.talkbubble { -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; }
-.talkbubble:before { content:""; position: absolute; right: 100%; top: 26px; width: 0; height: 0; border-top: 13px solid transparent; border-right: 26px solid red; border-bottom: 13px solid transparent; }
-
-.tv { width: 200px; height: 150px; margin: 20px 0; background: red; border-radius: 50% / 10%; color: white; text-align: center; text-indent: .1em; }
+.talkbubble { -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; background-color: yellow; }
+.talkbubble:before { content:""; position: absolute; right: 100%; top: 26px; width: 0; height: 0; border-top: 13px solid transparent; border-right: 26px solid yellow; border-bottom: 13px solid transparent; }
+.tv { width: 200px; height: 150px; margin: 20px 0; border-radius: 50% / 10%; text-align: center; text-indent: .1em; }
 .tv:before { content: ''; position: absolute; top: 10%; bottom: 10%; right: -5%; left: -5%; background: inherit; border-radius: 5% / 50%; }
+.tv .PIAIconTopToolbar { margin: 10px 5px; }
 
-
+/* Other examples */
 .note1 {
-
+    bottom: 10px;
+    right: 10px;
     color: rgba(118,204,250,1);
 
     border-radius: 10px 10px 10px 10px;
@@ -224,12 +226,13 @@
 .note2 {
     top:100px;
     right: 100px;
+    position: absolute;
 }
-
 
 .note3 {
     top:100px;
     right: 100px;
+    position: relative;
 
     border-radius: 10px 10px 10px 10px;
     -moz-border-radius: 10px 10px 10px 10px;

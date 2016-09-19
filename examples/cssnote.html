@@ -67,13 +67,13 @@
 
                     <div class="starter-template">
                         <h1>Using CSS class in new notes</h1>
-                        <p class="lead">The css clases are defined in <a href="../css/noteconfiguration.css">noteconfiguration.css</a> stylesheet.</p>
+                        <p class="lead">This is a mixed example with overwriten css clases and custom clases passed as note parameters. All css clases are defined and included from the <a href="../css/noteconfiguration.css" target=_blank>noteconfiguration.css</a> stylesheet file.</p>
 
                         <div class="list-group">
                             <a href="#" class="list-group-item" id="idNew1">Note with $.fn.postitall.cssclases.note class.<br>Without class the style will be defined by plugin properties</a>
-                            <a href="#" class="list-group-item" id="idNew2">Note with .note class (changed in note config)</a>
-                            <a href="#" class="list-group-item" id="idNew3">Note with .note1 class (in the new call)</a>
-                            <a href="#" class="list-group-item" id="idNew4">Note with .note2 class (in the new call)</a>
+                            <a href="#" class="list-group-item" id="idNew2">Note with .customNote class (changed in note config)</a>
+                            <a href="#" class="list-group-item" id="idNew3">Note with .note1 class (passed in the new call)</a>
+                            <a href="#" class="list-group-item" id="idNew4">Note with .tv class</a>
                             <a href="#" class="list-group-item" id="idNew5">Note with an inexistent class or without class.<br>The style will be defined by plugin properties</a>
                         </div>
                     </div>
@@ -108,13 +108,13 @@
     $(document).ready(function() {
 
         $('#idNew1').click(function(e) {
-            $.PostItAll.new('With css class in globals ($.fn.postitall. cssclases.note)<br>Class applied : ' + $.fn.postitall.cssclases.note + '<br><br>* Without class the style will be defined by plugin properties.');
+            $.PostItAll.new('With css class in globals ($.fn.postitall. cssclases.note)<br>Class applied : .' + $.fn.postitall.cssclases.note + '<br><br>* Without class the style will be defined by plugin properties.');
             e.preventDefault();
         });
 
         $('#idNew2').click(function(e) {
-            $.PostItAll.changeConfig('note', { cssclases : { note : "note" } });
-            $.PostItAll.new('Changing the css class for the note-configuration with changeConfig method.<br>Class applied : .note');
+            $.PostItAll.changeConfig('note', { cssclases : { note : "customNote" } });
+            $.PostItAll.new('Changing the css class for the note-configuration with changeConfig method.<br>Class applied : .customNote');
             $.PostItAll.restoreConfig('note');
             e.preventDefault();
         });
@@ -131,9 +131,9 @@
 
         $('#idNew4').click(function(e) {
             $.PostItAll.new({
-                content : 'Another example. Changed css class by passing the property to the new method.<br>Class applied : .note2',
+                content : 'The shape of this note is like an old Television.<br>Class applied : .tv',
                 cssclases : {
-                    note : "note2"
+                    note : "tv"
                 }
             });
             e.preventDefault();

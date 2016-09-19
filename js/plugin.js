@@ -549,9 +549,11 @@ $(document).ready(function() {
                 $('.addCodeFeatures').show();
                 content += " features : {\n";
                     var ides = ["idRandomColor2", "idChangeOptions2", "idAllowBlock2", "idAllowMinimize2", "idAllowExpand2", "idAddNew2", "idAllowFix2",
-                        "idHideToolbar2", "idAskOnDelete2", "idShowInfo2", "idPasteHtml2", "idHtmlEditor2", "idAutoPosition2", "idResizable2", "idToolbar2", "idRemovable2"];
+                        "idHideToolbar2", "idAskOnDelete2", "idShowInfo2", "idPasteHtml2", "idHtmlEditor2", "idAutoPosition2", "idResizable2", "idToolbar2", "idRemovable2",
+                        "idDraggable2", "idEditable2", "idExport2", "idShowMeta2", "idAskOnHide2"];
                     var props = ["randomColor", "changeoptions", "blocked", "minimized", "expand", "addNew", "fixed",
-                        "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable"];
+                        "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable",
+                        "draggable", "editable", "exportNote", "showMeta", "askOnHide"];
                     $.each(ides, function(a,b) {
                         //console.log(props[a],b);
                         if(!$('#'+b).prop('checked'))
@@ -665,6 +667,11 @@ $(document).ready(function() {
                 addArrow        : $('#idPosArrow2').val(),
                 toolbar         : $('#idToolbar2').prop('checked'),
                 removable       : $('#idRemovable2').prop('checked'),
+                draggable       : $('#idDraggable2').prop('checked'),
+                editable        : $('#idEditable2').prop('checked'),
+                exportNote      : $('#idExport2').prop('checked'),
+                showMeta        : $('#idShowMeta2').prop('checked'),
+                askOnHide       : $('#idAskOnHide2').prop('checked'),
             };
         }
         $.PostItAll.new(vars);
@@ -740,6 +747,19 @@ $(document).ready(function() {
                     'placeholder': 'Placeholder for the textarea field'
                 }
             },
+        });
+
+        e.preventDefault();
+    });
+
+    //Styling notes
+    $('#idCssNote').click(function(e) {
+
+        $.PostItAll.new({
+            content : 'Changed css class by passing the property to the new method.<br>Class applied : .note',
+            cssclases : {
+                note : "customNote"
+            }
         });
 
         e.preventDefault();

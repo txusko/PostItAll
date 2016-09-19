@@ -35,6 +35,9 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans|Oswald|Roboto|Lato|Indie+Flower|Shadows+Into+Light|Bangers' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//cdn.rawgit.com/google/code-prettify/master/loader/skins/sunburst.css">
 
+    <!-- Custom note clases -->
+    <link rel="stylesheet" href="css/plugin.css">
+
     <!-- Custom CSS -->
     <link href="css/landing-page.css" rel="stylesheet">
 </head>
@@ -115,6 +118,7 @@
                     <li class="nav-item"><a href="#doc_globalconfig" class="nav-link">Global configuration</a></li>
                     <li class="nav-item"><a href="#doc_noteconfiguration" class="nav-link">Note configuration</a></li>
                     <li class="nav-item"><a href="#doc_globalfunctions" class="nav-link">Functions / Methods</a></li>
+                    <li class="nav-item"><a href="#doc_stylingnote" class="nav-link">Styling note</a></li>
                     <li class="nav-item">
                         <a href="#doc_noteexamples" class="nav-link">Examples</a>
                         <ul>
@@ -408,6 +412,324 @@ $.fn.postitall.defaults = {
 </pre>
                         </div>
 
+
+                        <a id="doc_stylingnote" class="anchor">&nbsp;</a>
+                        <h2>Styling note</h2>
+                        <hr>
+                        <p>Note style can be changed by overwriting the default plugin clases or by changing the plugin clases by your own.
+                            <br>All these clases are defined in the plugin css file <a href="dist/jquery.postitall.css" target=_blank>jquery.postitall.css</a>
+                        </p>
+                        <h4>Default plugin clases</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table class="table table-striped">
+                                        <thead class="thead-default">
+                                            <tr>
+                                                <th colspan="4">Note clases</th>
+                                            </tr>
+                                        </thead>
+                                        <thead class="thead-inverse">
+                                            <tr>
+                                                <th>Class</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">note</th>
+                                                <td>Default note style. Main note class</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">withBoxShadow</th>
+                                                <td>Note with text-shadow for dark fonts (default)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">withoutBoxShadow</th>
+                                                <td>Note with text-shadow for light fonts (default)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">withoutTextShadow</th>
+                                                <td>Note without text-shadows</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">withTextShadowWhite</th>
+                                                <td>Note with box-shadow</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">withTextShadowBlack</th>
+                                                <td>Note without box-shadow</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table table-striped">
+                                        <thead class="thead-default">
+                                            <tr>
+                                                <th colspan="4">Arrow clases</th>
+                                            </tr>
+                                        </thead>
+                                        <thead class="thead-inverse">
+                                            <tr>
+                                                <th>Class</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">arrow_box</th>
+                                                <td>Set in any arrow class</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">arrow_box_top</th>
+                                                <td>Top arrow class</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">arrow_box_right</th>
+                                                <td>Right arrow class</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">arrow_box_bottom</th>
+                                                <td>Bottom arrow class</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">arrow_box_left</th>
+                                                <td>Left arrow class</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <table class="table table-striped">
+                                        <thead class="thead-default">
+                                            <tr>
+                                                <th colspan="4">Icon clases</th>
+                                            </tr>
+                                        </thead>
+                                        <thead class="thead-inverse">
+                                            <tr>
+                                                <th>Class</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">PIAIconTopToolbar</th>
+                                                <td>Top icon toolbar common properties</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAIconBottomToolbar</th>
+                                                <td>Bottom icon toolbar common properties</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAicon</th>
+                                                <td>Common icon style. Set in all icons</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAiconright</th>
+                                                <td>Set in all right icons</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAiconleft</th>
+                                                <td>Set in all left icons</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAiconbottom</th>
+                                                <td>Set in all bottom icons</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <table class="table table-striped">
+                                        <thead class="thead-default">
+                                            <tr>
+                                                <th colspan="4">Note icons 1</th>
+                                            </tr>
+                                        </thead>
+                                        <thead class="thead-inverse">
+                                            <tr>
+                                                <th>Class</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">PIAclose</th>
+                                                <td>Close icon (back panels)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAconfig</th>
+                                                <td>Config icon (top-right)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAhide</th>
+                                                <td>Hide icon (top-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAminimize</th>
+                                                <td>Minimize icon (top-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAmaximize</th>
+                                                <td>Restore/Collapse icon (top-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAexpand</th>
+                                                <td>Expand icon (top-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAblocked</th>
+                                                <td>Non blocked icon (top-right)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <table class="table table-striped">
+                                        <thead class="thead-default">
+                                            <tr>
+                                                <th colspan="4">Note icons 2</th>
+                                            </tr>
+                                        </thead>
+                                        <thead class="thead-inverse">
+                                            <tr>
+                                                <th>Class</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">PIAblocked2</th>
+                                                <td>Blocked icon (top-right)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAdelete</th>
+                                                <td>Delete icon (top-right)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAinfoIcon</th>
+                                                <td>Info icon (bottom-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAnew</th>
+                                                <td>Copy icon (bottom-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAfixed</th>
+                                                <td>Non fixed icon (top-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAfixed2</th>
+                                                <td>Fixed icon (top-left)</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">PIAexport</th>
+                                                <td>Export icon (bottom-left)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <p>You can view an example of overwriten plugin clases in this css file <a href="css/noteconfiguration.css" target=_blank>noteconfiguration.css</a>, and a <a href="examples/cssnote.html">live example</a>
+                            </p>
+                        </div>
+
+                        <br>
+                        <h4>Custom css clases</h4>
+                        <p>You can redefine the most important clases used by this plugin by passing as a parameter when you call the new method:
+
+                        <div class="row">
+                            <div class="col-md-8">
+<pre class="prettyprint lang-js">
+//Changable css clases for new notes
+$.PostItAll.new({
+  cssclases : {
+    note                : 'note', //Default note style
+    withTextShadowWhite : 'withTextShadowWhite', //Note with text-shadow for dark fonts (default)
+    withTextShadowBlack : 'withTextShadowBlack', //Note with text-shadow for light fonts (default)
+    withoutTextShadow   : 'withoutTextShadow', //Note without text-shadows
+    withBoxShadow       : 'withBoxShadow', //Note with box-shadow
+    withoutBoxShadow    : 'withoutBoxShadow', //Note without box-shadow
+    icons : { //Icon generic clases and set
+      icon            : 'PIAicon', //Set for all icons
+      iconRight       : 'PIAiconright', //Set for the last top-right icon
+      iconLeft        : 'PIAiconleft', //Set for all left icons (top or bottom)
+      iconBottom      : 'PIAiconbottom', //Set for all bottom icons (left or right)
+      topToolbar      : 'PIAIconTopToolbar', //Set for bottom toolbar (contains all botton icons)
+      bottomToolbar   : 'PIAIconBottomToolbar', //Set for bottom toolbar (contains all botton icons)
+      close           : 'PIAclose', //Close icon (back panels)
+      config          : 'PIAconfig', //Config icon (top-right)
+      hide            : 'PIAhide', //Hide icon (top-left)
+      minimize        : 'PIAminimize', //Minimize icon (top-left)
+      maximize        : 'PIAmaximize', //Restore/Collapse icon (top-left)
+      expand          : 'PIAexpand', //Expand icon (top-left)
+      blocked         : 'PIAblocked', //Non blocked icon (top-right)
+      blockedOn       : 'PIAblocked2', //Blocked icon (top-right)
+      delete          : 'PIAdelete', //Delete icon (top-right)
+      info            : 'PIAinfoIcon', //Info icon (bottom-left)
+      copy            : 'PIAnew', //Copy icon (bottom-left)
+      fixed           : 'PIAfixed', //Non fixed icon (top-left)
+      fixedOn         : 'PIAfixed2', //Fixed icon (top-left)
+      export          : 'PIAexport', //Export icon (bottom-left)
+    },
+    arrows  : { //Default arrow : none
+      arrow   : 'arrow_box', //Set in all arrows
+      none    : '', //Without arrow
+      top     : 'arrow_box_top', //Top arrow
+      right   : 'arrow_box_right', //Right arrow
+      bottom  : 'arrow_box_bottom', //Bottom arrow
+      left    : 'arrow_box_left' //Left arrow
+    }
+  }
+});
+
+//Redefine global clases
+$.PostItAll.changeConfig('note', {
+  cssclases : {
+    note : "customNote"
+  }
+});
+$.PostItAll.new('Now all new notes will have the .customNote class aplied.');
+</pre>
+                            </div>
+                            <div class="col-md-4">
+<pre class="prettyprint lang-js">
+//New note with ".note1" css class applied
+$.PostItAll.new({
+  content : 'Changed css class by passing the property to the new method.&lt;br&gt;Class applied : .customNote',
+  cssclases : {
+    note : "customNote"
+  }
+});
+
+//CSS
+.customNote {
+  border: 10px solid #ff6400;
+  background-color: #ffb77e;
+  color: white;
+  top: 40px;
+  left: 60px;
+  width: 320px;
+  height: 200px;
+  min-width: 160px;
+  min-height: 200px;
+  opacity: 0.8;
+  filter:Alpha(Opacity=0.8);
+  font-size: 32px;
+  position: relative;
+}
+</pre>
+                                <p class="text-center"><button class="btn btn-success" id="idCssNote">Create note with .note css class</button></p>
+                            </div>
+                        </div>
+
+
                         <a id="doc_globalfunctions" class="anchor">&nbsp;</a>
                         <h2>Functions / Methods</h2>
                         <hr>
@@ -577,7 +899,10 @@ $.fn.postitall.defaults = {
                         <hr>
 
                         <a id="doc_changeglobalconfig" class="anchor">&nbsp;</a>
-                        <h3>Change global configuration</h3>
+                        <div class="row"><div class="col-md-8">
+                            <div class="pull-right"><label><input id="idCheckAll" type="checkbox" name="checkAll" checked> Check/Uncheck all</label></div>
+                            <h3>Change global configuration</h3>
+                        </div></div>
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="card card-block">
@@ -600,15 +925,6 @@ $.fn.postitall.defaults = {
                                                 <label><input id="idAskOnDelete" type="checkbox" name="askOnDelete" class="feature" checked> <span class="label label-pill label-info">askOnDelete</span> Ask for confirmation before note deletion</label>
                                             </div>
                                             <div class="checkbox">
-                                                <label><input id="idDraggable" type="checkbox" name="draggable" class="feature" checked> <span class="label label-pill label-info">draggable</span> Set draggable feature on or off</label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label><input id="idResizable" type="checkbox" name="resizable" class="feature" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label><input id="idEditable" type="checkbox" name="editable" class="feature" checked> <span class="label label-pill label-info">editable</span> Set contenteditable and enable changing note content</label>
-                                            </div>
-                                            <div class="checkbox">
                                                 <label><input id="idPasteHtml" type="checkbox" name="pasteHtml" class="feature" checked> <span class="label label-pill label-info">pasteHtml</span> Allow paste html content (if not, paste text content)</label>
                                             </div>
                                             <div class="checkbox">
@@ -618,7 +934,13 @@ $.fn.postitall.defaults = {
                                                 <label><input id="idAutoPosition" type="checkbox" name="autoPosition" class="feature" checked> <span class="label label-pill label-info">autoPosition</span> Relative note position on browser resize</label>
                                             </div>
                                             <div class="checkbox">
-                                                <label><input id="idExport" type="checkbox" name="export" class="feature" checked> <span class="label label-pill label-info">export</span> Allow to export the note in JSON format.</label>
+                                                <label><input id="idDraggable" type="checkbox" name="draggable" class="feature" checked> <span class="label label-pill label-info">draggable</span> Set draggable feature on or off</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idResizable" type="checkbox" name="resizable" class="feature" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input id="idEditable" type="checkbox" name="editable" class="feature" checked> <span class="label label-pill label-info">editable</span> Set contenteditable and enable changing note content</label>
                                             </div>
             							</div>
             							<div class="col-md-6">
@@ -649,27 +971,27 @@ $.fn.postitall.defaults = {
                                             <div class="checkbox">
                                                 <label><input id="idAskOnHide" type="checkbox" name="askOnHide" class="feature" checked> <span class="label label-pill label-info">askOnHide</span> If this feature is enabled, when you hide a note a datepicker selector will be shown to pick up a date when the note will be shown again.</label>
                                             </div>
-
+                                            <div class="checkbox">
+                                                <label><input id="idExport" type="checkbox" name="export" class="feature" checked> <span class="label label-pill label-info">export</span> Allow to export the note in JSON format.</label>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 text-right">
-                                            <label for="idPosArrow" class="control-label" i18n="arrowOptions">Show arrow options on</label>
-                                        </div>
-            						    <div class="col-md-6 form-grup">
-            						    	<select class="form-control" id="idPosArrow">
-                                                <option value="none" i18n="posArrow_front">None</option>
-            						    		<option value="front" i18n="posArrow_front">Front (Arrows in the cardinal points of the note)</option>
-            						    		<option value="back" i18n="posArrow_back">Back (Select option in the back. Change note options must be enabled)</option>
-            						    		<option value="all" selected i18n="posArrow_both">Both (Front and Back)</option>
-            						    	</select>
-            						    </div>
-            						</div>
-
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="text-left"><label><input id="idCheckAll" type="checkbox" name="checkAll" checked> Check/Uncheck all</label></div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6 text-right">
+                                                    <label for="idPosArrow" class="control-label" i18n="arrowOptions">Show arrow options on : </label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class="form-control" id="idPosArrow" style="width: 300px;">
+                                                        <option value="none" i18n="posArrow_front">None</option>
+                                                        <option value="front" i18n="posArrow_front">Front (Arrows in the cardinal points of the note)</option>
+                                                        <option value="back" i18n="posArrow_back">Back (Select option in the back. Change note options must be enabled)</option>
+                                                        <option value="all" selected i18n="posArrow_both">Both (Front and Back)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <hr>
                                             <button class="btn btn-warning" id="idRestoreFeatures">Restore features</button>
                                             <div class="checkbox pull-right text-right">
@@ -942,13 +1264,15 @@ $.PostItAll.restoreConfig('global');
                                                         <div class="checkbox">
                                                             <label><input id="idAutoPosition2" type="checkbox" name="autoPosition" class="feature2" checked> <span class="label label-pill label-info">autoPosition</span> Relative note position on browser resize</label>
                                                         </div>
-                                                        <label for="idPosArrow2" class="control-label" i18n="arrowOptions2">Show arrow options on :</label>
-                                                        <select class="form-control" id="idPosArrow2">
-                                                            <option value="none" i18n="posArrow_front">None</option>
-                                                            <option value="front" i18n="posArrow_front">Front (Arrows in the cardinal points of the note)</option>
-                                                            <option value="back" i18n="posArrow_back">Back (Select option in the back. Change note options must be enabled)</option>
-                                                            <option value="all" selected i18n="posArrow_both">Both (Front and Back)</option>
-                                                        </select>
+                                                        <div class="checkbox">
+                                                            <label><input id="idDraggable2" type="checkbox" name="draggable" class="feature2" checked> <span class="label label-pill label-info">draggable</span> Set draggable feature on or off</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idResizable2" type="checkbox" name="resizable" class="feature2" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idEditable2" type="checkbox" name="editable" class="feature2" checked> <span class="label label-pill label-info">editable</span> Set contenteditable and enable changing note content</label>
+                                                        </div>
                         							</div>
                         							<div class="col-md-6">
                                                         <div class="checkbox">
@@ -973,10 +1297,34 @@ $.PostItAll.restoreConfig('global');
                                                             <label><input id="idShowInfo2" type="checkbox" name="showInfo" class="feature2" checked> <span class="label label-pill label-info">showInfo</span> Show info icon (if not hide info icon)</label>
                                                         </div>
                                                         <div class="checkbox">
-                                                            <label><input id="idResizable2" type="checkbox" name="resizable" class="feature2" checked> <span class="label label-pill label-info">resizable</span> Resizable note (if not note have fixed dimensions)</label>
+                                                            <label><input id="idShowMeta2" type="checkbox" name="showMeta" class="feature2" checked> <span class="label label-pill label-info">showMeta</span> Show meta information under info icon (if not and note info diabled, hide info icon)</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idAskOnHide2" type="checkbox" name="askOnHide" class="feature2" checked> <span class="label label-pill label-info">askOnHide</span> If this feature is enabled, when you hide a note a datepicker selector will be shown to pick up a date when the note will be shown again.</label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label><input id="idExport2" type="checkbox" name="export" class="feature2" checked> <span class="label label-pill label-info">export</span> Allow to export the note in JSON format.</label>
                                                         </div>
                                                     </div>
+                                                </div>
 
+                                                <div class="row addCodeFeatures">
+                                                    <div class="col-md-12">
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-6 text-right">
+                                                                <label for="idPosArrow2" class="control-label" i18n="arrowOptions2">Show arrow options on :</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control" id="idPosArrow2">
+                                                                    <option value="none" i18n="posArrow_front">None</option>
+                                                                    <option value="front" i18n="posArrow_front">Front (Arrows in the cardinal points of the note)</option>
+                                                                    <option value="back" i18n="posArrow_back">Back (Select option in the back. Change note options must be enabled)</option>
+                                                                    <option value="all" selected i18n="posArrow_both">Both (Front and Back)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             </div>
@@ -995,7 +1343,6 @@ $.PostItAll.restoreConfig('global');
                                 <h5>Change note configuration / features</h5>
                                 <p>All new notes without params will be created with the configuration saved.</p>
 <pre class="prettyprint lang-js" id="idConfigNoteExample"></pre>
-                                <p class="text-muted">Change note configuration and features by calling <span class="label label-default">changeConfig</span> method.</p>
                                 <p class="text-center"><button class="btn btn-info" id="idSaveNoteConfig">Save note configuration</button></p>
                                 <br>
 
@@ -1004,7 +1351,6 @@ $.PostItAll.restoreConfig('global');
 <pre class="prettyprint lang-js">
 $.PostItAll.restoreConfig('note');
 </pre>
-                                <p class="text-muted">Restore note configuration and features by calling <span class="label label-default">restoreConfig</span> method.</p>
                                 <p class="text-center"><button class="btn btn-warning" id="idRestoreNoteConfig">Restore note configuration</button></p>
                                 <br>
                             </div>
@@ -1021,8 +1367,9 @@ $.PostItAll.restoreConfig('note');
                         <div class="card card-block">
                             <p class="card-text">
                                 The notes have a featured called "export" by default enabled. When this feature is enabled, an icon in the bottom-left of the notes will appear .
-                                When you click on this icon, the current note will be saves as a JSON string in a auto-generated file.
-                                <br>The filename generated by this options will have this format : date#note_id.txt
+                                <div class="text-center"><img class="img-thumbnail img-responsive" src="img/note_exporticon.png" alt="Export icon" /></div>
+                                Clicking this icon will export the current note into an auto-generated text file in JSON format.
+                                The filename generated by this options will have this format : date#note_id.txt
                             </p>
                             <p class="card-text">
                                 Also you can export or import notes massively with the global methods :
@@ -1059,15 +1406,23 @@ $.PostItAll.import();
                     <div class="col-lg-8">
                         <div class="card card-block">
                             <p class="card-text">
-                                You can add aditional info to the notes by definig the meta data of this. When the feature "metaInfo" is enabled, the info icon in the
-                                bottom left corner of the note will be visible. When you click on it, under the tab "Meta info" you can add this additional information
-                                to the note, in order to classify it, or add relevant information of the note.
+                                Add additional information to the notes by enabling hte metaInfo feature and defining the meta-data property.
+                                <br>When the feature "metaInfo" is enabled, the info icon in the bottom left corner of the note will be visible.
+                                <div class="text-center"><img class="img-thumbnail img-responsive" src="img/note_infoicon.png" alt="Information icon" /></div>
                             </p>
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <a id="idMetaData" href="#">Custom meta-data note</a>
+                            <p>
+                                If you click on it, under the "Meta data" tab you will be abble to add this additional information in order to classify it or add more relevant information.
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        <img class="img-thumbnail img-responsive" src="img/note_metadata_default.png" alt="Default meta-data information" />
+                                        <br><span class="text-muted">Note with the default meta-data information</span>
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        <img class="img-thumbnail img-responsive" src="img/note_metadata_custom.png" alt="Custom meta-data information" />
+                                        <br><span class="text-muted">Note with custom meta-data information</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </p>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -1098,6 +1453,7 @@ $.PostItAll.new({
     },
 });
                         </pre>
+                        <p class="text-center"><button class="btn btn-success" id="idMetaData">Create the custom meta-data note</button></p>
                     </div>
                 </div>
 
@@ -1109,9 +1465,11 @@ $.PostItAll.new({
                     <div class="col-lg-8">
                         <div class="card card-block" id="divToAttach">
                             <p class="card-text">
-                                You can create or attach notes to an existing element of your page. The note can be positioned in the top, right, buttom or left of the existing element, and also you can add an arrow pointing out to it.
+                                You can create or attach notes to an existing element of your page.
+                                The note can be positioned in the top, right, buttom or left (or combinations) of the existing element, and also you can add an arrow pointing out to it.
                                 <br>Even if you resize the browser, the note will be moved to the same relative position of the attached element.
                             </p>
+                            <p>* The element property can be a selector or a jQuery object : "#divToAttach" or $('#divToAttach')</p>
                             <div class="row">
                                 <div class="col-md-3">
                                     <label for="idSelectPosition" class="control-label">Select the position :</label>
@@ -1446,7 +1804,7 @@ $.PostItAll.length(function(total) {
 
                 <br>
                 <h3>External storage</h3>
-                <p class="text-danger"><b>Comming soon</b></p>
+                <p><a href="examples/externalStorage.html">View an example</a></p>
 
                 <br><hr><br>
 
@@ -1592,7 +1950,7 @@ $.PostItAll.length(function(total) {
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 
-    <script>
+    <!--script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -1601,7 +1959,7 @@ $.PostItAll.length(function(total) {
       ga('create', 'UA-71086346-1', 'auto');
       ga('send', 'pageview');
 
-    </script>
+  </script-->
 
 </body>
 

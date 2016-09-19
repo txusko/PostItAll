@@ -2253,7 +2253,7 @@ var delay = (function(){
                 val = tmp.css(prop);
                 //Remove element
                 tmp.remove();
-                console.log('getCssClassProperty ' + prop + ' : ' + val);
+                //console.log('getCssClassProperty ' + prop + ' : ' + val);
             }
             return val;
         },
@@ -2880,16 +2880,35 @@ var delay = (function(){
             obj.css('height', cssVal);
 
             //Top / Bottom
+            //console.log('options', options);
             cssVal = this.getCssClassProperty(options.cssclases.note, "bottom");
-            if(cssVal !== "" && cssVal !== "auto") {
-                obj.css('bottom', parseInt(cssVal, 10));
-                options.posY = obj.css('top');
-            } else {
-                cssVal = this.getCssClassProperty(options.cssclases.note, "top");
+            if(options.position == "absolute") {
                 if(cssVal !== "" && cssVal !== "auto") {
-                    options.posY = cssVal;
+                    obj.css('bottom', parseInt(cssVal, 10));
+                    options.posY = obj.css('top');
+                } else {
+                    cssVal = this.getCssClassProperty(options.cssclases.note, "top");
+                    if(cssVal !== "" && cssVal !== "auto") {
+                        options.posY = cssVal;
+                    }
+                    obj.css('top', options.posY);
                 }
-                obj.css('top', options.posY);
+            } else {
+                console.log(options);
+                if(options.position == "relative") {
+                    options.position = "absolute";
+                    obj.css('position', options.position);
+                }
+                if(cssVal !== "" && cssVal !== "auto") {
+                    obj.css('bottom', options.posY + ($(window).height() - parseInt(cssVal, 10)));
+                    options.posY = obj.css('top');
+                } else {
+                    cssVal = this.getCssClassProperty(options.cssclases.note, "top");
+                    if(cssVal !== "" && cssVal !== "auto") {
+                        options.posY = parseInt(options.posY, 10) + parseInt(cssVal, 10);
+                    }
+                    obj.css('top', options.posY + "px");
+                }
             }
 
             //Left / Right
