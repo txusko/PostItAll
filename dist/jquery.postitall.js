@@ -2580,7 +2580,7 @@ var delay = (function(){
                     bottomToolbar.append(newNote);
                 }
                 //Export note
-                if(options.features.export) {
+                if($.fn.postitall.globals.export && options.features.export) {
                     var exportNote = $('<a />', {
                         'href': '#',
                         'id': 'pia_export_' + index,
