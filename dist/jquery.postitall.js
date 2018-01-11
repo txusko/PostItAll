@@ -1112,7 +1112,9 @@ var delay = (function(){
             var objHeight = objToAttach.height() + parseInt(objToAttach.css('padding-top'),10) + parseInt(objToAttach.css('padding-bottom'),10);
             var noteWidth = parseInt(obj.width(), 10) + parseInt(obj.css('padding-left'),10) + parseInt(obj.css('padding-right'),10);
             var noteHeight = parseInt(obj.height(), 10) + parseInt(obj.css('padding-top'),10) + parseInt(obj.css('padding-bottom'),10);
-            var arrowWidth = 20 + parseInt(t.getCssClassProperty(data.cssclases.note, "border-width"),10);
+            var arrowWidth = 20;
+            if(!isNaN(parseInt(t.getCssClassProperty(data.cssclases.note, "border-width"))))
+                arrowWidth += parseInt(t.getCssClassProperty(data.cssclases.note, "border-width"),10);
 
             //Breakpoints / responsive behaviour (https://github.com/txusko/PostItAll/issues/11)
             var fixVertical = function(callback) {
@@ -1604,7 +1606,7 @@ var delay = (function(){
             if($.fn.postitall.globals.resizable && $.ui) $($.fn.postitall.globals.prefix + id).resizable("disable");
             if($.fn.postitall.globals.draggable && $.ui) {
                 setTimeout(function() {
-                    $($.fn.postitall.globals.prefix + id).draggable({disabled: true});
+                    $($.fn.postitall.globals.prefix + id).draggable({disabled: true}).removeClass("ui-state-disabled");
                 }, 500);
             }
             //$(this).parent().parent().parent().parent().addClass('PIAflip');
@@ -2894,7 +2896,6 @@ var delay = (function(){
                     obj.css('top', options.posY);
                 }
             } else {
-                console.log(options);
                 if(options.position == "relative") {
                     options.position = "absolute";
                     obj.css('position', options.position);
@@ -3294,7 +3295,7 @@ var delay = (function(){
             //disable draggable on mouseenter in contenteditable div
             if ($.fn.postitall.globals.draggable && options.features.draggable) {
                 $("#pia_editable_" + index).mouseenter(function (e) {
-                    if($.ui) obj.draggable({disabled: true});
+                    if($.ui) obj.draggable({disabled: true}).removeClass("ui-state-disabled");
                 }).mouseleave(function(e) {
                     if($.ui && !options.flags.blocked && !options.flags.expand) {
                         obj.draggable({disabled: false});
