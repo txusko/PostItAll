@@ -80,9 +80,11 @@ $(document).ready(function() {
     var updateGlobalExample = function() {
         var content = "$.PostItAll.changeConfig('global', {\n";
         var ides = ["idRandomColor", "idChangeOptions", "idAllowBlock", "idAllowMinimize", "idAllowExpand", "idAddNew", "idAllowFix",
-            "idHideToolbar", "idAskOnDelete", "idShowInfo", "idPasteHtml", "idHtmlEditor", "idAutoPosition", "idResizable", "idToolbar", "idRemovable"];
+            "idHideToolbar", "idAskOnDelete", "idShowInfo", "idPasteHtml", "idHtmlEditor", "idAutoPosition", "idResizable",
+            "idToolbar", "idRemovable", "idAskOnHide", "idShowMeta", "idExport", "idDraggable", "idEditable"];
         var props = ["randomColor", "changeoptions", "blocked", "minimized", "expand", "addNew", "fixed",
-            "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable"];
+            "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable",
+            "toolbar", "removable", "askOnHide", "showMeta", "exportNote", "draggable", "editable"];
         $.each(ides, function(a,b) {
             if(!$('#'+b).prop('checked'))
                 content += "    " + props[a] + " : " + $('#'+b).prop('checked').toString() + ",\n";
@@ -127,6 +129,11 @@ $(document).ready(function() {
             addArrow        : $('#idPosArrow').val(),
             toolbar         : $('#idToolbar').prop('checked'),
             removable       : $('#idRemovable').prop('checked'),
+            askOnHide       : $('#idAskOnHide').prop('checked'),
+            showMeta        : $('#idShowMeta').prop('checked'),
+            exportNote      : $('#idExport').prop('checked'),
+            draggable       : $('#idDraggable').prop('checked'),
+            editable        : $('#idEditable').prop('checked'),
         });
         if($('#idCreateNewNote').prop('checked')) {
             $.PostItAll.new('Global configuration was updated successfully');
@@ -542,9 +549,11 @@ $(document).ready(function() {
                 $('.addCodeFeatures').show();
                 content += " features : {\n";
                     var ides = ["idRandomColor2", "idChangeOptions2", "idAllowBlock2", "idAllowMinimize2", "idAllowExpand2", "idAddNew2", "idAllowFix2",
-                        "idHideToolbar2", "idAskOnDelete2", "idShowInfo2", "idPasteHtml2", "idHtmlEditor2", "idAutoPosition2", "idResizable2", "idToolbar2", "idRemovable2"];
+                        "idHideToolbar2", "idAskOnDelete2", "idShowInfo2", "idPasteHtml2", "idHtmlEditor2", "idAutoPosition2", "idResizable2", "idToolbar2", "idRemovable2",
+                        "idDraggable2", "idEditable2", "idExport2", "idShowMeta2", "idAskOnHide2"];
                     var props = ["randomColor", "changeoptions", "blocked", "minimized", "expand", "addNew", "fixed",
-                        "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable"];
+                        "autoHideToolBar", "askOnDelete", "showInfo", "pasteHtml", "htmlEditor", "autoPosition", "resizable", "toolbar", "removable",
+                        "draggable", "editable", "exportNote", "showMeta", "askOnHide"];
                     $.each(ides, function(a,b) {
                         //console.log(props[a],b);
                         if(!$('#'+b).prop('checked'))
@@ -658,6 +667,11 @@ $(document).ready(function() {
                 addArrow        : $('#idPosArrow2').val(),
                 toolbar         : $('#idToolbar2').prop('checked'),
                 removable       : $('#idRemovable2').prop('checked'),
+                draggable       : $('#idDraggable2').prop('checked'),
+                editable        : $('#idEditable2').prop('checked'),
+                exportNote      : $('#idExport2').prop('checked'),
+                showMeta        : $('#idShowMeta2').prop('checked'),
+                askOnHide       : $('#idAskOnHide2').prop('checked'),
             };
         }
         $.PostItAll.new(vars);
@@ -694,4 +708,60 @@ $(document).ready(function() {
         e.preventDefault();
     });
     $('#lenghtNotes').click();
+
+    //Export all
+    $('#idExportAll').click(function(e) {
+        $.PostItAll.export();
+        e.preventDefault();
+    });
+
+    //Import all
+    $('#idImportAll').click(function(e) {
+        $.PostItAll.import();
+        e.preventDefault();
+    });
+
+    //Meta data
+    $('#idMetaData').click(function(e) {
+
+        $.PostItAll.new({
+            meta: {
+                'Field of type input': {
+                    'type': 'input',
+                    'maxlength': '20',
+                    'value': '',
+                    'placeholder': 'Placeholder for the input field'
+                },
+                'Field of type combo': {
+                    'type': 'combo',
+                    'value': '0',
+                    'values': {
+                        '0': 'Value 0',
+                        '1': 'Value 1',
+                        '2': 'Value 2'
+                    }
+                },
+                'Field of type textarea': {
+                    'type': 'textarea',
+                    'value': '',
+                    'placeholder': 'Placeholder for the textarea field'
+                }
+            },
+        });
+
+        e.preventDefault();
+    });
+
+    //Styling notes
+    $('#idCssNote').click(function(e) {
+
+        $.PostItAll.new({
+            content : 'Changed css class by passing the property to the new method.<br>Class applied : .note',
+            cssclases : {
+                note : "customNote"
+            }
+        });
+
+        e.preventDefault();
+    });
 });

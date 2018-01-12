@@ -189,3 +189,19 @@ a.anchor {
 .minicolors-theme-default .minicolors-input {
     height: auto;
 }
+
+.customNote {
+    border: 10px solid #ff6400;
+    background-color: #ffb77e;
+    color: white;
+    top: 40px;
+    left: 60px;
+    width: 320px;
+    height: 200px;
+    min-width: 160px;
+    min-height: 200px;
+    opacity: 0.8;
+	filter:Alpha(Opacity=0.8);
+    font-size: 32px;
+    position: relative;
+}

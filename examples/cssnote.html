@@ -25,6 +25,8 @@
     <!-- Custom styles for this template -->
     <link href="../css/cover.css" rel="stylesheet">
 
+    <link href="../css/noteconfiguration.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -67,15 +69,15 @@
                 <div class="container">
 
                     <div class="starter-template">
-                        <h1>Basic example</h1>
-                        <p class="lead">Basic actions to create, hide, show, change and remove a note.</p>
+                        <h1>Using CSS class in new notes</h1>
+                        <p class="lead">This is a mixed example with overwriten css clases and custom clases passed as note parameters. All css clases are defined and included from the <a href="../css/noteconfiguration.css" target=_blank>noteconfiguration.css</a> stylesheet file.</p>
 
                         <div class="list-group">
-                            <a href="#" class="list-group-item" id="idNew">New note</a>
-                            <a href="#" class="list-group-item" id="idHide">Hide</a>
-                            <a href="#" class="list-group-item" id="idShow">Show</a>
-                            <a href="#" class="list-group-item" id="idChange">Turn red</a>
-                            <a href="#" class="list-group-item" id="idDelete">Delete</a>
+                            <a href="#" class="list-group-item" id="idNew1">Note with $.fn.postitall.cssclases.note class.<br>Without class the style will be defined by plugin properties</a>
+                            <a href="#" class="list-group-item" id="idNew2">Note with .customNote class (changed in note config)</a>
+                            <a href="#" class="list-group-item" id="idNew3">Note with .note1 class (passed in the new call)</a>
+                            <a href="#" class="list-group-item" id="idNew4">Note with .tv class</a>
+                            <a href="#" class="list-group-item" id="idNew5">Note with an inexistent class or without class.<br>The style will be defined by plugin properties</a>
                         </div>
                     </div>
 
@@ -107,60 +109,61 @@
 
     <script>
     $(document).ready(function() {
-        var idNote = null;
-        $('#idNew').click(function(e) {
 
-            if(idNote != null)
-                $('#idDelete').click();
+        $('#idNew1').click(function(e) {
+            $.PostItAll.new('With css class in globals ($.fn.postitall. cssclases.note)<br>Class applied : .' + $.fn.postitall.cssclases.note + '<br><br>* Without class the style will be defined by plugin properties.');
+            e.preventDefault();
+        });
 
-            if(idNote == null) {
-                $.PostItAll.new({
-                    right: 20,
-                    onCreated: function(id) {
-                        idNote = id
-                    },
-                    onDelete: function() {
-                        idNote = null;
-                    }
-                });
-            }
+        $('#idNew2').click(function(e) {
+            $.PostItAll.changeConfig('note', { cssclases : { note : "customNote" } });
+            $.PostItAll.new('Changing the css class for the note-configuration with changeConfig method.<br>Class applied : .customNote');
+            $.PostItAll.restoreConfig('note');
             e.preventDefault();
         });
-        $('#idHide').click(function(e) {
-            if(idNote != null)
-                $(idNote).postitall('hide');
+
+        $('#idNew3').click(function(e) {
+            $.PostItAll.new({
+                content : 'Changed css class by passing the property to the new method.<br>Class applied : .note1',
+                cssclases : {
+                    note : "note1"
+                }
+            });
             e.preventDefault();
         });
-        $('#idShow').click(function(e) {
-            if(idNote != null)
-                $(idNote).postitall('show');
+
+        $('#idNew4').click(function(e) {
+            $.PostItAll.new({
+                content : 'The shape of this note is like an old Television.<br>Class applied : .tv',
+                cssclases : {
+                    note : "tv"
+                }
+            });
             e.preventDefault();
         });
-        $('#idChange').click(function(e) {
-            if(idNote != null)
-                $(idNote).postitall('options', {
-                    style : {
-                        backgroundcolor: '#ff0000'
-                    }
-                });
-            e.preventDefault();
-        });
-        $('#idDelete').click(function(e) {
-            if(idNote != null)
-                $(idNote).postitall('destroy');
-            e.preventDefault();
+
+        $('#idNew5').click(function(e) {
+            $.PostItAll.new({
+                content : 'If the class do not exists, the style will be defined by the plugin properties.<br>Class applied : .inexistent',
+                cssclases : {
+                    note : "inexistent"
+                }
+            });
+            // //or
+            // $.PostItAll.new('Class set to ""', {
+            //     cssclases : {
+            //         note : ""
+            //     }
+            // });
+            //
+            // //or
+            // $.PostItAll.changeConfig('note', { cssclases : { note : "" } });
+            // $.PostItAll.new("Global class set to \"\"");
+            // $.PostItAll.restoreConfig('note');
+            //
+            // e.preventDefault();
         });
     });
-    </script>
-
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-71086346-1', 'auto');
-        ga('send', 'pageview');
     </script>
 
   </body>
