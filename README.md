@@ -52,10 +52,6 @@ https://github.com/twbs/bootstrap
 
 The plugin has been tested and works in Chrome, Firefox, and Safari and can be used to save notes with the ```file:///``` protocol too.
 
-![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/firefox/firefox_48x48.png)
-![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/chrome/chrome_48x48.png)
-![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/safari/safari_48x48.png)
-
 ## About
 
 _Copyright Javi Filella (http://www.txusko.com/)_
