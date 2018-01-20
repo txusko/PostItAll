@@ -5,8 +5,7 @@
 
 /* Default note style */
 .note {
-    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
-    font-size: normal;
+    line-height: 1em;
 }
 
 /* Note with text-shadow for dark fonts (default) */
