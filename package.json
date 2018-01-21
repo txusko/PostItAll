@@ -1,6 +1,6 @@
 {
   "name": "postitall",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Customizable sticky notes for the web.",
   "main": "dist/jquery.postitall.js",
   "directories": {
