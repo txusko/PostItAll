@@ -849,8 +849,6 @@ var delay = (function(){
 
         //Save all (to storage)
         save : function() {
-            //if(!$.fn.postitall.globals.savable && )
-            //    return;
             var options;
             var id;
             $('.PIApostit').each(function(i,e) {
@@ -951,7 +949,6 @@ var delay = (function(){
                         $.PostItAll.getNotes(function(notes) {
                             if(notes.length > 0) {
                                 $(notes).each(function(i,o) {
-                                    //var obj2 = $.PostItAll.options($.fn.postitall.globals.prefix + o.id);
                                     obj.push(o);
                                 });
                             }
@@ -1624,7 +1621,6 @@ var delay = (function(){
             var id = this.options.id;
             var options = this.options;
             var components = this.getRGBComponents(options.style.backgroundcolor);
-            //$($.fn.postitall.globals.prefix + id).css('background', 'rgb('+components.R+', '+components.G+', '+components.B+')');
             $($.fn.postitall.globals.prefix + id).css('background-color', 'rgba('+components.R+', '+components.G+', '+components.B+', 0.8)');
         },
 
@@ -1633,7 +1629,6 @@ var delay = (function(){
             var id = this.options.id;
             var options = this.options;
             var components = this.getRGBComponents(options.style.backgroundcolor);
-            //$($.fn.postitall.globals.prefix + id).css('background', 'rgb('+components.R+', '+components.G+', '+components.B+')');
             $($.fn.postitall.globals.prefix + id).css('background-color', 'rgba('+components.R+', '+components.G+', '+components.B+', 1)');
         },
 
@@ -1698,7 +1693,7 @@ var delay = (function(){
                 }
                 $(window).off('resize');
                 //Set on resize action
-                if($.fn.postitall.globals.autoPosition) // && options.features.autoPosition)
+                if($.fn.postitall.globals.autoPosition)
                     $(window).on('resize', $.proxy(t.relativePosition, t));
 
             }
@@ -1796,7 +1791,6 @@ var delay = (function(){
                     //Save
                     obj.data('PIA-options', options);
                 });
-                //$.PostItAll.save();
             }, 100);
         },
 
@@ -2811,30 +2805,30 @@ var delay = (function(){
 
             //Border
             var borderColor = options.style.backgroundcolor;
-            if (options.useCssProperties || borderColor === "") {
+            if ((options.useCssProperties && options.cssclases.note !== "" && options.cssclases.note !== $.fn.postitall.defaults.cssclases.note) || borderColor === "") {
                 cssVal = this.getCssClassProperty(options.cssclases.note, "border-top-color");
                 var fontVal = this.getCssClassProperty(options.cssclases.note, "color");
-                if(cssVal !== "" && cssVal !== fontVal) borderColor = cssVal;
+                if(cssVal !== "" && cssVal !== fontVal && cssVal !== "rgba(0, 0, 0, 0)") borderColor = cssVal;
             }
             obj.css('border-bottom-color', borderColor).css('border-left-color', borderColor)
             .css('border-top-color', borderColor).css('border-right-color', borderColor);
 
             //Font-family
-            if (options.useCssProperties || options.style.fontfamily === "") {
+            if ((options.useCssProperties && options.cssclases.note !== "" && options.cssclases.note !== $.fn.postitall.defaults.cssclases.note) || options.style.fontfamily === "") {
                 cssVal = this.getCssClassProperty(options.cssclases.note, "font-family");
                 if(cssVal !== "" && cssVal !== "static") options.style.fontfamily = cssVal;
             }
             obj.css('font-family', options.style.fontfamily);
 
             //Font-size
-            if (options.useCssProperties || options.style.fontsize === "") {
+            if ((options.useCssProperties && options.cssclases.note !== "" && options.cssclases.note !== $.fn.postitall.defaults.cssclases.note) || options.style.fontsize === "") {
                 cssVal = this.getCssClassProperty(options.cssclases.note, "font-size");
                 if(cssVal !== "" && cssVal !== "static") options.style.fontsize = cssVal;
             }
             obj.css('font-size', options.style.fontsize);
 
             //Position
-            if (options.useCssProperties || options.position === "") {
+            if ((options.useCssProperties && options.cssclases.note !== "" && options.cssclases.note !== $.fn.postitall.defaults.cssclases.note) || options.position === "") {
                 cssVal = this.getCssClassProperty(options.cssclases.note, "position");
                 if(cssVal !== "" && cssVal !== "static") options.position = cssVal;
             }
@@ -2848,14 +2842,6 @@ var delay = (function(){
                     if(cssVal === "" || parseInt(cssVal, 10) == 0 || parseInt(cssVal, 10) < options.minWidth)
                         cssVal = options.width + "px";
                 }
-                /*if (options.useCssProperties || options.minWidth === "") {
-                    //minwidth
-                    var minVal = this.getCssClassProperty(options.cssclases.note, "min-width");
-                    //if(minVal !== "" && parseInt(minVal, 10) != 0) options.minWidth = parseInt(minVal, 10);
-                    //Set minwidth as width if this is inferior
-                    if(parseInt(minVal, 10) > parseInt(cssVal, 10)) cssVal = options.minWidth + "px";
-                    //else if(cssVal !== "" && parseInt(cssVal, 10) != 0) options.minWidth = parseInt(cssVal, 10);
-                }*/
             }
             obj.css('width', cssVal);
 
@@ -2867,14 +2853,6 @@ var delay = (function(){
                     if(cssVal === "" || parseInt(cssVal, 10) == 0 || parseInt(cssVal, 10) < options.minHeight)
                         cssVal = options.width + "px";
                 }
-                /*if (options.useCssProperties || options.minHeight === "") {
-                    //minHeight
-                    var minVal = this.getCssClassProperty(options.cssclases.note, "min-height");
-                    //if(minVal !== "" && parseInt(minVal, 10) != 0) options.minHeight = parseInt(minVal, 10);
-                    //Set minheight as height if this is inferior
-                    if(parseInt(minVal, 10) > parseInt(cssVal, 10)) cssVal = options.minHeight + "px";
-                    //else if(cssVal !== "" && parseInt(cssVal, 10) != 0) options.minHeight = parseInt(cssVal, 10);
-                }*/
             }
             obj.css('height', cssVal);
 
@@ -3062,16 +3040,15 @@ var delay = (function(){
                             $(this).draggable('enable');
                             t.autoresize();
                             options.right = '';
-                            //if ($.fn.postitall.globals.savable && options.features.savable) {
-                                if(!options.flags.minimized) {
-                                    options.posY = obj.css('top');
-                                    options.posX = obj.css('left');
-                                    options.oldPosition.leftMinimized = undefined;
-                                } else {
-                                    options.oldPosition.leftMinimized = obj.css('left');
-                                }
-                                t.saveOptions(options);
-                            //}
+                            if(!options.flags.minimized) {
+                                options.posY = obj.css('top');
+                                options.posX = obj.css('left');
+                                options.oldPosition.leftMinimized = undefined;
+                            } else {
+                                options.oldPosition.leftMinimized = obj.css('left');
+                            }
+                            t.saveOptions(options);
+
                             if(!options.flags.minimized) {
                                 t.switchTrasparentNoteOff();
                             }
