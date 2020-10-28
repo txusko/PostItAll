@@ -60,4 +60,4 @@ _Dual-licensed under the MIT and GPL Version 2 licenses_
 
 http://postitall.txusko.com/
 
-postitall@txusko.com
+txusko@gmail.com
