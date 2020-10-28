@@ -407,17 +407,17 @@
 }
 
 /* reset previous styles */
-input, textarea, div[contenteditable] {
+#the_notes input, #the_notes textarea, #the_notes div[contenteditable] {
 	width: auto;
 	height: auto;
 	padding: auto;
 }
-input:focus, textarea:focus, div[contenteditable="true"]:focus {
+#the_notes input:focus, #the_notes textarea:focus, #the_notes div[contenteditable="true"]:focus {
 	border-color: auto;
 	box-shadow: none;
 }
 
-.fixed {
+#the_notes .fixed {
 	position:fixed !important;
     width:auto;
     height:auto;
@@ -461,16 +461,16 @@ input:focus, textarea:focus, div[contenteditable="true"]:focus {
 }
 
 /* Redefine UI */
-.ui-resizable-helper { border: 2px dashed gray; }
-.ui-state-disabled,
-.ui-widget-content .ui-state-disabled,
-.ui-widget-header .ui-state-disabled {
+#the_notes .ui-resizable-helper { border: 2px dashed gray; }
+#the_notes .ui-state-disabled,
+#the_notes .ui-widget-content .ui-state-disabled,
+#the_notes .ui-widget-header .ui-state-disabled {
 	opacity: 1;
 	filter:Alpha(Opacity=1);
 	background-image: none;
 }
-.ui-state-disabled .ui-icon {
-	filter:Alpha(Opacity=1); /* For IE8 - See #6059 */
+#the_notes .ui-state-disabled .ui-icon {
+	filter:Alpha(Opacity=1);
 }
 
 /* FLIP-CARD */
