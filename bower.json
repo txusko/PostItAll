@@ -1,11 +1,11 @@
 {
   "name": "postitall",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "http://postitall.txusko.com/",
   "authors": [
     {
       "name": "Javi Filella (@txusko)",
-      "email": "postitall@txusko.com",
+      "email": "txusko@gmail.com",
       "homepage": "http://txusko.com"
     }
   ],
@@ -32,6 +32,6 @@
     "dist/jquery.postitall.chromeManager.js"
   ],
   "dependencies": {
-    "jquery": "~2.1.4"
+    "jquery": "~3.4.1"
   }
 }
